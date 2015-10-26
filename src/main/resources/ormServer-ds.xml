@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://www.springframework.org/schema/data/jpa 
+            http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+            ">
+	<context:property-placeholder location="classpath*:*-jdbc.properties" />
+	
+	<bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
+        <property name="statementExecutableSqlLogEnable" value="true" />
+        <property name="dataSourceLogEnabled" value="true" />
+        <property name="connectionLogEnabled" value="true" />
+        <property name="statementLogEnabled" value="true" />
+  	</bean>
+	
+	<bean id="ormServerDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${ormServer.jdbc.url}" />
+		<property name="username" value="${ormServer.jdbc.username}" />
+		<property name="password" value="${ormServer.jdbc.password}" />
+		<property name="filters" value="stat" />
+		<property name="maxActive" value="1" />
+		<property name="initialSize" value="1" />
+		<property name="maxWait" value="600" />
+		<property name="minIdle" value="1" />
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 'x' FROM DUAL" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="50" />
+		<property name="proxyFilters">
+	        <list>
+<!-- 	            <ref bean="log-filter"/> -->
+	        </list>
+	    </property>
+	</bean>
+
+	<bean id="ormServerEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="packagesToScan" value="cn.innosoft.fw.orm.server" />
+		<property name="dataSource" ref="ormServerDataSource" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+				<property name="generateDdl" value="true" />
+			</bean>
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">none</prop>
+				<prop key="hibernate.format_sql">true</prop>
+<!-- 				<prop key="hibernate.hbm2ddl.auto">create</prop> -->
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="ormServerTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="ormServerEntityManagerFactory" />
+	</bean>
+	
+	<tx:advice id="ormServerTxAdvice" transaction-manager="ormServerTransactionManager">
+		<tx:attributes>
+			<tx:method name="*" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config proxy-target-class="true">
+		<aop:pointcut id="ormServerMyMethod" expression="execution(* cn.innosoft.fw.orm.server..service.*.*(..)) || execution(* cn.innosoft.fw.orm.server..service.*.*(..))" />
+		<aop:advisor advice-ref="ormServerTxAdvice" pointcut-ref="ormServerMyMethod" />
+	</aop:config>
+
+	<jpa:repositories base-package="cn.innosoft.fw.orm.server" transaction-manager-ref="ormServerTransactionManager" entity-manager-factory-ref="ormServerEntityManagerFactory" factory-class="cn.innosoft.fw.biz.core.persistent.DefaultRepositoryFactoryBean"/>
+
+</beans>
