@@ -15,18 +15,14 @@ import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
 import cn.innosoft.fw.orm.server.model.OrmCode;
-import cn.innosoft.fw.orm.server.model.OrmRoleCodeRight;
 import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.persistent.OrmCodeDao;
-import cn.innosoft.fw.orm.server.persistent.OrmRoleCodeRightDao;
 
 @Service
 public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 
 	@Autowired
 	private OrmCodeDao ormCodeDao;
-	@Autowired
-	private OrmRoleCodeRightDao ormRoleCodeRightDao;
 	@Override
 	public BaseDao<OrmCode, String> getBaseDao() {
 		return ormCodeDao;
@@ -55,45 +51,10 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 
 	public void deleteCode(String codeId) {
 		ormCodeDao.delete(codeId);
-		ormRoleCodeRightDao.deleteByCodeId(codeId);
 	}
 
-	public void editRoleCodeRight(List<String> roleIds, OrmCode code) {
-		String codeId = code.getCodeId();
-		String systemId = code.getSystemId();
-		String parentCodeId = code.getParentCodeId();
-		for (String roleId : roleIds) {
-			List<OrmRoleCodeRight> list = ormRoleCodeRightDao.findByCodeIdAndRoleId(parentCodeId, roleId);
-			if (list.size() == 0) {
-				createOrmRoleCodeRight(roleId, parentCodeId, "Y", "GLOBAL", null,
-						systemId);
-			}
-			createOrmRoleCodeRight(roleId, codeId, "N", "GLOBAL", null, systemId);
-		}
-	}
 
-	/**
-	 * 生成ZTREE，权限建模的时候用
-	 * 
-	 * @param roleId
-	 * @return
-	 */
-	public List<ZtreeBean> createZtree(String roleId) {
-		List<ZtreeBean> result = new ArrayList<ZtreeBean>();
-		List<OrmCode> codes = ormCodeDao.findAll();
-		List<OrmRoleCodeRight> rights = ormRoleCodeRightDao.findByRoleId(roleId);
-		for (OrmCode code : codes) {
-			ZtreeBean node = codeToTreeNode(code);
-			String codeId = code.getCodeId();
-			for (OrmRoleCodeRight rcr : rights) {
-				if (codeId.equals(rcr.getCodeId()) && "N".equals(rcr.getHalfSelect())) {
-					node.setChecked(true);
-				}
-			}
-			result.add(node);
-		}
-		return result;
-	}
+
 
 	/**
 	 * 生成代码ztree，建模时用
@@ -114,18 +75,5 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 		node.setNocheck(false);
 		node.setChecked(false);
 		return node;
-	}
-	public void createOrmRoleCodeRight(String roleId, String codeId, String halfSelcet, String type, String resId,
-			String systemId) {
-		OrmRoleCodeRight rcr = new OrmRoleCodeRight();
-		rcr.setCodeId(codeId);
-		rcr.setHalfSelect(halfSelcet);
-		if (null != resId) {
-			rcr.setResourceId(resId);
-		}
-		rcr.setRoleId(roleId);
-		rcr.setSystemId(systemId);
-		rcr.setType(type);
-		ormRoleCodeRightDao.save(rcr);
 	}
 }

@@ -18,14 +18,10 @@ import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
 import cn.innosoft.fw.orm.server.model.OrmOrganization;
 import cn.innosoft.fw.orm.server.model.OrmResource;
 import cn.innosoft.fw.orm.server.model.OrmRole;
-import cn.innosoft.fw.orm.server.model.OrmRoleCodeRight;
-import cn.innosoft.fw.orm.server.model.OrmRoleOrgRight;
 import cn.innosoft.fw.orm.server.model.OrmRoleResourceRight;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgUserMapDao;
-import cn.innosoft.fw.orm.server.persistent.OrmRoleCodeRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleDao;
-import cn.innosoft.fw.orm.server.persistent.OrmRoleOrgRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleResourceRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
 
@@ -36,10 +32,6 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	private OrmRoleDao ormRoleDao;
 	@Autowired
 	private OrmOrgRoleMapDao ormOrgRoleMapDao;
-	@Autowired
-	private OrmRoleCodeRightDao ormRoleCodeRightDao;
-	@Autowired
-	private OrmRoleOrgRightDao ormRoleOrgRightDao;
 	@Autowired
 	private OrmRoleResourceRightDao ormRoleResourceRightDao;
 	@Autowired
@@ -78,8 +70,6 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	public void deleteRole(String roleId) {
 		ormRoleDao.delete(roleId);
 		ormOrgRoleMapDao.deleteByRoleId(roleId);
-		ormRoleCodeRightDao.deleteByRoleId(roleId);
-		ormRoleOrgRightDao.deleteByRoleId(roleId);
 		ormRoleResourceRightDao.deleteByRoleId(roleId);
 		ormUserRoleMapDao.deleteByRoleId(roleId);
 	}
@@ -100,48 +90,6 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 				ormResourceService.createOrmRoleResourceRight(roleId, parentResId, "Y", res.getSystemId());
 			}
 			ormResourceService.createOrmRoleResourceRight(roleId, res.getResourceId(), "N", res.getSystemId());
-		}
-	}
-
-	public void editRoleCodeRight(Map<String, OrmCode> map, String roleId) {
-		List<OrmRoleCodeRight> rcrs = ormRoleCodeRightDao.findByRoleId(roleId);
-		for (OrmRoleCodeRight rcr : rcrs) {
-			if (map.containsKey(rcr.getResourceId())) {
-				map.remove(rcr.getResourceId());
-			} else {
-				ormRoleCodeRightDao.delete(rcr);
-			}
-		}
-		for (OrmCode code : map.values()) {
-			String parentCodeId = code.getParentCodeId();
-			List<OrmRoleCodeRight> list = ormRoleCodeRightDao.findByCodeId(parentCodeId);
-			if(list.size() == 0){
-				ormCodeService.createOrmRoleCodeRight(roleId, parentCodeId, "Y", "GLOBAL", null,
-						code.getSystemId());
-			}
-			ormCodeService.createOrmRoleCodeRight(roleId, code.getCodeId(), "N", "GLOBAL", null,
-					code.getSystemId());
-		}
-	}
-
-	public void editRoleOrgRight(Map<String, OrmOrganization> map, OrmRole role) {
-		String roleId = role.getRoleId();
-		String systemId = role.getSystemId();
-		List<OrmRoleOrgRight> rors = ormRoleOrgRightDao.findByRoleId(roleId);
-		for (OrmRoleOrgRight ror : rors) {
-			if (map.containsKey(ror.getResourceId())) {
-				map.remove(ror.getResourceId());
-			} else {
-				ormRoleOrgRightDao.delete(ror);
-			}
-		}
-		for (OrmOrganization org : map.values()) {
-			String parentOrgId = org.getParentOrgId();
-			List<OrmRoleOrgRight> list = ormRoleOrgRightDao.findByOrgId(parentOrgId);
-			if(list.size() == 0){
-				ormOrganizationService.createOrmRoleOrgRight(roleId, parentOrgId, "Y", "GLOBAL", null, systemId);
-			}
-			ormOrganizationService.createOrmRoleOrgRight(roleId, org.getOrgId(), "N", "GLOBAL", null, systemId);
 		}
 	}
 

@@ -26,9 +26,6 @@ public class OrmRoleResourceRight implements Serializable {
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	private String id;
 
-	@Column(name="AUTO_ASSOCIATIVE")
-	private String autoAssociative;
-
 	@Column(name="HALF_SELECT")
 	private String halfSelect;
 
@@ -50,14 +47,6 @@ public class OrmRoleResourceRight implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getAutoAssociative() {
-		return this.autoAssociative;
-	}
-
-	public void setAutoAssociative(String autoAssociative) {
-		this.autoAssociative = autoAssociative;
 	}
 
 	public String getHalfSelect() {

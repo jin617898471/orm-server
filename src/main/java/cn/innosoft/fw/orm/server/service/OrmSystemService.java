@@ -14,9 +14,7 @@ import cn.innosoft.fw.orm.server.persistent.OrmCodeDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgUserMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmResourceDao;
-import cn.innosoft.fw.orm.server.persistent.OrmRoleCodeRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleDao;
-import cn.innosoft.fw.orm.server.persistent.OrmRoleOrgRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleResourceRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmSystemDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
@@ -35,11 +33,7 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 	@Autowired
 	private OrmResourceDao ormResourceDao;
 	@Autowired
-	private OrmRoleCodeRightDao ormRoleCodeRightDao;
-	@Autowired
 	private OrmRoleDao ormRoleDao;
-	@Autowired
-	private OrmRoleOrgRightDao ormRoleOrgRightDao;
 	@Autowired
 	private OrmRoleResourceRightDao ormRoleResourceRightDao;
 	@Autowired
@@ -76,9 +70,7 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 		ormCodeDao.deleteBySystemId(systemId);
 		ormOrgRoleMapDao.deleteBySystemId(systemId);
 		ormResourceDao.deleteBySystemId(systemId);
-		ormRoleCodeRightDao.deleteBySystemId(systemId);
 		ormRoleDao.deleteBySystemId(systemId);
-		ormRoleOrgRightDao.deleteBySystemId(systemId);
 		ormRoleResourceRightDao.deleteBySystemId(systemId);
 		ormUserRoleMapDao.deleteBySystemId(systemId);
 	}

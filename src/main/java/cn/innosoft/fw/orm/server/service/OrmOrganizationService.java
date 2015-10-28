@@ -16,13 +16,11 @@ import cn.innosoft.fw.orm.server.model.OrmOrgRoleMap;
 import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
 import cn.innosoft.fw.orm.server.model.OrmOrganization;
 import cn.innosoft.fw.orm.server.model.OrmRole;
-import cn.innosoft.fw.orm.server.model.OrmRoleOrgRight;
 import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgUserMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrganizationDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleDao;
-import cn.innosoft.fw.orm.server.persistent.OrmRoleOrgRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
 import cn.innosoft.orm.client.common.SelectTreeBean;
 import cn.innosoft.orm.client.service.LoginUserContext;
@@ -39,9 +37,6 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 
 	@Autowired
 	private OrmOrgRoleMapDao ormOrgRoleMapDao;
-
-	@Autowired
-	private OrmRoleOrgRightDao ormRoleOrgRightDao;
 
 	@Autowired
 	private OrmRoleDao ormRoleDao;
@@ -84,7 +79,6 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		ormOrganizationDao.delete(orgId);
 		ormOrgUserMapDao.deleteByOrgId(orgId);
 		ormOrgRoleMapDao.deleteByOrgId(orgId);
-		ormRoleOrgRightDao.deleteByOrgId(orgId);
 	}
 
 	/**
@@ -95,18 +89,18 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 	 */
 	public List<ZtreeBean> createZtree(String roleId) {
 		List<ZtreeBean> result = new ArrayList<ZtreeBean>();
-		List<OrmOrganization> orgs = ormOrganizationDao.findAll();
-		List<OrmRoleOrgRight> rights = ormRoleOrgRightDao.findByRoleId(roleId);
-		for (OrmOrganization org : orgs) {
-			ZtreeBean node = orgToTreeNode(org);
-			String orgId = org.getOrgId();
-			for (OrmRoleOrgRight ror : rights) {
-				if (orgId.equals(ror.getOrgId()) && "N".equals(ror.getHalfSelect())) {
-					node.setChecked(true);
-				}
-			}
-			result.add(node);
-		}
+//		List<OrmOrganization> orgs = ormOrganizationDao.findAll();
+//		List<OrmRoleOrgRight> rights = ormRoleOrgRightDao.findByRoleId(roleId);
+//		for (OrmOrganization org : orgs) {
+//			ZtreeBean node = orgToTreeNode(org);
+//			String orgId = org.getOrgId();
+//			for (OrmRoleOrgRight ror : rights) {
+//				if (orgId.equals(ror.getOrgId()) && "N".equals(ror.getHalfSelect())) {
+//					node.setChecked(true);
+//				}
+//			}
+//			result.add(node);
+//		}
 		return result;
 	}
 
@@ -228,19 +222,5 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		orm.setRoleId(role.getRoleId());
 		orm.setSystemId(role.getSystemId());
 		ormOrgRoleMapDao.save(orm);
-	}
-
-	public void createOrmRoleOrgRight(String roleId, String orgId, String halfSelcet, String type, String resId,
-			String systemId) {
-		OrmRoleOrgRight ror = new OrmRoleOrgRight();
-		ror.setOrgId(orgId);
-		ror.setHalfSelect(halfSelcet);
-		if (null != resId) {
-			ror.setResourceId(resId);
-		}
-		ror.setRoleId(roleId);
-		ror.setSystemId(systemId);
-		ror.setType(type);
-		ormRoleOrgRightDao.save(ror);
 	}
 }

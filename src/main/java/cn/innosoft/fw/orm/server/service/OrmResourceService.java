@@ -18,8 +18,6 @@ import cn.innosoft.fw.orm.server.model.OrmResource;
 import cn.innosoft.fw.orm.server.model.OrmRoleResourceRight;
 import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.persistent.OrmResourceDao;
-import cn.innosoft.fw.orm.server.persistent.OrmRoleCodeRightDao;
-import cn.innosoft.fw.orm.server.persistent.OrmRoleOrgRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleResourceRightDao;
 
 @Service
@@ -29,10 +27,6 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	private OrmResourceDao ormResourceDao;
 	@Autowired
 	private OrmRoleResourceRightDao ormRoleResourceRightDao;
-	@Autowired
-	private OrmRoleOrgRightDao ormRoleOrgRightDao;
-	@Autowired
-	private OrmRoleCodeRightDao ormRoleCodeRightDao;
 
 	@Override
 	public BaseDao<OrmResource, String> getBaseDao() {
@@ -77,8 +71,6 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	 */
 	public void deleteResource(String resId) {
 		ormResourceDao.delete(resId);
-		ormRoleOrgRightDao.deleteByResourceId(resId);
-		ormRoleCodeRightDao.deleteByResourceId(resId);
 		ormRoleResourceRightDao.deleteByResourceId(resId);
 	}
 
