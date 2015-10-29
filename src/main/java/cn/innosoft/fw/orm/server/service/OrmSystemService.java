@@ -1,5 +1,8 @@
 package cn.innosoft.fw.orm.server.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +15,6 @@ import cn.innosoft.fw.biz.core.service.AbstractBaseService;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
 import cn.innosoft.fw.orm.server.persistent.OrmCodeDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
-import cn.innosoft.fw.orm.server.persistent.OrmOrgUserMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmResourceDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleResourceRightDao;
@@ -29,8 +31,6 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 	@Autowired
 	private OrmOrgRoleMapDao ormOrgRoleMapDao;
 	@Autowired
-	private OrmOrgUserMapDao ormOrgUserMapDao;
-	@Autowired
 	private OrmResourceDao ormResourceDao;
 	@Autowired
 	private OrmRoleDao ormRoleDao;
@@ -44,6 +44,8 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 		return ormSystemDao;
 	}
 
+
+	
 	/**
 	 * 代码系统
 	 * 
@@ -65,6 +67,12 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 		ormSystemDao.update(system);
 	}
 
+	
+	/**
+	 * 删除System
+	 * 级联删除其他表里的数据
+	 * @param systemId
+	 */
 	public void deleteSystem(String systemId) {
 		ormSystemDao.delete(systemId);
 		ormCodeDao.deleteBySystemId(systemId);
@@ -73,5 +81,24 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 		ormRoleDao.deleteBySystemId(systemId);
 		ormRoleResourceRightDao.deleteBySystemId(systemId);
 		ormUserRoleMapDao.deleteBySystemId(systemId);
+	}
+	
+	/**
+	 * 批量删除System
+	 * 
+	 */
+	public void deleteBatchSystemById(ArrayList<String> idArray){
+		for(int i=0;i<idArray.size();i++){
+			deleteSystem(idArray.get(i));
+		}
+	}
+	
+	/**
+	 * 查询所有的OrmSystem记录
+	 * @return
+	 */
+	public List<OrmSystem> findOrmSystemAll(){
+		return ormSystemDao.findByValidSign("Y");
+		//return null;
 	}
 }

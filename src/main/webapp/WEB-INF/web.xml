@@ -31,6 +31,7 @@
 <!-- 			classpath*:biz-beans-enhance.xml -->
 			classpath*:biz-beans.xml
 			classpath:ormServer-beans.xml
+			classpath:ormServer-servlet.xml
 		</param-value>
 	</context-param>
 
