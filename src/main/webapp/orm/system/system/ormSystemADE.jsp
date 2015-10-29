@@ -63,6 +63,6 @@
 	<script type="text/javascript" src="resources/commons/js/seajs/sea-debug.js" ></script>
     <script type="text/javascript" src="resources/commons/js/seajs/sea-config-debug.js"></script>
 	<script>
-		seajs.use("<%=basePath%>orm/ormsystem/js/ormSystemADE");
+		seajs.use("<%=basePath%>orm/system/system/js/ormSystemADE");
 	</script>
 </html>

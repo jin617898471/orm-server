@@ -105,7 +105,7 @@ define(function(require, exports, module) {
 			Confirmbox.confirm('这些系统记录可能被其他资源所引用,是否确定要删除？', '', function() {
 				var name = "";
 				var parameter = {
-					url :  _path + '/deletebatch/' + deleteIdArray,
+					url :  _path + '/deleteBatch/' + deleteIdArray,
 					type : "POST",
 					async : false,
 					success : function(data) {
@@ -176,7 +176,7 @@ define(function(require, exports, module) {
 			var name = "";
 			
 			var parameter = {
-				url : _path + '/delete/' + id,
+				url : _path + '/deleteSystem/' + id,
 				type : "POST",
 				async : false,
 				success : function(data) {

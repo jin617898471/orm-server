@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 		Form = require("form"),
 		$ = require("$");
 
-	var _path = "/orm-sever/pages/ormsystem";
+	var _path = "/orm-server/ormsystem";
 
 	// 验证
 	var validator = new Validator({
@@ -56,7 +56,7 @@ define(function(require, exports, module) {
 					check = data;
 				},
 				error : function(result) {
-					Confirmbox.alert('数据异常！');
+					Confirmbox.alert('数据异常！'+result);
 				}
 			};
 			$.ajax(parameter);
@@ -122,7 +122,8 @@ define(function(require, exports, module) {
 					}
 					var option = {
 						type : type,
-						successFn : function() {
+						successFn : function(data) {
+							//alert(data);
 							showInformation(true);
 							$(".msgText").text(name+"成功");
 						},
