@@ -43,7 +43,7 @@
 		<property name="maxPoolPreparedStatementPerConnectionSize" value="50" />
 		<property name="proxyFilters">
 	        <list>
-<!-- 	            <ref bean="log-filter"/> -->
+	            <ref bean="log-filter"/>
 	        </list>
 	    </property>
 	</bean>
