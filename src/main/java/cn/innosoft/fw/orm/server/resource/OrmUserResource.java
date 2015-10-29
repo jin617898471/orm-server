@@ -9,6 +9,6 @@ public class OrmUserResource {
 
 	@RequestMapping("/manager")
 	public String forwardUserManager() {
-		return "to user manager page";
+		return "{to user manager page}";
 	}
 }

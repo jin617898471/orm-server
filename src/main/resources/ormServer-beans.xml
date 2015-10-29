@@ -19,7 +19,7 @@
 	<context:annotation-config />
 	
 	<context:component-scan base-package="cn.innosoft.fw.orm.server" use-default-filters="false">
-		<context:include-filter type="aspectj" expression="cn.innosoft.fw.orm.server..*.service.*Service" />
+		<context:include-filter type="aspectj" expression="cn.innosoft.fw.orm..*.service.*Service" />
 	</context:component-scan>
 	
 	<import resource="ormServer-ds.xml"/>
