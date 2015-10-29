@@ -41,6 +41,9 @@ public interface OrmResourceDao extends BaseDao<OrmResource, String> {
 	 * @param resourceId
 	 */
 	@Modifying
-	@Query(value = "update ORM_RESOURCE set is_leaf = 1? where resource_Id = 2?", nativeQuery = true)
+	@Query(value = "update ORM_RESOURCE set is_leaf = ?1 where resource_Id = ?2", nativeQuery = true)
 	public void updateIsLeafByResourceId(String isLeaf, String resourceId);
+	
+	@Query(value="select resource_id from ORM_RESOURCE where system_id = ?1",nativeQuery=true)
+	public List<String> findResourceIdBySystemId(String systemId);
 }

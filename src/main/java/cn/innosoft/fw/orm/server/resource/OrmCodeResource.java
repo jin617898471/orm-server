@@ -20,12 +20,6 @@ public class OrmCodeResource {
 	
 	@Autowired
 	private OrmCodeService ormCodeService;
-	
-	
-	
-	public OrmCodeService getOrmCodeService() {
-		return ormCodeService;
-	}
 
 	public void setOrmCodeService(OrmCodeService ormCodeService) {
 		this.ormCodeService = ormCodeService;
@@ -41,7 +35,8 @@ public class OrmCodeResource {
 	public String forwardDetailAction(Model model,@PathVariable String codeId){
 		OrmCode ormCode = ormCodeService.findOne(codeId);
 		model.addAttribute("OrmCode",ormCode);
-		return "";
+		model.addAttribute("sign","details");
+		return "/orm/system/code/ormCodeADE.jsp";
 	}
 	
 	/**
@@ -51,8 +46,8 @@ public class OrmCodeResource {
 	 */
 	@RequestMapping("/forward/add")
 	public String forwardAddAction(Model model){
-		model.addAttribute("type","add");
-		return "";
+		model.addAttribute("sign","add");
+		return "/orm/system/code/ormCodeADE.jsp";
 	}
 	
 	/**
@@ -65,8 +60,8 @@ public class OrmCodeResource {
 	public String forwardEditAction(Model model,@PathVariable String codeId){
 		OrmCode ormCode = ormCodeService.findOne(codeId);
 		model.addAttribute("ormCode",ormCode);
-		model.addAttribute("type","add");
-		return "";
+		model.addAttribute("sign","edit");
+		return "/orm/system/code/ormCodeADE.jsp";
 	}
 	
 	/**
@@ -74,11 +69,11 @@ public class OrmCodeResource {
 	 * @param ormCode
 	 * @return
 	 */
-	@RequestMapping("/add")
+	@RequestMapping("/addCode")
 	@ResponseBody
-	public String addOrmCodeAction(OrmCode ormCode){
+	public String addCodeAction(OrmCode ormCode){
 		
-		ormCodeService.add(ormCode);
+		ormCodeService.addCode(ormCode);
 		return "true";
 	}
 	
@@ -87,10 +82,10 @@ public class OrmCodeResource {
 	 * @param ormCode
 	 * @return
 	 */
-	@RequestMapping("/edit")
+	@RequestMapping("/editCode")
 	@ResponseBody
-	public String editOrmCodeAction(OrmCode ormCode){
-		ormCodeService.update(ormCode);
+	public String editCodeAction(OrmCode ormCode){
+		ormCodeService.updateCode(ormCode);
 		return "true";
 	}
 	
@@ -98,26 +93,28 @@ public class OrmCodeResource {
 	 * 通过ormCodeId删除OrmCode数据
 	 * @param ormCodeId
 	 */
-	@RequestMapping("/delete")
+	@RequestMapping("/deleteCode/{codeId}")
 	@ResponseBody
-	public void deleteOrmCodeAction(@PathVariable String ormCodeId){
-		ormCodeService.delete(ormCodeId);
+	public void deleteCodeAction(@PathVariable String codeId){
+		ormCodeService.delete(codeId);
 	}
 	
 	/**
 	 * 批量删除OrmCode数据
 	 * @param idArray
 	 */
-	@RequestMapping("/deleteBatch")
+	@RequestMapping("/deleteBatchCode/{idArray}")
 	@ResponseBody
 	public void deleteBatchCodeAction(@PathVariable ArrayList<String> idArray){
 		ormCodeService.deleteBatchCode(idArray);
 	}
 	
-	@RequestMapping("/findByPage")
+	@RequestMapping("/findCodeByPage")
 	@ResponseBody
-	public PageResponse<OrmCode> findAllOrmCode(PageRequest pageRequest){
+	public PageResponse<OrmCode> findOrmCodeByPage(PageRequest pageRequest){
 		return ormCodeService.find(pageRequest);
 	}
+	
+	
 	
 }

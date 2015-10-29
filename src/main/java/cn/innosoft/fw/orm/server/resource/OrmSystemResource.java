@@ -37,7 +37,7 @@ public class OrmSystemResource {
 		model.addAttribute("OrmSystem",ormSystem);
 		model.addAttribute("sign","details");
 		//返回到系统详情页面
-		return "/orm/system/system/ormSystemADE";
+		return "/orm/ormsystem/ormSystemADE.jsp";
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public class OrmSystemResource {
 		model.addAttribute("OrmSystem",ormSystem);
 		model.addAttribute("sign","edit");
 		//返回到系统详情页面
-		return "/orm/system/system/ormSystemADE";
+		return "/orm/ormsystem/ormSystemADE.jsp";
 	}
 	
 	/**
@@ -67,7 +67,7 @@ public class OrmSystemResource {
 		
 		model.addAttribute("sign","add");
 		//返回到系统详情页面
-		return "/orm/system/system/ormSystemADE";
+		return "/orm/ormsystem/ormSystemADE.jsp";
 	}
 	
 	/**
@@ -86,7 +86,7 @@ public class OrmSystemResource {
 	 * @param systemId
 	 * @return
 	 */
-	@RequestMapping("/checkOnlyOne/{systemId}")
+	@RequestMapping("/checkOnlyOne")
 	@ResponseBody
 	public boolean checkOnlyOne(@PathVariable String systemId){
 		if(ormSystemService.findOne(systemId)!=null){
@@ -105,9 +105,9 @@ public class OrmSystemResource {
 	@ResponseBody
 	public String addSystemAction(OrmSystem ormSystem){
 		
-		ormSystemService.addSystem(ormSystem);
+		ormSystemService.add(ormSystem);
+		//没有出现异常,返回"true"到前端
 		return "true";
-		
 	}
 	
 	/**
@@ -119,7 +119,7 @@ public class OrmSystemResource {
 	@ResponseBody
 	public String editSystemAction(OrmSystem ormSystem){
 		
-		ormSystemService.updateSystem(ormSystem);
+		ormSystemService.add(ormSystem);
 		//没有出现异常,返回"true"到前端
 		return "true";
 	}

@@ -17,6 +17,13 @@
             ">
 	<context:property-placeholder location="classpath*:*-jdbc.properties" />
 	
+	<bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
+        <property name="statementExecutableSqlLogEnable" value="true" />
+        <property name="dataSourceLogEnabled" value="true" />
+        <property name="connectionLogEnabled" value="true" />
+        <property name="statementLogEnabled" value="true" />
+  	</bean>
+	
 	<bean id="ormServerDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="url" value="${ormServer.jdbc.url}" />
 		<property name="username" value="${ormServer.jdbc.username}" />
@@ -36,9 +43,7 @@
 		<property name="maxPoolPreparedStatementPerConnectionSize" value="50" />
 		<property name="proxyFilters">
 	        <list>
-	            <bean class="com.alibaba.druid.filter.logging.Log4jFilter">
-			        <property name="statementExecutableSqlLogEnable" value="true" />
-			  	</bean>
+	            <ref bean="log-filter"/>
 	        </list>
 	    </property>
 	</bean>
@@ -58,6 +63,7 @@
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">none</prop>
 				<prop key="hibernate.format_sql">true</prop>
+<!-- 				<prop key="hibernate.hbm2ddl.auto">create</prop> -->
 			</props>
 		</property>
 	</bean>
