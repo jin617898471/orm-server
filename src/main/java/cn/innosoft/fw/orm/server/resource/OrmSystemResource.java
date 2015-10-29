@@ -37,7 +37,7 @@ public class OrmSystemResource {
 		model.addAttribute("OrmSystem",ormSystem);
 		model.addAttribute("sign","details");
 		//返回到系统详情页面
-		return "/pages/ormsystem/ormSystemADE.jsp";
+		return "/orm/ormsystem/ormSystemADE.jsp";
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public class OrmSystemResource {
 		model.addAttribute("OrmSystem",ormSystem);
 		model.addAttribute("sign","edit");
 		//返回到系统详情页面
-		return "pages/ormsystem/ormSystemADE.jsp";
+		return "/orm/ormsystem/ormSystemADE.jsp";
 	}
 	
 	/**
@@ -67,7 +67,7 @@ public class OrmSystemResource {
 		
 		model.addAttribute("sign","add");
 		//返回到系统详情页面
-		return "pages/ormsystem/ormSystemADE.jsp";
+		return "/orm/ormsystem/ormSystemADE.jsp";
 	}
 	
 	/**
@@ -79,6 +79,21 @@ public class OrmSystemResource {
 	@ResponseBody
 	public PageResponse<OrmSystem>  findOrmSystemByPage(PageRequest pageRequest){
 		return ormSystemService.find(pageRequest);
+	}
+	
+	/**
+	 * 用于添加和修改OrmSystem时系统标识符的唯一判断
+	 * @param systemId
+	 * @return
+	 */
+	@RequestMapping("/checkOnlyOne")
+	@ResponseBody
+	public boolean checkOnlyOne(@PathVariable String systemId){
+		if(ormSystemService.findOne(systemId)!=null){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	/**
@@ -146,6 +161,8 @@ public class OrmSystemResource {
 	 * @param ormSystemId
 	 * @return
 	 */
+	@RequestMapping("/getOrmSystemById")
+	@ResponseBody
 	public OrmSystem getOrmSystemById(String ormSystemId){
 		return ormSystemService.findOne(ormSystemId);
 	}
