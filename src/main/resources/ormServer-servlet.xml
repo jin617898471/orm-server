@@ -36,7 +36,13 @@
 			</bean>
 		</mvc:message-converters>
     </mvc:annotation-driven>
-    
+    	<!-- 配置视图组件ViewResolver -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 该组件可以自动给页面追加前缀 -->
+		<property name="prefix" value="/"/>
+		<!-- 该组件可以自动给页面追加后缀 -->
+		<property name="suffix" value=".jsp"/>
+	</bean>	
      
     
 	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
@@ -50,8 +56,8 @@
 		</property>
 	</bean>
 	
-	<context:component-scan base-package="cn.innosoft.fw.orm.server" use-default-filters="false">
-		<context:include-filter type="aspectj" expression="cn.innosoft.fw.orm.server..resource.*Resource" />
+	<context:component-scan base-package="cn.innosoft.fw.orm" use-default-filters="false">
+		<context:include-filter type="aspectj" expression="cn.innosoft.fw.orm..resource.*Resource" />
 	</context:component-scan>
 	
 	<mvc:default-servlet-handler />
