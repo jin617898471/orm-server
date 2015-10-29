@@ -21,7 +21,7 @@ public class OrmUserResource {
 		return "orm/ormuser/ormUserManage";
 	}
 	@RequestMapping("/list")
-	@ResponseBody
+	@ResponseBody 
 	public PageResponse<OrmUser> listUsers(PageRequest pageRequest){
 		return ormUserService.find(pageRequest);
 	}
