@@ -31,4 +31,11 @@ public interface OrmUserRoleMapDao extends BaseDao<OrmUserRoleMap, String> {
 
 	public Long deleteBySystemId(String systemId);
 
+	/**
+	 * 根据用户Id查找系统Id
+	 * @param userId
+	 * @return
+	 */
+	@Query(value="select system_Id from Orm_User_Role_Map where user_Id=1?",nativeQuery=true)
+	public List<String> findSystemIdByUserId(String userId);
 }

@@ -27,17 +27,16 @@
 			</bean>
 			<!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
 			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="prettyPrint" value="true" />
 				<property name="objectMapper" >
 					<bean id="customObjectMapper" class="cn.innosoft.fw.biz.util.CustomerObjectMapper" >
-				    	<constructor-arg value="yyyy-MM-dd HH:mm:ss" />  
+				    	<constructor-arg value="yyyy/MM/dd hh" />  
 				    </bean> 
 				</property>  
 			</bean>
 		</mvc:message-converters>
     </mvc:annotation-driven>
-    
-
-	<!-- 配置视图组件ViewResolver -->
+    	<!-- 配置视图组件ViewResolver -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- 该组件可以自动给页面追加前缀 -->
 		<property name="prefix" value="/"/>
@@ -49,6 +48,7 @@
 	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
 		<property name="converters">
 			<list>
+				<bean class="cn.innosoft.fw.biz.util.converter.StringToSqlTimeConverter"></bean>
 				<bean class="cn.innosoft.fw.biz.util.converter.StringToSqlDateConverter"></bean>
 				<bean class="cn.innosoft.fw.biz.util.converter.StringToSqlTimestampConverter"></bean>
 				<bean class="cn.innosoft.fw.biz.util.converter.StringToUtilDateConverter"></bean>
@@ -61,16 +61,6 @@
 	</context:component-scan>
 	
 	<mvc:default-servlet-handler />
-	
-	<mvc:interceptors>
-		<!-- 设置biz框架的日志拦截器  -->
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<bean class="cn.innosoft.fw.biz.log.LogInterceptor" >
-				<property name="level" value="0" /> <!-- 0：不记录日志到数据库；1：只记录业务日志；2：记录技术日志：3：记录详情日志  -->
-			</bean>
-		</mvc:interceptor>
-	</mvc:interceptors>
 	
 
 	

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import cn.innosoft.fw.biz.base.querycondition.FilterGroup;
 import cn.innosoft.fw.biz.base.querycondition.QueryConditionHelper;
@@ -20,6 +21,7 @@ import cn.innosoft.fw.orm.server.model.OrmRoleResourceRight;
 import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.persistent.OrmResourceDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleResourceRightDao;
+import cn.innosoft.fw.orm.server.persistent.OrmSystemDao;
 import cn.innosoft.orm.client.service.LoginUserContext;
 
 @Service
@@ -29,10 +31,12 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	private OrmResourceDao ormResourceDao;
 	@Autowired
 	private OrmRoleResourceRightDao ormRoleResourceRightDao;
+	@Autowired
+	private OrmSystemDao ormSystemDao;
 
 	@Override
 	public BaseDao<OrmResource, String> getBaseDao() {
-		return null;
+		return ormResourceDao;
 	}
 
 	/**
@@ -230,22 +234,121 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		return page;
 	}
 
-//	public String getBcTreeNodes() throws Exception {
-//		StringBuilder sb = new StringBuilder();
-//		String systemid = Util.convertListToString(LoginUserContext.getUserId(), false);
-//		FilterGroup filtergroup = QueryConditionHelper.add(new String[] { "validSign", "systemId", "resourceType" },
-//				new String[] { "Y", systemid, "000" }, new String[] { "equal", "in", "equal" });
-//		List<OrmResource> topist = this.find(filtergroup);
-//		FilterGroup rfiltergroup = QueryConditionHelper.add(new String[] { "validSign" }, new String[] { "Y" });
-//		List<OrmResource> rlist = this.find(rfiltergroup);
-//		List<String> resourceIds = new ArrayList<String>();
-//		for (String string : LoginUserContext.getSystem()) {
-//			resourceIds.addAll(LoginUserContext.getUserResources(string));
-//		}
-//		sb.append("[");
-//		sb.append(getResourceString(topist, rlist, resourceIds));
-//		sb.append("]");
-//		return sb.toString();
-//	}
+	/**
+	 * 加载资源树
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String getBcTreeNodes() throws Exception {
+		StringBuilder sb = new StringBuilder();
+		List<String> systemIdList = ormSystemDao.findSystemIdByValidSign("Y");
+		String systemid = convertListToString(systemIdList, false);
+		FilterGroup filtergroup = QueryConditionHelper.add(new String[] { "validSign", "systemId", "resourceType" },
+				new String[] { "Y", systemid, "000" }, new String[] { "equal", "in", "equal" });
+		List<OrmResource> topist = findAll(filtergroup);
+		FilterGroup rfiltergroup = QueryConditionHelper.add(new String[] { "validSign" }, new String[] { "Y" });
+		List<OrmResource> rlist = findAll(rfiltergroup);
+		List<String> resourceIds = new ArrayList<String>();
+		for (String systemId : systemIdList) {
+			resourceIds.addAll(ormResourceDao.findResourceIdBySystemId(systemId));
+		}
+		sb.append("[");
+		sb.append(getResourceString(topist, rlist, resourceIds));
+		sb.append("]");
+		return sb.toString();
+	}
 
+	/**
+	 * 将字符串转换成List
+	 * @param ids
+	 * @param hasQuotation
+	 * @return
+	 */
+	public static String convertListToString(List<String> ids, boolean hasQuotation) {
+		String str = "";
+		for (String id : ids) {
+			str += ",";
+			if (hasQuotation) {
+				str += "'" + id + "'";
+			} else {
+				str += id;
+			}
+		}
+		if (str.length() > 0) {
+			str = str.substring(1);
+		}
+		return str;
+	}
+
+	/**
+	 * 将资源链表拼接成字符串
+	 * @param topResources
+	 * @param systemResources
+	 * @param resourceIds
+	 * @return
+	 */
+	private static String getResourceString(List<OrmResource> topResources, List<OrmResource> systemResources,
+			List<String> resourceIds) {
+		StringBuilder sb = new StringBuilder();
+		for (OrmResource resource : topResources) {
+			StringBuilder sb2 = new StringBuilder();
+			boolean checked = true;
+			sb2.append("{");
+			sb2.append("\"id\":").append("\"").append(resource.getResourceId()).append("\",");
+			sb2.append("\"name\":").append("\"").append(resource.getResourceName()).append("\",");
+			if ("000".equals(resource.getResourceType())) {
+				sb2.append("\"type\":").append("\"").append("system").append("\",");
+				sb2.append("\"open\":").append(true).append(",");
+			} else {
+				sb2.append("\"type\":").append("\"").append("resource").append("\",");
+			}
+			sb2.append("\"system\":").append("\"").append(resource.getSystemId()).append("\",");
+			sb2.append("\"resourceType\":").append("\"").append(resource.getResourceType()).append("\"");
+
+			if (!resourceIds.contains(resource.getResourceId())) {
+				sb2.append(",\"nocheck\":").append("true");
+				checked = false;
+			}
+
+			List<OrmResource> childResources = getSameLevelResources(resource.getResourceId(), systemResources);
+			boolean hasChild = false;
+			if (childResources != null && childResources.size() > 0) {
+				String temp = getResourceString(childResources, systemResources, resourceIds);
+				if (StringUtils.hasText(temp)) {
+					hasChild = true;
+					sb2.append(",\"children\":").append("[");
+					sb2.append(temp);
+					sb2.append("]");
+				}
+			}
+			sb2.append("},");
+			if (checked) {
+				sb.append(sb2);
+			} else if (!checked && hasChild) {
+				sb.append(sb2);
+			}
+
+		}
+		if (sb.length() > 1)
+			sb.deleteCharAt(sb.length() - 1);
+		return sb.toString();
+	}
+
+	/**
+	 * 获得统计资源
+	 * @param pResourceId
+	 * @param allResources
+	 * @return
+	 */
+	private static List<OrmResource> getSameLevelResources(String pResourceId, List<OrmResource> allResources) {
+		List<OrmResource> retResources = new ArrayList<OrmResource>();
+		for (OrmResource resource : allResources) {
+			if (pResourceId.equals(resource.getParentResId())) {
+				retResources.add(resource);
+				continue;
+			}
+		}
+		return retResources;
+	}
 }
