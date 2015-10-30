@@ -22,6 +22,7 @@ import cn.innosoft.fw.orm.server.persistent.OrmResourceDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleResourceRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmSystemDao;
 
+
 @Service
 public class OrmResourceService extends AbstractBaseService<OrmResource, String> {
 
@@ -65,9 +66,17 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		ormResource.setValidSign("Y");
 		ormResource.setIsLeaf("Y");
 		ormResource.setCreateDt(new Date());
+<<<<<<< HEAD
+		//ormResource.setCreateUserId(LoginUserContext.getUserId());
+=======
 //		ormResource.setCreateUserId(LoginUserContext.getUserId());
+>>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 		ormResource.setUpdateDt(new Date());
+<<<<<<< HEAD
+		//ormResource.setUpdateUserId(LoginUserContext.getUserId());
+=======
 //		ormResource.setUpdateUserId(LoginUserContext.getUserId());
+>>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 		updateIfParentIsLeaf(parentId);
 		return ormResourceDao.save(ormResource).toString();
 	}
@@ -79,7 +88,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	 */
 	private void updateIfParentIsLeaf(String parentId) {
 		OrmResource res = ormResourceDao.findByResourceId(parentId);
-		if ("Y".equals((res.getIsLeaf()))) {
+		if (res!=null && "Y".equals((res.getIsLeaf()))) {
 			ormResourceDao.updateIsLeafByResourceId("N", res.getResourceId());
 		}
 	}

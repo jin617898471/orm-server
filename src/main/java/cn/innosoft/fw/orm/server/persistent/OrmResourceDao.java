@@ -9,6 +9,17 @@ import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.orm.server.model.OrmResource;
 
 public interface OrmResourceDao extends BaseDao<OrmResource, String> {
+<<<<<<< HEAD
+
+	/**
+	 * 查找有效同级节点（同一个父亲节点）
+	 * 
+	 * @param parentResId
+	 * @return
+	 */
+	@Query(value = "select * from ORM_RESOURCE where parent_Res_Id=?1 and valid_Sign='Y'", nativeQuery = true)
+=======
+>>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 	public List<OrmResource> findByParentResId(String parentResId);
 
 	public Long deleteBySystemId(String systemId);
@@ -31,6 +42,11 @@ public interface OrmResourceDao extends BaseDao<OrmResource, String> {
 	@Query(value = "update ORM_RESOURCE set is_leaf = ?1 where resource_Id = ?2", nativeQuery = true)
 	public void updateIsLeafByResourceId(String isLeaf, String resourceId);
 	
+	/**
+	 * 通过系统Id查找资源Id
+	 * @param systemId
+	 * @return
+	 */
 	@Query(value="select resource_id from ORM_RESOURCE where system_id = ?1",nativeQuery=true)
 	public List<String> findResourceIdBySystemId(String systemId);
 }
