@@ -10,7 +10,7 @@
 <title>用户管理主页</title>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/base.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/widget.css">
-<link rel="stylesheet" type="text/css" href="<%=basePath%>orm/ormuser/css/ormUserManage.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>orm/org/user/css/ormUserManage.css">
 <base href="<%=basePath%>">
 </head>
 <body>
@@ -88,7 +88,7 @@
 	<script type="text/javascript" src="resources/commons/js/seajs/sea-debug.js" ></script>
     <script type="text/javascript" src="resources/commons/js/seajs/sea-config-debug.js"></script>
 	<script>
-		seajs.use("../orm/ormuser/js/ormUserManage");
+		seajs.use("../orm/org/user/js/ormUserManage");
 	</script>
 </body>
 </html>

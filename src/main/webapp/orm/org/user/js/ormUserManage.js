@@ -4,7 +4,7 @@ define(function(require,exports){
 		Confirmbox=require("inno/dialog/1.0.0/confirmbox-debug"),
 		Form = require("form"),
 		SelectTree=require("inno/select-tree/1.0.0/select-tree-debug"),
-		CodeProvider = require("../../common/js/codeProvider");
+//		CodeProvider = require("../../common/js/codeProvider");
 		$=require("$");
 
 	require("easyui");
@@ -49,7 +49,7 @@ define(function(require,exports){
 	        scrolling:true,
 	        title:"用户查看"
 	    }).before('show',function(id){
-	    	var url='./'+_path+"/forward/detail/"+id;
+	    	var url='./'+_path+"/detail/"+id;
 	    	this.set('content',url);
 	});
 	
@@ -85,48 +85,48 @@ define(function(require,exports){
 		return data;
 	};
 	
-//	var one= new SelectTree({
-//        trigger: '.O_SERIAL',
-//        height:'200px',
-//        width: '188px',
-//        name: 'O_SERIAL',
-////        mult:false,
-//        cascade:false,
-//        checkSelect:function(target,mult){
-//        	//flase时表示选中,true为取消选中
-//        	var flag = $(target).find("span").hasClass("ui-select-tree-checked");
-//        	var value = "";
-//        	if(!flag){
-//        		var val_ = $("input[name = SERIAL]").val();
-//        		value=val_ +","+$(target).attr("data-oserial");
-//        	}else {
-//        		value = "noCheck";
-//        	}
-//            if(value){
-//            	if("noCheck" == value){//若该节点取消选中,则去除该节点的value值
-//            		var ncValue = $(target).attr("data-oserial");
-//            		value = $("input[name = SERIAL]").val();
-//            		if(!value.indexOf(",", 0)){
-//            			value = "";
-//            		}else {
-//            			value += ",";
-//            			value = value.replace(ncValue+",", "");
-//            			value = value.substr(0,value.length-1);
-//            		}
-//            	}else {
-//            		if(","==value.substring(0,1)){//第一次去掉首位的逗号
-//            			value = value.substr(1,value.length-1);
-//            		}
-//            	}
-//	            $("input[name = SERIAL]").val(value);
-//	            return true;
-//            }else{
-//            	alert("您勾选的节点不在您所在的权限范围内!");
-//            }
-//            return false;
-//        },
-//        model: getOrgSelectTree(),
-//    }).render();
+	var one= new SelectTree({
+        trigger: '.O_SERIAL',
+        height:'200px',
+        width: '188px',
+        name: 'O_SERIAL',
+//        mult:false,
+        cascade:false,
+        checkSelect:function(target,mult){
+        	//flase时表示选中,true为取消选中
+        	var flag = $(target).find("span").hasClass("ui-select-tree-checked");
+        	var value = "";
+        	if(!flag){
+        		var val_ = $("input[name = SERIAL]").val();
+        		value=val_ +","+$(target).attr("data-oserial");
+        	}else {
+        		value = "noCheck";
+        	}
+            if(value){
+            	if("noCheck" == value){//若该节点取消选中,则去除该节点的value值
+            		var ncValue = $(target).attr("data-oserial");
+            		value = $("input[name = SERIAL]").val();
+            		if(!value.indexOf(",", 0)){
+            			value = "";
+            		}else {
+            			value += ",";
+            			value = value.replace(ncValue+",", "");
+            			value = value.substr(0,value.length-1);
+            		}
+            	}else {
+            		if(","==value.substring(0,1)){//第一次去掉首位的逗号
+            			value = value.substr(1,value.length-1);
+            		}
+            	}
+	            $("input[name = SERIAL]").val(value);
+	            return true;
+            }else{
+            	alert("您勾选的节点不在您所在的权限范围内!");
+            }
+            return false;
+        },
+        model: getOrgSelectTree(),
+    }).render();
 	
 	//刷新
 	$(".ui-button-refresh").click(function(){
@@ -155,15 +155,15 @@ define(function(require,exports){
 				"groups":[],
 				"op":"and"
 		};
-//		var orgid = $("input[name = SERIAL]").val();
-//		var org= {
-//				field:"m.O_SERIAL",
-//				op:"in",
-//				value:orgid
-//		};
-//		if(orgid){
-//			s["rules"].push(org);
-//		}
+		var orgid = $("input[name = SERIAL]").val();
+		var org= {
+				field:"m.O_SERIAL",
+				op:"in",
+				value:orgid
+		};
+		if(orgid){
+			s["rules"].push(org);
+		}
 		var QUERYCONDITION =  form.initSearch(s);
 		inittable(QUERYCONDITION);
 	});
@@ -267,9 +267,9 @@ define(function(require,exports){
 	
 	// 操作
 	function getGridOperation(value, rec, index) {
-		var v = '<a href="javascript:void(0)" onclick="tableRowDetailsSee(\'' + rec.USER_ID + '\' )" >查看</a> ';
-		var e = '<a href="javascript:void(0)" onclick="tableRowDetailsEdit(\'' + rec.USER_ID + '\')" >编辑</a> ';
-		var p = '<a href="javascript:void(0)" onclick="tableRowDetailsDelete(\'' + rec.USER_ID + '\')" >删除</a> ';
+		var v = '<a href="javascript:void(0)" onclick="tableRowDetailsSee(\'' + rec.userId + '\' )" >查看</a> ';
+		var e = '<a href="javascript:void(0)" onclick="tableRowDetailsEdit(\'' + rec.userId + '\')" >编辑</a> ';
+		var p = '<a href="javascript:void(0)" onclick="tableRowDetailsDelete(\'' + rec.userId + '\')" >删除</a> ';
 		return v + e + p;
 	}
 	

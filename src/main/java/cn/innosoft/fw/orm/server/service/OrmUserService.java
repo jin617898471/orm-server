@@ -68,6 +68,15 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		FilterGroup group = QueryConditionHelper.add(pageRequest.getFilterGroup(), new String[] { "validSign" },
 				new String[] { "Y" }, new String[] { "equal" });
 		PageResponse<OrmUser> page = findAll(group, pageRequest);
+		List<OrmUser> list = page.getRows();
+		for(OrmUser user : list){
+			List<OrmOrgUserMap> oums = ormOrgUserMapDao.findByUserId(user.getUserId());
+			List<String> orgIds = new ArrayList<String>();
+			for(OrmOrgUserMap oum : oums){
+				orgIds.add(oum.getOrgId());
+			}
+			user.setOrgids(orgIds);
+		}
 		return page; 
 	}
 	/**
@@ -121,19 +130,10 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		}
 	}
 
-	/**
-	 * 根据userId获取用户信息，具体情况根据前段页面再确定
-	 * 
-	 * @param userId
-	 */
-	public void getUserById(String userId) {
+	public OrmUser getUserById(String userId) {
 		OrmUser user = ormUserDao.findOne(userId);
-		List<OrmOrgUserMap> userRoleMaps = ormOrgUserMapDao.findByUserId(userId);
-		List<OrmOrganization> orgs = new ArrayList<OrmOrganization>();
-		for (OrmOrgUserMap oum : userRoleMaps) {
-			OrmOrganization org = ormOrganizationDao.findOne(oum.getOrgId());
-			orgs.add(org);
-		}
+//		user.setUserPwd(null);
+		return user;
 	}
 
 	public List<OrmUser> getUserList(String userAcct) {
