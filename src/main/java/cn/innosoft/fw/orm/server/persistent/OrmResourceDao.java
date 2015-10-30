@@ -2,6 +2,9 @@ package cn.innosoft.fw.orm.server.persistent;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.orm.server.model.OrmResource;
 

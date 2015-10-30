@@ -55,11 +55,7 @@ public class OrmSystemResource {
 		model.addAttribute("OrmSystem",ormSystem);
 		model.addAttribute("sign","edit");
 		//返回到系统详情页面
-<<<<<<< HEAD
-		return "pages/ormsystem/ormSystemADE.jsp";
-=======
 		return "/orm/ormsystem/ormSystemADE.jsp";
->>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 	}
 	
 	/**
@@ -72,11 +68,7 @@ public class OrmSystemResource {
 		
 		model.addAttribute("sign","add");
 		//返回到系统详情页面
-<<<<<<< HEAD
-		return "pages/ormsystem/ormSystemADE.jsp";
-=======
 		return "/orm/ormsystem/ormSystemADE.jsp";
->>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 	}
 	
 	/**
