@@ -37,6 +37,7 @@ public class OrmSystemResource {
 		model.addAttribute("OrmSystem",ormSystem);
 		model.addAttribute("sign","details");
 		//返回到系统详情页面
+
 		return "/orm/ormsystem/ormSystemADE.jsp";
 	}
 	
@@ -82,6 +83,8 @@ public class OrmSystemResource {
 	}
 	
 	/**
+<<<<<<< HEAD
+=======
 	 * 用于添加和修改OrmSystem时系统标识符的唯一判断
 	 * @param systemId
 	 * @return
@@ -97,6 +100,7 @@ public class OrmSystemResource {
 	}
 	
 	/**
+>>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 	 * 通过前端传过来的OrmSystem对象来添加数据
 	 * @param ormSystem
 	 * @return
@@ -161,8 +165,6 @@ public class OrmSystemResource {
 	 * @param ormSystemId
 	 * @return
 	 */
-	@RequestMapping("/getOrmSystemById")
-	@ResponseBody
 	public OrmSystem getOrmSystemById(String ormSystemId){
 		return ormSystemService.findOne(ormSystemId);
 	}
