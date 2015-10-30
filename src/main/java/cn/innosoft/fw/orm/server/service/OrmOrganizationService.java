@@ -124,7 +124,14 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		return node;
 	}
 
-
+	/**
+	 * 生成组织机构的下拉树
+	 * 
+	 * @return
+	 */
+//	public List<SelectTreeBean> createSelectTree() {
+//		return LoginUserContext.getOrgTree();
+//	}
 
 	/**
 	 * 关联用户组织机构

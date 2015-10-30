@@ -29,7 +29,6 @@ import cn.innosoft.fw.orm.server.persistent.OrmRoleDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
 import cn.innosoft.fw.orm.server.util.BeanMapSwitch;
-import cn.innosoft.orm.client.service.LoginUserContext;
 
 /**
  * 
@@ -78,6 +77,40 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 			user.setOrgids(orgIds);
 		}
 		return page; 
+		List<OrmUser> users = page.getRows();
+//		List<String> orgIds = LoginUserContext.getOrgs();
+//		List<OrmOrgUserMap> oums = ormOrgUserMapDao.findByOrgIdIn(orgIds);
+		Map<String, List<String>> map = new HashMap<String, List<String>>();
+//		for(OrmOrgUserMap oum : oums){
+//			String userId = oum.getUserId();
+//			if (map.containsKey(userId)) {
+//				List<String> list = map.get(userId);
+//				list.add(oum.getOrgId());
+//			} else {
+//				List<String> list = new ArrayList<String>();
+//				list.add(oum.getOrgId());
+//				map.put(userId, list);
+//			}
+//		}
+		for (OrmUser user : users) {
+			String userId = user.getUserId();
+			if (map.containsKey(userId)) {
+				Map<String, Object> userWithOrg = BeanMapSwitch.beanToMap(user);
+				List<String> tempOrgIds = map.get(userId);
+				List<OrmOrganization> orgs = ormOrganizationDao.findByOrgIdIn(tempOrgIds);
+				String orgNames = "";
+				for(OrmOrganization org : orgs){
+					if ("".equals(orgNames)) {
+						orgNames += org.getOrgName();
+					} else {
+						orgNames += "," + org.getOrgName();
+					}
+				}
+				userWithOrg.put("orgName", orgNames);
+				result.add(userWithOrg);
+			}
+		}
+		return result;
 	}
 	/**
 	 * 添加用户

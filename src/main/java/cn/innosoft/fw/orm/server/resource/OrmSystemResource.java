@@ -37,7 +37,8 @@ public class OrmSystemResource {
 		model.addAttribute("OrmSystem",ormSystem);
 		model.addAttribute("sign","details");
 		//返回到系统详情页面
-		return "/pages/ormsystem/ormSystemADE.jsp";
+
+		return "/orm/ormsystem/ormSystemADE.jsp";
 	}
 	
 	/**
@@ -54,7 +55,11 @@ public class OrmSystemResource {
 		model.addAttribute("OrmSystem",ormSystem);
 		model.addAttribute("sign","edit");
 		//返回到系统详情页面
+<<<<<<< HEAD
 		return "pages/ormsystem/ormSystemADE.jsp";
+=======
+		return "/orm/ormsystem/ormSystemADE.jsp";
+>>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 	}
 	
 	/**
@@ -67,7 +72,11 @@ public class OrmSystemResource {
 		
 		model.addAttribute("sign","add");
 		//返回到系统详情页面
+<<<<<<< HEAD
 		return "pages/ormsystem/ormSystemADE.jsp";
+=======
+		return "/orm/ormsystem/ormSystemADE.jsp";
+>>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 	}
 	
 	/**
@@ -82,6 +91,24 @@ public class OrmSystemResource {
 	}
 	
 	/**
+<<<<<<< HEAD
+=======
+	 * 用于添加和修改OrmSystem时系统标识符的唯一判断
+	 * @param systemId
+	 * @return
+	 */
+	@RequestMapping("/checkOnlyOne")
+	@ResponseBody
+	public boolean checkOnlyOne(@PathVariable String systemId){
+		if(ormSystemService.findOne(systemId)!=null){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	/**
+>>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 	 * 通过前端传过来的OrmSystem对象来添加数据
 	 * @param ormSystem
 	 * @return

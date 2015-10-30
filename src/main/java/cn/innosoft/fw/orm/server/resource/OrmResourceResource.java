@@ -18,7 +18,7 @@ import cn.innosoft.fw.orm.server.service.OrmResourceService;
 import cn.innosoft.fw.orm.server.service.OrmSystemService;
 
 @Controller
-@RequestMapping(value = "resource")
+@RequestMapping(value = "resource/ormresource")
 public class OrmResourceResource {
 
 	@Autowired
@@ -153,7 +153,7 @@ public class OrmResourceResource {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	public PageResponse<OrmResource> getListAction(PageRequest pageRequest) {
+	public PageResponse<OrmResource> getListAction(String systemId,PageRequest pageRequest) {
 		return ormResourceService.findValid(pageRequest);
 	}
 
@@ -164,9 +164,9 @@ public class OrmResourceResource {
 	 * @return
 	 * @throws Exception
 	 */
-//	@RequestMapping("/treeBeanList")
-//	@ResponseBody
-//	public String getTreeBeanAction() throws Exception {
-//		return ormResourceService.getBcTreeNodes();
-//	}
+	@RequestMapping("/treeBeanList")
+	@ResponseBody
+	public String getTreeBeanAction() throws Exception {
+		return ormResourceService.getBcTreeNodes();
+	}
 }
