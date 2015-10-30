@@ -29,7 +29,6 @@ import cn.innosoft.fw.orm.server.persistent.OrmRoleDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
 import cn.innosoft.fw.orm.server.util.BeanMapSwitch;
-import cn.innosoft.orm.client.service.LoginUserContext;
 
 /**
  * 
@@ -70,20 +69,20 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 				new String[] { "Y" }, new String[] { "equal" });
 		PageResponse<OrmUser> page = findAll(group, pageRequest);
 		List<OrmUser> users = page.getRows();
-		List<String> orgIds = LoginUserContext.getOrgs();
-		List<OrmOrgUserMap> oums = ormOrgUserMapDao.findByOrgIdIn(orgIds);
+//		List<String> orgIds = LoginUserContext.getOrgs();
+//		List<OrmOrgUserMap> oums = ormOrgUserMapDao.findByOrgIdIn(orgIds);
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		for(OrmOrgUserMap oum : oums){
-			String userId = oum.getUserId();
-			if (map.containsKey(userId)) {
-				List<String> list = map.get(userId);
-				list.add(oum.getOrgId());
-			} else {
-				List<String> list = new ArrayList<String>();
-				list.add(oum.getOrgId());
-				map.put(userId, list);
-			}
-		}
+//		for(OrmOrgUserMap oum : oums){
+//			String userId = oum.getUserId();
+//			if (map.containsKey(userId)) {
+//				List<String> list = map.get(userId);
+//				list.add(oum.getOrgId());
+//			} else {
+//				List<String> list = new ArrayList<String>();
+//				list.add(oum.getOrgId());
+//				map.put(userId, list);
+//			}
+//		}
 		for (OrmUser user : users) {
 			String userId = user.getUserId();
 			if (map.containsKey(userId)) {

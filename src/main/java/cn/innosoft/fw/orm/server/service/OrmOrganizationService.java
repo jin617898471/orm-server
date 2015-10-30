@@ -22,8 +22,6 @@ import cn.innosoft.fw.orm.server.persistent.OrmOrgUserMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrganizationDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
-import cn.innosoft.orm.client.common.SelectTreeBean;
-import cn.innosoft.orm.client.service.LoginUserContext;
 
 @Service
 public class OrmOrganizationService extends AbstractBaseService<OrmOrganization, String> {
@@ -130,9 +128,9 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 	 * 
 	 * @return
 	 */
-	public List<SelectTreeBean> createSelectTree() {
-		return LoginUserContext.getOrgTree();
-	}
+//	public List<SelectTreeBean> createSelectTree() {
+//		return LoginUserContext.getOrgTree();
+//	}
 
 	/**
 	 * 关联用户组织机构
