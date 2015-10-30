@@ -2,6 +2,7 @@ package cn.innosoft.fw.orm.server.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -76,6 +78,9 @@ public class OrmUser implements Serializable {
 
 	@Column(name="VALID_SIGN")
 	private String validSign;
+	
+	@Transient
+	private List<String> orgids;
 
 	public OrmUser() {
 	}
@@ -208,4 +213,11 @@ public class OrmUser implements Serializable {
 		this.validSign = validSign;
 	}
 
+	public List<String> getOrgids() {
+		return orgids;
+	}
+
+	public void setOrgids(List<String> orgids) {
+		this.orgids = orgids;
+	}
 }

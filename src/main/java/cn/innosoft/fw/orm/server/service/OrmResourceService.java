@@ -1,5 +1,4 @@
 package cn.innosoft.fw.orm.server.service;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,7 +21,6 @@ import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.persistent.OrmResourceDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleResourceRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmSystemDao;
-import cn.innosoft.orm.client.service.LoginUserContext;
 
 @Service
 public class OrmResourceService extends AbstractBaseService<OrmResource, String> {
@@ -67,9 +65,9 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		ormResource.setValidSign("Y");
 		ormResource.setIsLeaf("Y");
 		ormResource.setCreateDt(new Date());
-		ormResource.setCreateUserId(LoginUserContext.getUserId());
+//		ormResource.setCreateUserId(LoginUserContext.getUserId());
 		ormResource.setUpdateDt(new Date());
-		ormResource.setUpdateUserId(LoginUserContext.getUserId());
+//		ormResource.setUpdateUserId(LoginUserContext.getUserId());
 		updateIfParentIsLeaf(parentId);
 		return ormResourceDao.save(ormResource).toString();
 	}
@@ -136,7 +134,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 			createOrmRoleResourceRight(roleId, resId, "N", systemId);
 		}
 	}
-
+	
 	/**
 	 * 生成ZTREE，权限建模的时候用
 	 * 

@@ -25,10 +25,13 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 
 	@Autowired
 	private OrmCodeDao ormCodeDao;
+<<<<<<< HEAD
 	
 	@Autowired
 	private OrmSystemDao ormSystemDao;
 	
+=======
+>>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 	@Override
 	public BaseDao<OrmCode, String> getBaseDao() {
 		return ormCodeDao;

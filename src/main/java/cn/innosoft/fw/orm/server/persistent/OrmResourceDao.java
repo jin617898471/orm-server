@@ -9,23 +9,10 @@ import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.orm.server.model.OrmResource;
 
 public interface OrmResourceDao extends BaseDao<OrmResource, String> {
-
-	/**
-	 * 查找有效同级节点（同一个父亲节点）
-	 * 
-	 * @param parentResId
-	 * @return
-	 */
-	@Query(value = "select * from ORM_RESOURCE where parent_Res_Id=1? and valid_Sign='Y'", nativeQuery = true)
 	public List<OrmResource> findByParentResId(String parentResId);
 
-	/**
-	 * 通过SystemId删除资源
-	 * 
-	 * @param systemId
-	 * @return
-	 */
 	public Long deleteBySystemId(String systemId);
+
 
 	/**
 	 * 通过资源Id查找资源
