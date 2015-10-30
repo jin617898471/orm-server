@@ -24,6 +24,7 @@ import cn.innosoft.fw.orm.server.persistent.OrmRoleResourceRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmSystemDao;
 import cn.innosoft.orm.client.service.LoginUserContext;
 
+
 @Service
 public class OrmResourceService extends AbstractBaseService<OrmResource, String> {
 
@@ -67,9 +68,9 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		ormResource.setValidSign("Y");
 		ormResource.setIsLeaf("Y");
 		ormResource.setCreateDt(new Date());
-		ormResource.setCreateUserId(LoginUserContext.getUserId());
+		//ormResource.setCreateUserId(LoginUserContext.getUserId());
 		ormResource.setUpdateDt(new Date());
-		ormResource.setUpdateUserId(LoginUserContext.getUserId());
+		//ormResource.setUpdateUserId(LoginUserContext.getUserId());
 		updateIfParentIsLeaf(parentId);
 		return ormResourceDao.save(ormResource).toString();
 	}
@@ -81,7 +82,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	 */
 	private void updateIfParentIsLeaf(String parentId) {
 		OrmResource res = ormResourceDao.findByResourceId(parentId);
-		if ("Y".equals((res.getIsLeaf()))) {
+		if (res!=null && "Y".equals((res.getIsLeaf()))) {
 			ormResourceDao.updateIsLeafByResourceId("N", res.getResourceId());
 		}
 	}

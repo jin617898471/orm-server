@@ -1,5 +1,6 @@
 package cn.innosoft.fw.orm.server.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,10 +13,8 @@ import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
-import cn.innosoft.fw.orm.server.model.OrmCode;
 import cn.innosoft.fw.orm.server.model.OrmOrgRoleMap;
 import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
-import cn.innosoft.fw.orm.server.model.OrmOrganization;
 import cn.innosoft.fw.orm.server.model.OrmResource;
 import cn.innosoft.fw.orm.server.model.OrmRole;
 import cn.innosoft.fw.orm.server.model.OrmRoleResourceRight;
@@ -52,13 +51,10 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 		return ormRoleDao;
 	}
 
-	public PageResponse<OrmRole> find(PageRequest pageRequest) {
-		FilterGroup group = QueryConditionHelper.add(pageRequest.getFilterGroup(), new String[] { "validSign" },
-				new String[] { "Y" }, new String[] { "equal" });
-		PageResponse<OrmRole> page = findAll(group, pageRequest);
-		return page;
-	}
-
+	/**
+	 * 添加角色
+	 * @param ormRole
+	 */
 	public void addRole(OrmRole ormRole) {
 		ormRoleDao.save(ormRole);
 	}
@@ -67,6 +63,10 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 		ormRoleDao.update(ormRole);
 	}
 
+	/**
+	 * 删除角色和对应的其他表中记录
+	 * @param roleId
+	 */
 	public void deleteRole(String roleId) {
 		ormRoleDao.delete(roleId);
 		ormOrgRoleMapDao.deleteByRoleId(roleId);
@@ -124,4 +124,39 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	public void deleteRoleUserMap(String userId, String roleId) {
 		ormUserRoleMapDao.deleteByUserIdAndRoleId(userId, roleId);
 	}
+
+	public OrmRole findByRoleId(String id) {
+		return ormRoleDao.findByRoleId(id);
+	}
+
+	/**
+	 * 批量删除
+	 * @param idArray
+	 */
+	public void deleteByIds(ArrayList<String> idArray) {
+		for (String string : idArray) {
+			deleteRole(string);
+		}
+	}
+
+	/**
+	 * 分页查询有效数据
+	 * @param pageRequest
+	 * @return
+	 */
+	public PageResponse<OrmRole> findValid(PageRequest pageRequest) {
+		FilterGroup group = QueryConditionHelper.add(pageRequest.getFilterGroup(), new String[] { "validSign" },
+				new String[] { "Y" }, new String[] { "equal" });
+		PageResponse<OrmRole> page = findAll(group, pageRequest);
+		return page;
+	}
+	
+	public List<String> findValidRoleIdList() {
+		return ormRoleDao.findRoleIds();
+	}
+
+	public List<OrmRole> findRoleBySystemId(String systemId) {
+		return ormRoleDao.findBySystemId(systemId);
+	}
+
 }

@@ -260,4 +260,8 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		urm.setSystemId(systemId);
 		ormUserRoleMapDao.save(urm);
 	}
+
+	public OrmUser findByUserId(String userId) {
+		return ormUserDao.findByUserId(userId);
+	}
 }

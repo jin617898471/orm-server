@@ -38,13 +38,13 @@ define(function(require,exports,module){
 			$("#btnSave").css("visibility","hidden");
 		}else if(sign == "add"){
 			var checkObj = parent.getParentId();
-			var presId = checkObj.presId;
+			var parentResId = checkObj.parentResId;
 			systemId = checkObj.systemId;
-			if(presId){
-				$("input[name='presId']").val(presId);
+			if(parentResId){
+				$("input[name='parentResId']").val(parentResId);
 				sys.selectValue(systemId);
 			}else{
-				$("input[name='presId']").val(systemId);
+				$("input[name='parentResId']").val(systemId);
 			}
 		}
 		require("easyui");
@@ -57,7 +57,7 @@ define(function(require,exports,module){
 		});
 		
 		validator.addItem({
-	        element: 'input[name=\'resourceNameCn\']',
+	        element: 'input[name=\'resourceName\']',
 	        display:"资源名称",
 	        required: true,
 	        rule: 'minlength{"min":-1}'
@@ -65,10 +65,10 @@ define(function(require,exports,module){
 		
 		sys.on("change",function(target){
 			var checkObj = parent.getParentId();
-			var presId = checkObj.presId;
+			var parentResId = checkObj.parentResId;
 			var systemId = target.attr("data-value");
-			if(!presId){
-				$("input[name='presId']").val(systemId);
+			if(!parentResId){
+				$("input[name='parentResId']").val(systemId);
 			}
 	    });
 		
@@ -207,7 +207,7 @@ define(function(require,exports,module){
 										showInformation(true);
 										$(".msgText").text(name+"成功");
 										var arr = result.split(",");
-										parent.tableRefresh($("input[name = presId]").val(),arr[0],$("input[name = resourceNameCn]").val(),type,arr[1],arr[2]);
+										parent.tableRefresh($("input[name = parentResId]").val(),arr[0],$("input[name = resourceName]").val(),type,arr[1],arr[2]);
 									}
 								}
 							},
@@ -226,6 +226,8 @@ define(function(require,exports,module){
 	        		showInformation(false);
 	        	}
 	        });
+	        
+	        $.fn.zTree.getZTreeObj("tree")
 	    });
 		
 		showInformation = function(type){
@@ -245,4 +247,5 @@ define(function(require,exports,module){
 		$("#btnCancel").click(function(){
 			window.frameElement.trigger('close'); 
 		});
+		
 });

@@ -16,7 +16,7 @@ public interface OrmResourceDao extends BaseDao<OrmResource, String> {
 	 * @param parentResId
 	 * @return
 	 */
-	@Query(value = "select * from ORM_RESOURCE where parent_Res_Id=1? and valid_Sign='Y'", nativeQuery = true)
+	@Query(value = "select * from ORM_RESOURCE where parent_Res_Id=?1 and valid_Sign='Y'", nativeQuery = true)
 	public List<OrmResource> findByParentResId(String parentResId);
 
 	/**
@@ -44,6 +44,11 @@ public interface OrmResourceDao extends BaseDao<OrmResource, String> {
 	@Query(value = "update ORM_RESOURCE set is_leaf = ?1 where resource_Id = ?2", nativeQuery = true)
 	public void updateIsLeafByResourceId(String isLeaf, String resourceId);
 	
+	/**
+	 * 通过系统Id查找资源Id
+	 * @param systemId
+	 * @return
+	 */
 	@Query(value="select resource_id from ORM_RESOURCE where system_id = ?1",nativeQuery=true)
 	public List<String> findResourceIdBySystemId(String systemId);
 }
