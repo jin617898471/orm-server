@@ -7,4 +7,5 @@ import cn.innosoft.fw.orm.server.model.OrmUser;
 
 public interface OrmUserDao extends BaseDao<OrmUser, String> {
 	public List<OrmUser> findByUserAcct(String userAcct);
+	Long deleteByUserIdIn(List<String> userIds);
 }

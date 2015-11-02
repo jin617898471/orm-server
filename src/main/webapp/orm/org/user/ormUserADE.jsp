@@ -15,7 +15,11 @@
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/base.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/widget.css">
 <base href="<%=basePath%>">
-<style></style>
+<style type="text/css">
+	.ui-form-container, .ui-form-title, #btnSave, #btnCancel{
+		display:none;
+	}
+</style>
 </head>
 <body>
 	<form class="ui-form clearfix" id="UserADEForm" data-widget="validator">
@@ -27,7 +31,7 @@
 				<div class="ui-form-item-column clearfix">
 					<div class="ui-form-item-col">
 						<label class="ui-label">用户名称:</label>
-						<input class="ui-input ui-input-w190 userAcctCn" name="userName" value="${OrmUser.userName}">
+						<input class="ui-input ui-input-w190 userName" name="userName" value="${OrmUser.userName}">
 						<span class="ui-form-required">*</span>
 						<div class="ui-form-explain"></div>
 					</div>
@@ -37,13 +41,25 @@
 						<span class="ui-form-required">*</span>
 						<div class="ui-form-explain"></div>
 					</div>
+					<div class="ui-form-item-col userPwd">
+					<label class="ui-label">用户登录密码:</label>
+					<input class="ui-input ui-input-w190 userPassword" id = "userAcctPwd" name="userPwd" type = "password" value="${OrmUser.userPwd}" >
+					<span class="ui-form-required">*</span>
+					<div class="ui-form-explain"></div>
+				</div>
+				<div class="ui-form-item-col userPwd">
+					<label class="ui-label">重复登录密码:</label>
+					<input class="ui-input ui-input-w190 userPassword"  type = "password"  name ="password-confirmation" value="${OrmUser.userPwd}">
+					<span class="ui-form-required">*</span>
+					<div class="ui-form-explain"></div>
+				</div>
 				</div>
 				<div class="ui-form-item-have2col">
 					<label class="ui-label">组织机构:</label>
 					<div class="ui-select-trigger  oserial"   style="width: 358px">
 				        <span data-role="trigger-content"></span>        
 				       	<i class="iconfont" title="下三角形">&#xf0044;</i>
-				       	<input name = "oserial" type = "hidden" />
+				       	<input name = "orgIds" type = "hidden" />
 				    </div>
 					<span class="ui-form-required">*</span>
 					<div class="ui-form-explain"></div>
@@ -124,7 +140,7 @@
 	</form>
 	<input type="hidden" id = "sign" value = "${sign}">
 	<input type="hidden" id = "userSex" value = "${OrmUser.userSex}">
-<%-- 	<input type="hidden" id = "oserial" value = "${OrmUser.oserial}"> --%>
+	<input type="hidden" id = "orgIds" value = "${OrmUser.orgIds}">
 </body>
 <script type="text/javascript" src="resources/commons/js/seajs/sea-debug.js" ></script>
 <script type="text/javascript" src="resources/commons/js/seajs/sea-config-debug.js"></script>

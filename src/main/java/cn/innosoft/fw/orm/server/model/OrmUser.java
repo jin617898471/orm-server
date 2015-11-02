@@ -4,11 +4,15 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -80,13 +84,13 @@ public class OrmUser implements Serializable {
 	private String validSign;
 	
 	@Transient
-	private List<String> orgids;
+	private String orgIds;
 
 	public OrmUser() {
 	}
 
 	public String getUserId() {
-		return this.userId;
+		return userId;
 	}
 
 	public void setUserId(String userId) {
@@ -94,7 +98,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public Date getCreateDt() {
-		return this.createDt;
+		return createDt;
 	}
 
 	public void setCreateDt(Date createDt) {
@@ -102,7 +106,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public String getCreateUserId() {
-		return this.createUserId;
+		return createUserId;
 	}
 
 	public void setCreateUserId(String createUserId) {
@@ -110,7 +114,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public Date getUpdateDt() {
-		return this.updateDt;
+		return updateDt;
 	}
 
 	public void setUpdateDt(Date updateDt) {
@@ -118,7 +122,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public String getUpdateUserId() {
-		return this.updateUserId;
+		return updateUserId;
 	}
 
 	public void setUpdateUserId(String updateUserId) {
@@ -126,7 +130,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public String getUserAcct() {
-		return this.userAcct;
+		return userAcct;
 	}
 
 	public void setUserAcct(String userAcct) {
@@ -134,7 +138,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public Date getUserBirth() {
-		return this.userBirth;
+		return userBirth;
 	}
 
 	public void setUserBirth(Date userBirth) {
@@ -142,7 +146,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public String getUserEmail() {
-		return this.userEmail;
+		return userEmail;
 	}
 
 	public void setUserEmail(String userEmail) {
@@ -150,7 +154,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public String getUserFax() {
-		return this.userFax;
+		return userFax;
 	}
 
 	public void setUserFax(String userFax) {
@@ -158,7 +162,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public String getUserIdentitycard() {
-		return this.userIdentitycard;
+		return userIdentitycard;
 	}
 
 	public void setUserIdentitycard(String userIdentitycard) {
@@ -166,7 +170,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public String getUserMobile() {
-		return this.userMobile;
+		return userMobile;
 	}
 
 	public void setUserMobile(String userMobile) {
@@ -174,7 +178,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public String getUserName() {
-		return this.userName;
+		return userName;
 	}
 
 	public void setUserName(String userName) {
@@ -182,7 +186,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public String getUserPwd() {
-		return this.userPwd;
+		return userPwd;
 	}
 
 	public void setUserPwd(String userPwd) {
@@ -190,7 +194,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public String getUserSex() {
-		return this.userSex;
+		return userSex;
 	}
 
 	public void setUserSex(String userSex) {
@@ -198,7 +202,7 @@ public class OrmUser implements Serializable {
 	}
 
 	public String getUserTel() {
-		return this.userTel;
+		return userTel;
 	}
 
 	public void setUserTel(String userTel) {
@@ -206,18 +210,19 @@ public class OrmUser implements Serializable {
 	}
 
 	public String getValidSign() {
-		return this.validSign;
+		return validSign;
 	}
 
 	public void setValidSign(String validSign) {
 		this.validSign = validSign;
 	}
 
-	public List<String> getOrgids() {
-		return orgids;
+	public String getOrgIds() {
+		return orgIds;
 	}
 
-	public void setOrgids(List<String> orgids) {
-		this.orgids = orgids;
+	public void setOrgIds(String orgIds) {
+		this.orgIds = orgIds;
 	}
+	
 }

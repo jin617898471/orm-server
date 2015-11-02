@@ -1,6 +1,7 @@
 package cn.innosoft.fw.orm.server.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,10 +64,32 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	 * @param pageRequest
 	 * @return
 	 */
-	public PageResponse<OrmUser> find(PageRequest pageRequest) {
+	public PageResponse<Map<String, Object>> find(PageRequest pageRequest) {
 		FilterGroup group = QueryConditionHelper.add(pageRequest.getFilterGroup(), new String[] { "validSign" },
 				new String[] { "Y" }, new String[] { "equal" });
-		PageResponse<OrmUser> page = findAll(group, pageRequest);
+		Map<String, Object> args = pageRequest.getFilterGroup().getMap();
+		String arg = (String) args.get("userAcct");
+		if(arg != null){
+			args.put("userAcct", "%"+arg+"%");
+		}
+		arg = (String) args.get("userName");
+		if(arg != null){
+			args.put("userName", "%"+arg+"%");
+		}
+		arg = (String) args.get("userMobile");
+		if(arg != null){
+			args.put("userMobile", "%"+arg+"%");
+		}
+		arg = (String) args.get("orgId");
+		if(arg != null && arg.indexOf(",") > 0){
+			String[] orgIds = arg.split(",");
+			List<String> list = new ArrayList<String>();
+			for(String orgId : orgIds){
+				list.add(orgId);
+			}
+			args.put("orgId", list);
+		}
+		PageResponse<Map<String, Object>> page = findMapBySql("userService-getUser", args, pageRequest);
 		return page;
 	}
 	/**
@@ -75,19 +98,20 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	 * @param ormUser
 	 * @return
 	 */
-	public boolean addUser(OrmUser ormUser) {
-		boolean unique = checkUserUniqueness(ormUser);
-		if (unique) {
-			return false;
-		} else {
-			try {
-				ormUserDao.save(ormUser);
-				return true;
-			} catch (Exception e) {
-				logger.error(e.getMessage(), e);
-				return false;
-			}
+	public String addUser(OrmUser ormUser) {
+//		boolean unique = checkUserUniqueness(ormUser);
+//		if (unique) {
+//			return false;
+//		} else {
+		try {
+			ormUserDao.save(ormUser);
+			editOrgUserMap(ormUser, ormUser.getOrgIds());
+			return "true";
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return "false";
 		}
+//		}
 	}
 
 	/**
@@ -96,9 +120,12 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	 * @param ormUser
 	 * @return
 	 */
-	public boolean checkUserUniqueness(OrmUser ormUser) {
-		List<OrmUser> list = ormUserDao.findByUserAcct(ormUser.getUserAcct());
-		return list.size() == 0 ? true : false;
+	public String checkUserUniqueness(String userAcct) {
+		List<OrmUser> users = ormUserDao.findByUserAcct(userAcct);
+		if(users.size() > 0){
+			return "true";
+		}
+		return "false";
 	}
 
 	/**
@@ -108,21 +135,31 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	 * @param orgIds
 	 * @return
 	 */
-	public boolean updateUser(OrmUser ormUser, List<String> orgIds) {
+	public String updateUser(OrmUser ormUser) {
 		try {
-			ormUserDao.update(ormUser);
-			String userId = ormUser.getUserId();
-			editOrgUserMap(userId, orgIds);
-			return true;
+			updateSome(ormUser);
+			editOrgUserMap(ormUser, ormUser.getOrgIds());
+			return "true";
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			return false;
+			return "false";
 		}
 	}
 
+	
 	public OrmUser getUserById(String userId) {
 		OrmUser user = ormUserDao.findOne(userId);
-//		user.setUserPwd(null);
+		List<OrmOrgUserMap> oums = ormOrgUserMapDao.findByUserId(userId);
+		String orgNames = "";
+		for(int i=0;i<oums.size();i++){
+			String name = oums.get(i).getOrgId();
+			if(i != oums.size()-1){
+				orgNames += name + ",";
+			}else{
+				orgNames += name;
+			}
+		}
+		user.setOrgIds(orgNames);
 		return user;
 	}
 
@@ -143,21 +180,31 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		ormOrgUserMapDao.deleteByUserId(userId);
 		ormUserRoleMapDao.deleteByUserId(userId);
 	}
-
+	public void deleteBatch(List<String> userIds){
+		ormUserDao.deleteByUserIdIn(userIds);
+		ormOrgUserMapDao.deleteByuserIdIn(userIds);
+		ormUserRoleMapDao.deleteByuserIdIn(userIds);
+	}
 	/**
 	 * 编辑用户组织机构关联，在更新用户的时候用
 	 * 
 	 * @param userId
 	 * @param orgIds
 	 */
-	public void editOrgUserMap(String userId, List<String> orgIds) {
+	public void editOrgUserMap(OrmUser user, String strOIds) {
+		String userId = user.getUserId();
+		List<String> orgIds = new ArrayList<String>();
+		String[] temp = strOIds.split(",");
+		for(String oId : temp){
+			orgIds.add(oId);
+		}
 		List<OrmOrgUserMap> list = ormOrgUserMapDao.findByUserId(userId);
 		for (OrmOrgUserMap oum : list) {
-			String orgId = oum.getId();
+			String orgId = oum.getOrgId();
 			if (orgIds.contains(orgId)) {
 				orgIds.remove(orgId);
 			} else {
-				ormOrgUserMapDao.delete(oum);
+				ormOrgUserMapDao.delete(oum.getId());
 				ormUserRoleMapDao.deleteByUserIdAndOrgId(userId, orgId);
 			}
 		}
@@ -171,6 +218,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 				createUserRoleMap(userId, orm.getRoleId(), orgId, orm.getSystemId());
 			}
 		}
+		updateSome(user);
 	}
 
 	/**

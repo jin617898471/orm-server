@@ -1,0 +1,47 @@
+<template>
+	<class id="userService">
+		<sql id="getUser">
+			<![CDATA[
+			   SELECT
+             DISTINCT 
+             u.CREATE_DT as "createDt",
+             u.USER_ID as "userId",
+             u.USER_IDENTITYCARD as "userIdentitycard",
+             u.USER_ACCT as "userAcct",
+             u.USER_NAME as "userName",
+             u.USER_SEX as "userSex",
+             u.USER_BIRTH as "userBirth",
+             u.USER_EMAIL as "userEmail",
+             u.USER_MOBILE as "userMobile",
+             u.USER_TEL as "userTel",
+             u.USER_FAX as "userFax",
+             WMSYS.WM_CONCAT(o.ORG_NAME) as "orgName"
+          FROM
+              ORM_USER u,
+              ORM_ORG_USER_MAP m,
+              ORM_ORGANIZATION o
+          WHERE
+            u.VALID_SIGN = 'Y'
+            AND u.USER_ID=m.USER_ID
+            and m.ORG_ID=o.ORG_ID
+            <#if userId?? && userId != ''>
+				AND u.USER_ID = :userId
+			</#if>
+            <#if userAcct?? && userAcct != ''>
+				AND u.USER_ACCT LIKE :userAcct
+			</#if>
+			<#if userName?? && userName != ''>
+				AND u.USER_NAME LIKE :userName
+			</#if>
+			<#if userEmail?? && userEmail != ''>
+				AND u.USER_MOBILE LIKE :userEmail
+			</#if>
+			<#if orgId??>
+				AND O.ORG_ID IN (SELECT DISTINCT ORG_ID FROM ORM_ORGANIZATION START WITH ORG_ID IN (:orgId) CONNECT BY PRIOR ORG_ID=PARENT_ORG_ID)
+			</#if>
+          GROUP BY u.CREATE_DT,u.USER_ID,u.USER_IDENTITYCARD,u.USER_ACCT,u.USER_NAME,u.USER_SEX,u.USER_BIRTH,
+          u.USER_EMAIL,u.USER_EMAIL,u.USER_MOBILE,u.USER_MOBILE,u.USER_TEL,u.USER_FAX
+			]]>
+		</sql>
+	</class>
+</template>

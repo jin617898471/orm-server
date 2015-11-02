@@ -275,6 +275,7 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		SelectTreeBean node = new SelectTreeBean();
 		node.setValue(org.getOrgId());
 		node.setText(org.getOrgName());
+//		node.setIcon("orm/common/css/imgs/" + org.getOrgType() + ".png");
 		node.setOpen(true);
 		List<Map<String, Object>> attrs = new ArrayList<Map<String, Object>>();
 		attrs.add(getAttr("orgCode", org.getOrgCode()));

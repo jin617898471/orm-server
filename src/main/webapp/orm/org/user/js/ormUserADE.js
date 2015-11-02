@@ -6,7 +6,7 @@ define(function(require,exports,module){
 		Validator = require("inno/validator/1.0.0/validator-debug"),
 		Calendar = require("inno/calendar/1.0.0/calendar-debug"),
 		AutoComplete=require("arale/autocomplete/1.3.0/autocomplete-debug"),
-		CodeProvider = require("../../../common/js/codeProvider");
+//		CodeProvider = require("../../../common/js/codeProvider");
 		SelectTree=require("inno/select-tree/1.0.0/select-tree-debug");
 		Form = require("form"),
 		$=require("$");
@@ -16,7 +16,7 @@ define(function(require,exports,module){
 	
 	var sexType = $("#userSex").val();
 	
-	var oserial = $("#oserial").val();
+	var oserial = $("#orgIds").val();
 	
 	//如果是新增，同时url中传入了默认的岗位id，则给oserial赋值
 	if( !oserial && getQueryString("orgid") ){
@@ -32,9 +32,24 @@ define(function(require,exports,module){
 		});
 		$(".ui-textarea").attr("disabled", true);
 		$(".ui-textarea-border").addClass("ui-textarea-disable");
-		$("#btnSave").css("visibility","hidden");
+		$(".userPwd").hide();
+		$("#btnCancel").show();
+		$(".ui-form-container").show();
+		$(".ui-form-title").show();
+		
 	}else if(sign == "edit"){
 		$(".userAcct").attr("disabled", true);
+		$(".userPwd").hide();
+		$("#btnSave").show();
+		$("#btnCancel").show();
+		$(".userPassword").remove();
+		$(".ui-form-container").show();
+		$(".ui-form-title").show();
+	}else{
+		$("#btnCancel").show();
+		$("#btnSave").show();
+		$(".ui-form-container").show();
+		$(".ui-form-title").show();
 	}
 	require("easyui");
 	
@@ -59,7 +74,7 @@ define(function(require,exports,module){
         rule: 'mobile'
     })
     .addItem({
-        element: 'input[name=\'userAcctPwd\']',
+        element: 'input[name=\'userPwd\']',
         display:"密码",
         required: true,
         rule: 'minlength{"min":5} maxlength{"max":20}',
@@ -70,7 +85,7 @@ define(function(require,exports,module){
         required: true,
         rule: 'minlength{"min":-1}',
     }).addItem({
-        element: 'input[name=\'userAcctCn\']',
+        element: 'input[name=\'userName\']',
         display:"用户名称",
         required: true,
         rule: 'minlength{"min":-1}',
@@ -99,7 +114,31 @@ define(function(require,exports,module){
 				return true;
 			}
 		);
-	
+	$("input[name=userAcct]").blur(
+			function() {
+				var span = $(this).next();
+				var acct=$("input[name=userAcct]").val();
+				var data={userAcct : acct};
+				var parameter={
+						url:_path+'/checkUserAcct',
+					    type:"POST",
+					    async:false,
+					    data:data,
+					    success:function(result){
+					    	if(result=='true'){
+								span.text('账号被占用');
+								$('#btnSave').attr("disabled", true);
+					    	}else{
+					    		$('#btnSave').attr("disabled", false);
+					    	}
+					    },
+					    error:function(result){
+					    	Confirmbox.alert('查询失败！');
+					    }
+					};
+				$.ajax( parameter );
+			}
+	);
 	var message = '';
 	checkAllSelect = function() {
 		var orgv = $.trim($(".oserial").text());
@@ -172,12 +211,12 @@ define(function(require,exports,module){
         trigger: '.oserial',
         width: '360px',
         maxHeight:'300px',
-        name: 'oserial',
+        name: 'orgIds',
         cascade:false,
         checkSelect:function(target,mult){
             var value=$(target).attr("data-disabled");
             if(value){
-            	var otype = $(target).attr("data-otype");
+            	var otype = $(target).attr("data-orgType");
                 if(otype == 'P'){
                 	return true;
                 }else{
@@ -276,7 +315,7 @@ define(function(require,exports,module){
 		$("input[name=password-confirmation]").val( data.userAcctPwd );
 		$("textarea[name=userAcctDesc]").html( data.userAcctDesc );
 		sex.selectValue( data.userSex);
-		one.selectValue( data.oserial );
+		one.selectValue( data.orgIds );
 	};
 	
 	var showInformation = function(type){

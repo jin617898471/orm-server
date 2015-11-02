@@ -26,6 +26,8 @@ public interface OrmUserRoleMapDao extends BaseDao<OrmUserRoleMap, String> {
 	public Long deleteByUserIdAndRoleId(String userId, String roleId);
 
 	public Long deleteByUserId(String userId);
+	
+	public Long deleteByuserIdIn(List<String> userIds);
 
 	public Long deleteByRoleId(String roleId);
 
