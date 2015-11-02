@@ -50,7 +50,7 @@
                     				<div class="search-form-2item">
 										<div class="search-form-item-col">
 											<label class="ui-label">中文名称:</label>
-											<input class="ui-input ui-input-w110" name="resourceNameCn"  style="width: 130px" data-rule-op="like">
+											<input class="ui-input ui-input-w110" name="resourceName"  style="width: 130px" data-rule-op="like">
 										</div>
 										<div class="search-form-item-col">
 											<label class="ui-label">URL:</label>

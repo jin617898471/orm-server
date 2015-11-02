@@ -14,7 +14,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/base.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/widget.css">
-<link rel="stylesheet" type="text/css" href="<%=basePath%>orm/resource/ormresource/css/ResourcesManager.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>orm/system/resource/css/ResourcesManager.css">
 <base href="<%=basePath%>">
 <style></style>
 </head>
@@ -24,8 +24,8 @@
 			<div class="ui-form-2item">
 				<div class="ui-form-item-column clearfix">
 					<div class="ui-form-item-col">
-						<label class="ui-label">中文名称:</label>
-						<input class="ui-input ui-input-w190" id="resourceNameCn" name="resourceNameCn" value="${OrmResource.resourceNameCn}">
+						<label class="ui-label">资源名称:</label>
+						<input class="ui-input ui-input-w190" id="resourceName" name="resourceName" value="${OrmResource.resourceName}">
 						<span class="ui-form-required">*</span>
 						<div class="ui-form-explain"></div>
 					</div>
@@ -56,19 +56,10 @@
 				</div>
 				<div class="ui-form-item-column clearfix">
 					<div class="ui-form-item-col">
-						<label class="ui-label">英文名称:</label>
-						<input class="ui-input ui-input-w190"  name ="resourceNameEn" value="${OrmResource.resourceNameEn}">
+						<label class="ui-label">资源标识:</label>
+						<input class="ui-input ui-input-w190"  name ="resourceCode" value="${OrmResource.resourceCode}">
 					</div>
-					<div class="ui-form-item-col">
-						<label class="ui-label">包名:</label>
-						<input class="ui-input ui-input-w190"  name ="resourcePackage" value="${OrmResource.resourcePackage}">
-					</div>
-				</div>
-				<div class="ui-form-item-column clearfix">
-					<div class="ui-form-item-col">
-						<label class="ui-label">关键字:</label>
-						<input class="ui-input ui-input-w190"  name ="resourceTag" value="${OrmResource.resourceTag}">
-					</div>
+					
 				</div>
 				<div class="ui-form-item-have2col">
 					<label class="ui-label">资源描述:</label>
@@ -80,8 +71,8 @@
 				</div>
 				<div class="ui-form-item-column clearfix" style = "display:none">
 					<div class="ui-form-item-col">
-						<label class="ui-label">presId:</label>
-						<input class="ui-input ui-input-w190"  name ="presId" value="${OrmResource.presId}">
+						<label class="ui-label">parentResId:</label>
+						<input class="ui-input ui-input-w190"  name ="parentResId" value="${OrmResource.parentResId}">
 					</div>
 					<div class="ui-form-item-col">
 						<label class="ui-label">resourceId:</label>
@@ -90,10 +81,6 @@
 					<div class="ui-form-item-col">
 						<label class="ui-label">validSign:</label>
 						<input class="ui-input ui-input-w190"  name ="validSign" value="Y">
-					</div>
-					<div class="ui-form-item-col">
-						<label class="ui-label">resourceSerial:</label>
-						<input class="ui-input ui-input-w190"  name ="resourceSerial" value="0000">
 					</div>
 				</div>
 			</div>
@@ -116,7 +103,8 @@
 </body>
 <script type="text/javascript" src="resources/commons/js/seajs/sea-debug.js" ></script>
 <script type="text/javascript" src="resources/commons/js/seajs/sea-config-debug.js"></script>
+<script type="text/javascript" src="orm/system/resource/js/ormResourceManage.js"></script>
 <script type="text/javascript">
-	seajs.use( "<%=basePath%>orm/resource/ormresource/js/ormResourceADE" );
+	seajs.use( "<%=basePath%>orm/system/resource/js/ormResourceADE" );
 </script>
 </html>

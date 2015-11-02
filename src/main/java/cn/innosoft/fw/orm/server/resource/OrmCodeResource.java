@@ -1,6 +1,7 @@
 package cn.innosoft.fw.orm.server.resource;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.orm.server.model.OrmCode;
+import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.service.OrmCodeService;
 
 @Controller
@@ -25,6 +27,7 @@ public class OrmCodeResource {
 		this.ormCodeService = ormCodeService;
 	}
 
+	
 	/**
 	 * 跳转到详情界面
 	 * @param model
@@ -44,7 +47,7 @@ public class OrmCodeResource {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("/forward/add")
+	@RequestMapping("/forward/addCode")
 	public String forwardAddAction(Model model){
 		model.addAttribute("sign","add");
 		return "/orm/system/code/ormCodeADE.jsp";
@@ -56,12 +59,22 @@ public class OrmCodeResource {
 	 * @param codeId
 	 * @return
 	 */
-	@RequestMapping("/forward/edit/{codeId}")
+	@RequestMapping("/forward/editCode/{codeId}")
 	public String forwardEditAction(Model model,@PathVariable String codeId){
 		OrmCode ormCode = ormCodeService.findOne(codeId);
 		model.addAttribute("ormCode",ormCode);
 		model.addAttribute("sign","edit");
 		return "/orm/system/code/ormCodeADE.jsp";
+	}
+
+	/**
+	 * 获取代码树
+	 * @return
+	 */
+	@RequestMapping("/getCodeTree")
+	@ResponseBody
+	public List<ZtreeBean> getCodeTree(){
+		return ormCodeService.getAllCodeTreeNodes();
 	}
 	
 	/**
@@ -115,6 +128,10 @@ public class OrmCodeResource {
 		return ormCodeService.find(pageRequest);
 	}
 	
-	
+	@RequestMapping("/findCode/{parentCodeId}")
+	@ResponseBody
+	public List<OrmCode> findCode(@PathVariable String parentCodeId){
+		return ormCodeService.findOrmCodesByParentCodeId(parentCodeId);
+	}
 	
 }

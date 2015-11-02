@@ -34,7 +34,7 @@ public class OrmResourceResource {
 	 */
 	@RequestMapping(value = "/forward/manage")
 	public String forwardAddAction() {
-		return "orm/resource/ormresource/ormResourceManage";
+		return "orm/system/resource/ormResourceManage";
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class OrmResourceResource {
 	@RequestMapping(value = "/forward/add")
 	public String forwardAddAction(Model model) {
 		model.addAttribute("sign", "add");
-		return "orm/resource/ormresource/ormResourceADE";
+		return "orm/system/resource/ormResourceADE";
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class OrmResourceResource {
 	public String forwardEditAction(Model model, @PathVariable String id) {
 		model.addAttribute("OrmResource", ormResourceService.findByReosurceId(id));
 		model.addAttribute("sign", "edit");
-		return "orm/resource/ormresource/ormResourceADE";
+		return "orm/system/resource/ormResourceADE";
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class OrmResourceResource {
 	@RequestMapping("/edit")
 	@ResponseBody
 	public String updateAction(OrmResource ormResource) {
-		ormResourceService.update(ormResource);
+		ormResourceService.updateResource(ormResource);
 		return ormResource.getResourceId();
 	}
 
@@ -109,7 +109,7 @@ public class OrmResourceResource {
 	public String forwardDetailAction(Model model, @PathVariable String id) {
 		model.addAttribute("OrmResource", ormResourceService.findByReosurceId(id));
 		model.addAttribute("sign", "detail");
-		return "orm/resource/ormresource/ormResourceADE";
+		return "orm/system/resource/ormResourceADE";
 	}
 
 	/**
@@ -157,6 +157,15 @@ public class OrmResourceResource {
 		return ormResourceService.findValid(pageRequest);
 	}
 
+	/**
+	 * 用于列表和下拉框显示：所属系统
+	 * @return
+	 */
+	@RequestMapping("/systemList")
+	@ResponseBody
+	public List<OrmSystem> getSystemList(){
+		return ormSystemService.findOrmSystemAll();
+	}
 	/**
 	 * 加载资源树
 	 * 
