@@ -29,6 +29,8 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	@Autowired
 	private OrmResourceDao ormResourceDao;
 	@Autowired
+	private OrmRoleResourceRightService ormRoleRresourceMapService;
+	@Autowired
 	private OrmRoleResourceRightDao ormRoleResourceRightDao;
 	@Autowired
 	private OrmSystemDao ormSystemDao;
@@ -66,18 +68,14 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		ormResource.setValidSign("Y");
 		ormResource.setIsLeaf("Y");
 		ormResource.setCreateDt(new Date());
-<<<<<<< HEAD
 		//ormResource.setCreateUserId(LoginUserContext.getUserId());
-=======
 //		ormResource.setCreateUserId(LoginUserContext.getUserId());
->>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 		ormResource.setUpdateDt(new Date());
-<<<<<<< HEAD
 		//ormResource.setUpdateUserId(LoginUserContext.getUserId());
-=======
 //		ormResource.setUpdateUserId(LoginUserContext.getUserId());
->>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 		updateIfParentIsLeaf(parentId);
+		OrmResource parentRes = ormResourceDao.findByResourceId(parentId);
+		ormResource.setRootResId(parentRes.getRootResId());
 		return ormResourceDao.save(ormResource).toString();
 	}
 
@@ -358,4 +356,112 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		}
 		return retResources;
 	}
+
+	// 提供给权限建模资源树
+		public List<ZtreeBean> creatResourceTreeBean(String roleId, String systemId) {
+			List<ZtreeBean> treeBeanList = new ArrayList<ZtreeBean>();
+			// 已授权资源
+			List<OrmRoleResourceRight> grantedResourceList = ormRoleRresourceMapService.getRolesByRoleId(roleId);
+			List<String> grantedResourceIdsList = new ArrayList<String>();
+
+			for (OrmRoleResourceRight ormRoleResourceRight : grantedResourceList) {
+				grantedResourceIdsList.add(ormRoleResourceRight.getResourceId());
+			}
+			// 有权限分配的资源id列表
+			//List<String> enableGrantResourceIds = LoginUserContext.getUserResources(systemId);
+			List<String> enableGrantResourceIds = ormResourceDao.findResourceIdBySystemId(systemId);
+			List<OrmResource> list = ormResourceDao.creatResourceTreeBean(systemId);
+			list = removeUselessNode(list, enableGrantResourceIds);
+
+			for (OrmResource resource : list) {
+				ZtreeBean tree = createZtreeBean(resource, grantedResourceIdsList, enableGrantResourceIds);
+				treeBeanList.add(tree);
+			}
+			return treeBeanList;
+		}
+		
+		/**
+		 * 移除不用的节点.
+		 * 
+		 * @param list
+		 *            完整的结果集
+		 * @param ids
+		 *            有效的结果集
+		 * @return
+		 */
+		private List<OrmResource> removeUselessNode(List<OrmResource> list, List<String> ids) {
+			Map<String, OrmResource> map = conventListToMap(list);
+			List<String> useids = new ArrayList<String>();
+			for (String id : ids) {
+				useids = fillUsedNode(map, useids, id);
+			}
+			List<OrmResource> usednode = new ArrayList<OrmResource>();
+			for (OrmResource res : list) {
+				if (isUserd(res, useids)) {
+					usednode.add(res);
+				}
+			}
+			return usednode;
+		}
+		
+		private Map<String, OrmResource> conventListToMap(List<OrmResource> list) {
+			Map<String, OrmResource> map = new HashMap<String, OrmResource>();
+			for (OrmResource res : list) {
+				String resId = res.getResourceId();
+				map.put(resId, res);
+			}
+
+			return map;
+		}
+		
+		private List<String> fillUsedNode(Map<String, OrmResource> map, List<String> useids, String id) {
+			OrmResource res = map.get(id);
+			if (res != null) {
+				if (!useids.contains(id)) {
+					useids.add(id);
+					String presId = res.getParentResId();
+					useids = fillUsedNode(map, useids, presId);
+				}
+			}
+			return useids;
+		}
+		
+		private boolean isUserd(OrmResource res, List<String> useids) {
+			String resId = res.getResourceId();
+			for (String id : useids) {
+				if (id.equals(resId)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		private ZtreeBean createZtreeBean(OrmResource resource, List<String> grantedResourceIdsList,
+				List<String> enableGrantResourceIds) {
+			ZtreeBean treebean = new ZtreeBean();
+			String id = resource.getResourceId();
+			String name = resource.getResourceName();
+			String pId = resource.getParentResId();
+			Boolean isLeaf = ("Y" == resource.getIsLeaf()) ? true : false;
+			treebean.setId(id);
+			treebean.setName(name);
+			treebean.setpId(pId);
+			treebean.setOpen(!(isLeaf));
+			treebean.setIsParent(isLeaf);
+			treebean.setChecked(false);
+			if (enableGrantResourceIds.contains(id) && !"000".equals(resource.getResourceType())) {
+				treebean.setNocheck(false);
+			}else{
+				treebean.setNocheck(true);
+			}
+
+			// 是否选中
+			if (grantedResourceIdsList.contains(id) || grantedResourceIdsList.contains(pId)) {
+				treebean.setChecked(true);
+			}
+			Map<String, Object> attributes = new HashMap<String, Object>();
+			attributes.put("resourceType", resource.getResourceType());
+			treebean.setAttributes(attributes);
+			return treebean;
+		}
 }

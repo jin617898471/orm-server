@@ -258,8 +258,8 @@ define(function(require, exports, module) {
 	// submit
 	var roleADEForm = new Form({
 		trigger : "#roleADEForm",
-		addUrl : _path + "/add",
-		setUrl : _path + "/edit"
+		addUrl : "./"+_path + "/add",
+		setUrl : "./"+_path + "/edit"
 	});
 
 	validator.element.on("submit", function(e) {
@@ -292,6 +292,11 @@ define(function(require, exports, module) {
 //									parent.resetutilsearchlist();
 //									window.frameElement.trigger("close");
 //								});
+								if(parent.tableRefresh){
+									parent.tableRefresh();
+								}else{
+									parent.tableRefresh();
+								}
 							}
 						},
 						errorFn : function(result) {

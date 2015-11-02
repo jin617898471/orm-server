@@ -94,7 +94,7 @@ public class OrmResourceResource {
 	@RequestMapping("/edit")
 	@ResponseBody
 	public String updateAction(OrmResource ormResource) {
-		ormResourceService.update(ormResource);
+		ormResourceService.updateResource(ormResource);
 		return ormResource.getResourceId();
 	}
 

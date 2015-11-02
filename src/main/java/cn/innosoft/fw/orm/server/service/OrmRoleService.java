@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import cn.innosoft.fw.biz.base.querycondition.FilterGroup;
 import cn.innosoft.fw.biz.base.querycondition.QueryConditionHelper;
@@ -39,13 +40,15 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	private OrmOrgUserMapDao ormOrgUserMapDao;
 	@Autowired
 	private OrmResourceService ormResourceService;
-	@Autowired
-	private OrmCodeService ormCodeService;
+//	@Autowired
+//	private OrmCodeService ormCodeService;
 	@Autowired
 	private OrmOrganizationService ormOrganizationService;
 	@Autowired
 	private OrmUserService ormUserService;
-
+	@Autowired
+	private OrmRoleResourceRightService ormRoleResMapService;
+	
 	@Override
 	public BaseDao<OrmRole, String> getBaseDao() {
 		return ormRoleDao;
@@ -159,4 +162,128 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 		return ormRoleDao.findBySystemId(systemId);
 	}
 
+	public String getRoleUseOrgName(@PathVariable String idArray) {
+		return getRoleUseOrgNames(idArray);
+	}
+	
+	public String getRoleUseOrgNames(@PathVariable String idArray) {
+		/*String[] str = idArray.split(",");
+		String idstr = "";
+		String name = "";
+		String sql = "";
+		for (String string : str) {
+			idstr += "'" + string.trim() + "',";
+		}
+		sql = "from OrmRoleUOMap where roleId in (" + idstr.substring(0, idstr.length() - 1) + ")";
+		List<OrmRoleUOMap> names = this.getHibernateTemplate().find(sql);
+		for (OrmRoleUOMap string : names) {
+			OrmUser ormUser = this.getHibernateTemplate().get(OrmUser.class, string.getUserId().trim());
+			name += "[用户]: {" + ormUser.getUserAcct() + "}, ";
+			OrmOrganization ormOrg = this.getHibernateTemplate().get(OrmOrganization.class, string.getOid().trim());
+			name += "[岗位]: {" + ormOrg.getOname() + "}, ";
+		}
+		return name;*/
+		return "";
+	}
+
+	public void grantResource(String roleId, String resourceIds) {
+		ArrayList<String> resourceIdsList = new ArrayList<String>();
+		if (!resourceIds.isEmpty()) {
+			String[] s = resourceIds.split(",");
+			for (int i = 0; i < s.length; i++) {
+				resourceIdsList.add(s[i]);
+			}
+		}
+		grantResource(roleId, resourceIdsList);
+	}
+	
+	//对比角色已授资源权限，将新增资源增加，删除资源删除
+		public void grantResource(String roleId, List<String> resourceIdsList){
+			List<String> roleOwnResourceList = getResourceIdsByRoleId(roleId);
+			List<String> needAddResourceIdList = new ArrayList<String>();
+			StringBuffer needDelResourceIds = new StringBuffer();
+			
+			//角色已授资源权限为空直接新增
+			if(roleOwnResourceList.size()<1){
+				addAuthRole(roleId,resourceIdsList);
+			}else{
+				//整理新增资源id列表
+				for (int i = 0; i < resourceIdsList.size(); i++) {
+					String id = resourceIdsList.get(i);
+					if (!roleOwnResourceList.contains(id)) {// 以前不包含此ResourceId
+						needAddResourceIdList.add(id);
+					}
+				}
+				
+				//整理需删除资源id字符串
+				for (int i = 0; i < roleOwnResourceList.size(); i++) {
+					String resourceId = roleOwnResourceList.get(i);
+					boolean isDelete = true;
+					for (int j = 0; j < resourceIdsList.size(); j++) {
+						String selectedResourceId = resourceIdsList.get(j);
+						if (selectedResourceId.equals(resourceId)) {// 此次任然包含此ResourceId
+							isDelete = false;
+							break;
+						}
+					}
+					if (isDelete) {// 此次不包含此ResourceId
+						needDelResourceIds.append(resourceId);
+						needDelResourceIds.append(",");
+					}
+					
+				}
+
+				//删除资源权限
+				if (needDelResourceIds.length() > 0) {
+					String resourceIds = needDelResourceIds.toString();
+					resourceIds = resourceIds.substring(0, resourceIds.length()-1);
+					deletes(roleId, resourceIds);
+				}
+				//增加资源权限
+				if(needAddResourceIdList.size()>0){
+					addAuthRole(roleId,needAddResourceIdList);
+				}
+			}
+		}
+		
+		public List<String> getResourceIdsByRoleId(String roleId) {
+			List<String>  resourceList  = new ArrayList<String>();//存放该角色下的所有资源id的集合
+			FilterGroup filtergroup = QueryConditionHelper.add(new String[] { "roleId" }, new String[] { roleId });
+			List<OrmRoleResourceRight> list = ormRoleResourceRightDao.findAll(filtergroup);//该角色下的所有资源
+			for (OrmRoleResourceRight ormAuthRole : list) {
+				resourceList.add(ormAuthRole.getResourceId());
+			}
+			return resourceList;
+		}
+		
+		private void addAuthRole(String roleId, List<String> resourceIdList){
+			for (int i = 0; i < resourceIdList.size(); i++) {
+				OrmRoleResourceRight ormAuthRole = new OrmRoleResourceRight();
+				String id = resourceIdList.get(i);
+				ormAuthRole.setResourceId(id);
+				ormAuthRole.setRoleId(roleId);
+				ormRoleResourceRightDao.add(ormAuthRole);
+			}
+		}
+		
+		public void deletes(String roleId, String resourceIds) {
+			String[] resIds = resourceIds.split(",");
+			for (int i = 0; i < resIds.length; i++) {
+				deleteResAuth(roleId, resIds[i]);
+			}
+		}
+		
+		public void deleteResAuth(String roleId, String resourceId) {
+			String sql = "SELECT AUTH_ROLE_ID FROM T_FW_ORM_AUTH_ROLE WHERE ROLE_ID = '" + roleId
+			             + "' and RESOURCE_ID = '" + resourceId + "'";
+			List<OrmRoleResourceRight> list = ormRoleResMapService.findEntityBySql(sql);
+			if (list.size() > 0) {
+				String authRoleId = list.get(0).getRoleId();
+				sql = "DELETE FROM T_FW_ORM_ROLE_O_MAP WHERE AUTH_ROLE_ID = '" + authRoleId + "'";
+				this.executeUpdateBySql(sql);
+				sql = "DELETE FROM T_FW_ORM_ROLE_CODE_MAP WHERE AUTH_ROLE_ID = '" + authRoleId + "'";
+				this.executeUpdateBySql(sql);
+				this.deleteRole(list.get(0).getId());
+			}
+		}
 }
