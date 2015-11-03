@@ -129,6 +129,7 @@ define(function(require,exports,module){
 								span.text('账号被占用');
 								$('#btnSave').attr("disabled", true);
 					    	}else{
+					    		span.text('*')
 					    		$('#btnSave').attr("disabled", false);
 					    	}
 					    },
