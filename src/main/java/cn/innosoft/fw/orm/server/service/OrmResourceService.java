@@ -29,8 +29,6 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	@Autowired
 	private OrmResourceDao ormResourceDao;
 	@Autowired
-	private OrmRoleResourceRightService ormRoleRresourceMapService;
-	@Autowired
 	private OrmRoleResourceRightDao ormRoleResourceRightDao;
 	@Autowired
 	private OrmSystemDao ormSystemDao;
@@ -362,7 +360,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	public List<ZtreeBean> creatResourceTreeBean(String roleId, String systemId) {
 		List<ZtreeBean> treeBeanList = new ArrayList<ZtreeBean>();
 		// 已授权资源
-		List<OrmRoleResourceRight> grantedResourceList = ormRoleRresourceMapService.getRolesByRoleId(roleId);
+		List<OrmRoleResourceRight> grantedResourceList = ormRoleResourceRightDao.findByRoleId(roleId);
 		List<String> grantedResourceIdsList = new ArrayList<String>();
 
 		for (OrmRoleResourceRight ormRoleResourceRight : grantedResourceList) {

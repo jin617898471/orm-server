@@ -27,4 +27,5 @@ public interface OrmRoleResourceRightDao extends BaseDao<OrmRoleResourceRight, S
 	@Modifying
 	@Query(value="update ORM_ROLE_RESOURCE_RIGHT set HALF_SELECT=?3 where ROLE_ID=?1 and RESOURCE_ID=?2",nativeQuery=true)
 	public void updateHalfSelect(String roleId,String parentResId, String halfSelect);
+		
 }
