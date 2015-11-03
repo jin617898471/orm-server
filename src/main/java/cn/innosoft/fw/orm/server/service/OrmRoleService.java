@@ -1,6 +1,7 @@
 package cn.innosoft.fw.orm.server.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,8 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	 * @param ormRole
 	 */
 	public void updateRole(OrmRole ormRole) {
+		ormRole.setUpdateDt(new Date());
+		//ormRole.setUpdateUserId(LoginUserContext.getUserId());
 		ormRoleDao.update(ormRole);
 	}
 
