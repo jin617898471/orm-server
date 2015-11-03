@@ -69,9 +69,14 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 	 * @param orgId
 	 */
 	public void deleteOrganization(String orgId) {
-		ormOrganizationDao.delete(orgId);
-		ormOrgUserMapDao.deleteByOrgId(orgId);
-		ormOrgRoleMapDao.deleteByOrgId(orgId);
+		List<OrmOrganization> orgs = ormOrganizationDao.getOrgByParentOrg(orgId);
+		for(OrmOrganization org : orgs){
+			String oId = org.getOrgId();
+			ormOrganizationDao.delete(oId);
+			ormOrgUserMapDao.deleteByOrgId(oId);
+			ormOrgRoleMapDao.deleteByOrgId(oId);
+		}
+
 	}
 	
 	public List<OrmOrganization> getOrgByUserId(String userId){
