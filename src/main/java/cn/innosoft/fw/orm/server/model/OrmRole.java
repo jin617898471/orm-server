@@ -11,6 +11,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -66,6 +67,8 @@ public class OrmRole implements Serializable {
 	@Column(name="VALID_SIGN")
 	private String validSign;
 
+	@Transient
+	private String mapType;
 	public OrmRole() {
 	}
 
@@ -163,6 +166,14 @@ public class OrmRole implements Serializable {
 
 	public void setValidSign(String validSign) {
 		this.validSign = validSign;
+	}
+
+	public String getMapType() {
+		return mapType;
+	}
+
+	public void setMapType(String mapType) {
+		this.mapType = mapType;
 	}
 
 }

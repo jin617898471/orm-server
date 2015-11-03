@@ -19,7 +19,7 @@ public interface OrmOrgUserMapDao extends BaseDao<OrmOrgUserMap, String> {
 
 	public Long deleteByUserId(String userId);
 	
-	public Long deleteByuserIdIn(List<String> userIds);
+	public Long deleteByUserIdIn(List<String> userIds);
 
 	public Long deleteByOrgId(String orgId);
 

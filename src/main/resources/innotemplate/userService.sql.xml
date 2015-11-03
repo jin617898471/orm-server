@@ -44,4 +44,36 @@
 			]]>
 		</sql>
 	</class>
+	<class id="orgService">
+		<sql id="institutionTree">
+			with temporg as (select * from ORM_ORGANIZATION where org_type = 'I'),
+     		treeorg as (
+         		SELECT ORG_ID, PARENT_ORG_ID, CONNECT_BY_ROOT (ORG_ID) root FROM (
+             	SELECT ORG_ID, PARENT_ORG_ID FROM (SELECT ORG_ID,DECODE(org_type,'I','ROOT',PARENT_ORG_ID) PARENT_ORG_ID,ROOT_ORG_ID FROM ORM_ORGANIZATION) START WITH ROOT_ORG_ID = ORG_ID CONNECT BY PARENT_ORG_ID = PRIOR ORG_ID 
+             	) CONNECT BY PRIOR ORG_ID = PARENT_ORG_ID
+     		)
+			SELECT c.*, b.num FROM  (
+				SELECT root AS id, count(1) num FROM (
+    				SELECT distinct b.user_id,a.root FROM treeorg A right JOIN (
+               			SELECT ORG_ID, user_id FROM ORM_ORG_USER_MAP
+         			) b ON a.ORG_ID = b.ORG_ID
+				) group by root
+			) b right join temporg c on b.id = c.org_id order by num desc 
+		</sql>
+		<sql id="orgTree">
+			with temporg as (select * from ORM_ORGANIZATION where ROOT_ORG_ID = :instId),
+     		treeorg as (
+         		SELECT ORG_ID, PARENT_ORG_ID, CONNECT_BY_ROOT (ORG_ID) root FROM (
+            		 SELECT ORG_ID, PARENT_ORG_ID FROM temporg START WITH ROOT_ORG_ID = ORG_ID CONNECT BY PARENT_ORG_ID = PRIOR ORG_ID
+             	) CONNECT BY PRIOR ORG_ID = PARENT_ORG_ID
+     		)
+			SELECT c.*, b.num FROM  (
+				SELECT root AS id, count(1) num FROM (
+    				SELECT distinct b.user_id,a.root FROM treeorg A right JOIN (
+               			SELECT ORG_ID, user_id FROM ORM_ORG_USER_MAP
+         			) b ON a.ORG_ID = b.ORG_ID
+				) group by root
+			) b right join temporg c on b.id = c.org_id order by num desc 		
+		</sql>
+	</class>
 </template>
