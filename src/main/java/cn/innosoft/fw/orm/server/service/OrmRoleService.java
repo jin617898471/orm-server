@@ -222,13 +222,16 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 		for (String s : resourceIdsList) {
 			OrmResource ormRRR = ormResourceService.findByReosurceId(s);
 			String parentResId = ormRRR.getParentResId();
-			if (!needUpdateResourceIdList.contains(parentResId)) {// 已经判断过的跳过
-				if (roleOwnResourceList.contains(parentResId)) {
+			while(!"ROOT".equals(parentResId.toUpperCase())){
+				if (!needUpdateResourceIdList.contains(parentResId)) {// 已经判断过的跳过
 					needUpdateResourceIdList.add(parentResId);
-					updateHalfSelect(roleId, parentResId, "N");
-				} else {
-					updateHalfSelect(roleId, parentResId, "Y");
+					if (roleOwnResourceList.contains(parentResId)) {
+						modifyHalfSelect(roleId, parentResId, "N");
+					} else {
+						modifyHalfSelect(roleId, parentResId, "Y");
+					}
 				}
+				parentResId =  ormResourceService.findByReosurceId(parentResId).getParentResId();
 			}
 		}
 
@@ -276,14 +279,25 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	}
 
 	/**
-	 * 更新父亲资源的半选状态
+	 * 修改父亲资源的半选状态,如果没有记录，则新增一条记录，有则更新半选状态
 	 * 
 	 * @param roleId
 	 * @param parentResId
 	 * @param halfSelect
 	 */
-	private void updateHalfSelect(String roleId, String parentResId, String halfSelect) {
-		ormRoleResourceRightDao.updateHalfSelect(roleId, parentResId, halfSelect);
+	private void modifyHalfSelect(String roleId, String parentResId, String halfSelect) {
+		List<OrmRoleResourceRight> roleResRight = ormRoleResourceRightDao.findByRoleIdAndResourceId(roleId,
+				parentResId);
+		if (roleResRight!=null && roleResRight.size()>0) {
+			ormRoleResourceRightDao.updateHalfSelect(roleId, parentResId, halfSelect);
+		} else {
+			OrmRoleResourceRight ormAuthRole = new OrmRoleResourceRight();
+			ormAuthRole.setResourceId(parentResId);
+			ormAuthRole.setRoleId(roleId);
+			ormAuthRole.setHalfSelect(halfSelect);
+			ormAuthRole.setSystemId(ormResourceService.findByReosurceId(parentResId).getSystemId());
+			ormRoleResourceRightDao.add(ormAuthRole);
+		}
 	}
 
 	public List<String> getResourceIdsByRoleId(String roleId) {
@@ -306,7 +320,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 			ormAuthRole.setResourceId(id);
 			ormAuthRole.setRoleId(roleId);
 			ormAuthRole.setHalfSelect("N");
-			// ormAuthRole.setSystemId(systemId);
+			ormAuthRole.setSystemId(ormResourceService.findByReosurceId(id).getSystemId());
 			ormRoleResourceRightDao.add(ormAuthRole);
 		}
 	}

@@ -365,7 +365,8 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 			List<String> grantedResourceIdsList = new ArrayList<String>();
 
 			for (OrmRoleResourceRight ormRoleResourceRight : grantedResourceList) {
-				grantedResourceIdsList.add(ormRoleResourceRight.getResourceId());
+				if("N".equals(ormRoleResourceRight.getHalfSelect()))
+					grantedResourceIdsList.add(ormRoleResourceRight.getResourceId());
 			}
 			// 有权限分配的资源id列表
 			//List<String> enableGrantResourceIds = LoginUserContext.getUserResources(systemId);
