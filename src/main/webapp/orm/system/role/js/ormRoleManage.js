@@ -184,19 +184,6 @@ define(function(require,exports){
 					return false;
 				}
 				Confirmbox.confirm('是否确定要删除这些记录？', '', function() {
-					var name = "";
-					var parameter = {
-						url : _path + '/userOrg/' + deleteIdArray,
-						type : "POST",
-						async : false,
-						success : function(data) {
-							name = data;
-						},
-						error : function(result) {
-							Confirmbox.alert('删除失败！');
-						}
-					};
-					$.ajax(parameter);
 					parameter = {
 						url : _path + '/deletebatch/' + deleteIdArray,
 						type : "POST",
@@ -208,16 +195,7 @@ define(function(require,exports){
 							Confirmbox.alert('删除失败！');
 						}
 					};
-					if (name.length > 0) {
-						Confirmbox.confirm('该角色被' + name + '所引用，是否继续删除？', '',
-								function() {
-									$.ajax(parameter);
-								}, function() {
-
-								});
-					} else {
-						$.ajax(parameter);
-					}
+					$.ajax(parameter);
 				}, function() {
 
 				});

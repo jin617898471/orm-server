@@ -1,14 +1,10 @@
 package cn.innosoft.fw.orm.server.resource;
 
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -227,31 +223,31 @@ public class OrmRoleResource {
 		return map;
 	}
 	
-	/**
-	 * 根据id查询角色关联的用户和岗位的name
-	 * 
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 */
-	@RequestMapping("/userOrg/{idArray}")
-	@ResponseBody
-	public String getRoleUseOrgName(@PathVariable String idArray, HttpServletResponse response) {
-		PrintWriter out = null;
-		String name = "";
-		try {
-			response.setCharacterEncoding("UTF-8");
-			out = response.getWriter();
-			response.reset();
-			name = ormRoleService.getRoleUseOrgName(idArray);
-			out.print(name);
-			out.flush();
-			out.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return name;
-	}
-	
+//	/**
+//	 * 根据id查询角色关联的用户和岗位的name
+//	 * 
+//	 * @return
+//	 * @throws UnsupportedEncodingException
+//	 */
+//	@RequestMapping("/userOrg/{idArray}")
+//	@ResponseBody
+//	public String getRoleUseOrgName(@PathVariable String idArray, HttpServletResponse response) {
+//		PrintWriter out = null;
+//		String name = "";
+//		try {
+//			response.setCharacterEncoding("UTF-8");
+//			out = response.getWriter();
+//			response.reset();
+//			name = ormRoleService.getRoleUseOrgName(idArray);
+//			out.print(name);
+//			out.flush();
+//			out.close();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return name;
+//	}
+//	
 	/**
 	 * 资源授权
 	 */
