@@ -516,5 +516,6 @@ define(function(require) {
 		}
 		// 右侧树列表的刷新
 		resetutilsearchlist();
+		$('#tblResult').datagrid('clearSelections');
 	};
 });

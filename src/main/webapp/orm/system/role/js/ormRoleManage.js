@@ -342,6 +342,7 @@ define(function(require,exports){
 	// 刷新公共方法
 	tableRefresh = function() {
 		searchlist();
+		$('#tblResult').datagrid('clearSelections');
 	};
 
 });
