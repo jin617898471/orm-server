@@ -19,8 +19,8 @@ import cn.innosoft.fw.orm.server.service.OrmOrganizationService;
 import cn.innosoft.fw.orm.server.service.OrmResourceService;
 import cn.innosoft.fw.orm.server.service.OrmRoleService;
 import cn.innosoft.fw.orm.server.service.OrmSystemService;
-import cn.innosoft.orm.client.common.SelectTreeBean;
-import cn.innosoft.orm.client.service.LoginUserContext;
+//import cn.innosoft.orm.client.common.SelectTreeBean;
+//import cn.innosoft.orm.client.service.LoginUserContext;
 
 @Controller
 @RequestMapping(value = "role/ormrole")
@@ -156,11 +156,11 @@ public class OrmRoleResource {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/getOrgnizationGroup")
-	@ResponseBody
-	public List<SelectTreeBean> getOrgnizationGroup() {
-		return ormOrganizationService.createSelectTree();
-	}
+//	@RequestMapping("/getOrgnizationGroup")
+//	@ResponseBody
+//	public List<SelectTreeBean> getOrgnizationGroup() {
+//		return ormOrganizationService.createSelectTree();
+//	}
 
 	/**
 	 * 系统选择下拉框

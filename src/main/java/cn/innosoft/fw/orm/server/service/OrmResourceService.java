@@ -66,17 +66,17 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		ormResource.setValidSign("Y");
 		ormResource.setIsLeaf("Y");
 		ormResource.setCreateDt(new Date());
-<<<<<<< HEAD
-		//ormResource.setCreateUserId(LoginUserContext.getUserId());
-=======
-//		ormResource.setCreateUserId(LoginUserContext.getUserId());
->>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
-		ormResource.setUpdateDt(new Date());
-<<<<<<< HEAD
-		//ormResource.setUpdateUserId(LoginUserContext.getUserId());
-=======
-//		ormResource.setUpdateUserId(LoginUserContext.getUserId());
->>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
+//<<<<<<< HEAD
+//		//ormResource.setCreateUserId(LoginUserContext.getUserId());
+//=======
+////		ormResource.setCreateUserId(LoginUserContext.getUserId());
+//>>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
+//		ormResource.setUpdateDt(new Date());
+//<<<<<<< HEAD
+//		//ormResource.setUpdateUserId(LoginUserContext.getUserId());
+//=======
+////		ormResource.setUpdateUserId(LoginUserContext.getUserId());
+//>>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 		updateIfParentIsLeaf(parentId);
 		return ormResourceDao.save(ormResource).toString();
 	}
