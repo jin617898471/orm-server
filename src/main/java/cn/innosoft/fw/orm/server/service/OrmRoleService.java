@@ -79,58 +79,6 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 		ormUserRoleMapDao.deleteByRoleId(roleId);
 	}
 
-	public void editRoleResourceRight(Map<String, OrmResource> map, String roleId) {
-		List<OrmRoleResourceRight> rrrs = ormRoleResourceRightDao.findByRoleId(roleId);
-		for (OrmRoleResourceRight rrr : rrrs) {
-			if (map.containsKey(rrr.getResourceId())) {
-				map.remove(rrr.getResourceId());
-			} else {
-				ormRoleResourceRightDao.delete(rrr);
-			}
-		}
-		for (OrmResource res : map.values()) {
-			String parentResId = res.getParentResId();
-			List<OrmRoleResourceRight> list = ormRoleResourceRightDao.findByResourceId
-
-			(parentResId);
-			if (list.size() == 0) {
-				ormResourceService.createOrmRoleResourceRight(roleId, parentResId, "Y",
-
-				res.getSystemId());
-			}
-			ormResourceService.createOrmRoleResourceRight(roleId, res.getResourceId(), "N",
-
-			res.getSystemId());
-		}
-	}
-
-	public void editRoleOrgMap(List<String> orgIds, OrmRole role) {
-		String roleId = role.getRoleId();
-		List<OrmOrgRoleMap> maps = ormOrgRoleMapDao.findByRoleId(roleId);
-		for (OrmOrgRoleMap orm : maps) {
-			String orgId = orm.getOrgId();
-			if (orgIds.contains(orgId)) {
-				orgIds.remove(orgId);
-			} else {
-				ormOrgRoleMapDao.delete(orm);
-				List<OrmOrgUserMap> list = ormOrgUserMapDao.findByOrgId(orgId);
-				for (OrmOrgUserMap oum : list) {
-					ormUserRoleMapDao.deleteByUserIdRoleIdAndType(oum.getUserId(),
-
-					roleId, "USER_ORG_TO_ROLE");
-				}
-			}
-		}
-		for (String orgId : orgIds) {
-			ormOrganizationService.createOrgRoleMap(orgId, role);
-			List<OrmOrgUserMap> list = ormOrgUserMapDao.findByOrgId(orgId);
-			for (OrmOrgUserMap oum : list) {
-				ormUserService.createUserRoleMap(oum.getUserId(), role.getRoleId(), orgId,
-
-				role.getSystemId());
-			}
-		}
-	}
 
 	public void addRoleUserMap(String userId, OrmRole role) {
 		ormUserService.createUserRoleMap(userId, role.getRoleId(), null, role.getSystemId());

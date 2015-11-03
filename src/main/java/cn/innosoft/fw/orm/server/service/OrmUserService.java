@@ -18,6 +18,7 @@ import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
 import cn.innosoft.fw.orm.server.model.OrmOrgRoleMap;
 import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
+import cn.innosoft.fw.orm.server.model.OrmRole;
 import cn.innosoft.fw.orm.server.model.OrmUser;
 import cn.innosoft.fw.orm.server.model.OrmUserRoleMap;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
@@ -44,6 +45,8 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	private OrmOrgRoleMapDao ormOrgRoleMapDao;
 	@Autowired
 	private OrmOrganizationService ormOrganizationService;
+	@Autowired
+	private OrmRoleService ormRoleService;
 
 	@Override
 	public BaseDao<OrmUser, String> getBaseDao() {
@@ -84,8 +87,8 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		PageResponse<Map<String, Object>> page = findMapBySql("userService-getUser", args, pageRequest);
 		return page;
 	}
-	public List<OrmUser> getUserByOrgId(String userId){
-		return ormUserDao.getUserByOrgId(userId);
+	public List<OrmUser> getUserByOrgId(String orgId){
+		return ormUserDao.getUserByOrgId(orgId);
 	}
 	/**
 	 * 添加用户
@@ -95,8 +98,8 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	 */
 	public String addUser(OrmUser ormUser) {
 		try {
-			ormUserDao.save(ormUser);
-			editOrgUserMap(ormUser, ormUser.getOrgIds());
+			ormUser= ormUserDao.save(ormUser);
+			editOrgUserMap(ormUser.getUserId(), ormUser.getOrgIds());
 			return "true";
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -129,7 +132,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		try {
 			updateSome(ormUser);
 			String strOIds = ormUser.getOrgIds();
-			editOrgUserMap(ormUser, strOIds);
+			editOrgUserMap(ormUser.getUserId(), strOIds);
 			return "true";
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -163,6 +166,14 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		OrmUser user = ormUserDao.findOne(userId);
 		map.put("user", user);
 		map.put("org", ormOrganizationService.getOrgByUserId(userId));
+		List<Object[]> list = ormRoleService.findRoleInfoByUserId(userId);
+		List<OrmRole> roles = new ArrayList<OrmRole>();
+		for(Object[] objs : list){
+			OrmRole role = (OrmRole) objs[1];
+			role.setMapType((String)objs[0]);
+			roles.add(role);
+		}
+		map.put("role", roles);
 		return map;
 	}
 	/**
@@ -192,8 +203,8 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	 */
 	public void deleteBatch(List<String> userIds){
 		ormUserDao.deleteByUserIdIn(userIds);
-		ormOrgUserMapDao.deleteByuserIdIn(userIds);
-		ormUserRoleMapDao.deleteByuserIdIn(userIds);
+		ormOrgUserMapDao.deleteByUserIdIn(userIds);
+		ormUserRoleMapDao.deleteByUserIdIn(userIds);
 	}
 	/**
 	 * 编辑用户组织机构关联
@@ -201,8 +212,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	 * @param userId
 	 * @param orgIds
 	 */
-	public void editOrgUserMap(OrmUser user, String strOIds) {
-		String userId = user.getUserId();
+	public void editOrgUserMap(String userId, String strOIds) {
 		List<String> orgIds = new ArrayList<String>();
 		String[] temp = strOIds.split(",");
 		for(String oId : temp){
@@ -228,7 +238,6 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 				createUserRoleMap(userId, orm.getRoleId(), orgId, orm.getSystemId());
 			}
 		}
-		updateSome(user);
 	}
 	public void deleteOrgUserMap(String userId,String orgId){
 		ormOrgUserMapDao.deleteByUserIdAndOrgId(userId, orgId);

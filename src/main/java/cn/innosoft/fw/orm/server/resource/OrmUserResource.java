@@ -47,7 +47,7 @@ public class OrmUserResource {
 	 * @param pageRequest
 	 * @return
 	 */
-	@RequestMapping("/list")
+	@RequestMapping("/listPage")
 	@ResponseBody 
 	public PageResponse<Map<String, Object>> listUsers(PageRequest pageRequest){
 		return ormUserService.find(pageRequest);
@@ -127,11 +127,8 @@ public class OrmUserResource {
 	public void deleteAction(@PathVariable String id) {
 		ormUserService.delete(id);
 	}
-	@RequestMapping("/userAssociate")
-	@ResponseBody
-	public List<OrmUser> userAssociate(String userAcct){
-		return ormUserService.userAssociate(userAcct);
-	}
+
+
 	/**
 	 * 批量删除
 	 * 

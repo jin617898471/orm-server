@@ -84,7 +84,7 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 	 * @param userId
 	 * @param orgId
 	 */
-	public void connectOrgToUser(String userId, String orgId) {
+	public void addUserToOrg(String userId, String orgId) {
 		createOrgUserMap(userId, orgId);
 		List<OrmOrgRoleMap> orms = ormOrgRoleMapDao.findByOrgId(orgId);
 		if (orms.size() == 0) {
@@ -131,7 +131,7 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 	 * @param userId
 	 * @param orgId
 	 */
-	public void disconnectOrgToUser(String userId, String orgId) {
+	public void deleteUserFromOrg(String userId, String orgId) {
 		ormOrgUserMapDao.deleteByUserIdAndOrgId(userId, orgId);
 		List<OrmOrgRoleMap> orms = ormOrgRoleMapDao.findByOrgId(orgId);
 		if (orms.size() == 0) {

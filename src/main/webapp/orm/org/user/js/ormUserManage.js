@@ -22,7 +22,7 @@ define(function(require,exports){
 			autoRowHeight : true,
 			striped : true,
 			collapsible : true,
-			url : _path+'/list',
+			url : _path+'/listPage',
 			sortName : 'u.CREATE_DT',
 			sortOrder : 'desc',
 			idField : 'u.USER_ID',
