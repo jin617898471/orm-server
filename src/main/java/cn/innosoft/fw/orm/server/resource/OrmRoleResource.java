@@ -1,8 +1,14 @@
 package cn.innosoft.fw.orm.server.resource;
 
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,12 +21,12 @@ import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.orm.server.model.OrmRole;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
+import cn.innosoft.fw.orm.server.model.SelectTreeBean;
+import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.service.OrmOrganizationService;
 import cn.innosoft.fw.orm.server.service.OrmResourceService;
 import cn.innosoft.fw.orm.server.service.OrmRoleService;
 import cn.innosoft.fw.orm.server.service.OrmSystemService;
-//import cn.innosoft.orm.client.common.SelectTreeBean;
-//import cn.innosoft.orm.client.service.LoginUserContext;
 
 @Controller
 @RequestMapping(value = "role/ormrole")
@@ -35,13 +41,16 @@ public class OrmRoleResource {
 	@Autowired
 	private OrmSystemService ormSystemService;
 	
+	@Autowired
+	private OrmResourceService ormResourceService;
+	
 	/**
 	 * 跳转到角色管理页面
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/forward/manage")
-	public String forwardAddAction() {
+	@RequestMapping("/forward/manage")
+	public String forwardManageAction() {
 		return "orm/system/role/ormRoleManage";
 	}
 
@@ -51,7 +60,7 @@ public class OrmRoleResource {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/forward/add")
+	@RequestMapping("/forward/add")
 	public String forwardAddAction(Model model) {
 		model.addAttribute("sign", "add");
 		return "orm/system/role/ormRoleADE";
@@ -61,16 +70,18 @@ public class OrmRoleResource {
 	 * 添加角色
 	 * 
 	 * @param ormRole
-	 * @return 如果角色类型与同级不匹配则返回N+系统Id+角色类型
+	 * @return 
 	 */
-	@RequestMapping(value = "/add")
+	@RequestMapping("/add")
+	@ResponseBody
 	public void addAction(OrmRole ormRole) {
 		ormRole.setRoleType("NORMAL");
 		//ormRole.setCreateUserId(LoginUserContext.getUserId());
 		ormRole.setCreateDt(new Date());
 		//ormRole.setUpdateUserId(LoginUserContext.getUserId());
 		ormRole.setUpdateDt(new Date());
-		ormRoleService.add(ormRole);
+		ormRoleService.addRole(ormRole);
+		//return "orm/system/role/ormRoleManage";
 	}
 
 	/**
@@ -103,6 +114,17 @@ public class OrmRoleResource {
 	}
 	
 	/**
+	 * 权限建模查询整个资源树
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/creatResourceTreeBean")
+	@ResponseBody
+	public List<ZtreeBean> creatResourceTreeBeanAction(String roleId, String systemId) {
+		return ormResourceService.creatResourceTreeBean(roleId, systemId);
+	}
+	
+	/**
 	 * 编辑角色
 	 * 
 	 * @param ormRole
@@ -111,7 +133,7 @@ public class OrmRoleResource {
 	@RequestMapping("/edit")
 	@ResponseBody
 	public String updateAction(OrmRole ormRole) {
-		ormRoleService.update(ormRole);
+		ormRoleService.updateRole(ormRole);
 		return ormRole.getRoleId();
 	}
 
@@ -201,6 +223,48 @@ public class OrmRoleResource {
 			//OrmUser user = new OrmUserService().findByUserId(LoginUserContext.getUserId());
 //			map.add(Util.convertListToString(ormRoleService.findRoleBySystemId(user.get), false));
 			map.add(OrmResourceService.convertListToString(ormRoleService.findValidRoleIdList(), false));
+		}
+		return map;
+	}
+	
+	/**
+	 * 根据id查询角色关联的用户和岗位的name
+	 * 
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	@RequestMapping("/userOrg/{idArray}")
+	@ResponseBody
+	public String getRoleUseOrgName(@PathVariable String idArray, HttpServletResponse response) {
+		PrintWriter out = null;
+		String name = "";
+		try {
+			response.setCharacterEncoding("UTF-8");
+			out = response.getWriter();
+			response.reset();
+			name = ormRoleService.getRoleUseOrgName(idArray);
+			out.print(name);
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return name;
+	}
+	
+	/**
+	 * 资源授权
+	 */
+	@RequestMapping("/grantResource")
+	@ResponseBody
+	public Map<String, Object> grantResource(String roleId, String resourceIds) throws Exception {
+		Map<String,Object> map=new HashMap<String,Object>();
+		try {
+			ormRoleService.grantResource(roleId, resourceIds);
+			map.put("isSuccess", "true");
+		} catch (Exception e) {
+			map.put("isSuccess", "false");
+			e.printStackTrace();
 		}
 		return map;
 	}

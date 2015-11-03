@@ -28,7 +28,7 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 	
 	@Autowired
 	private OrmSystemDao ormSystemDao;
-	
+
 	@Override
 	public BaseDao<OrmCode, String> getBaseDao() {
 		return ormCodeDao;

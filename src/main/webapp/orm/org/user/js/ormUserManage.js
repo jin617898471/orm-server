@@ -22,10 +22,10 @@ define(function(require,exports){
 			autoRowHeight : true,
 			striped : true,
 			collapsible : true,
-			url : _path+'/list',
-			sortName : 'createDt',
+			url : _path+'/listPage',
+			sortName : 'u.CREATE_DT',
 			sortOrder : 'desc',
-			idField : 'userId',
+			idField : 'u.USER_ID',
 			frozenColumns : getGridFrozenColumns(),
 			columns : getGridColumns(),
 			pagination : true,
@@ -36,7 +36,7 @@ define(function(require,exports){
 	
 	var add = new Dialog({
         trigger: '.ui-button-add',
-        content: './'+_path+"/forward/add",
+        content: './'+_path+"/forward/add/newUser",
         width:'800px',
         height:'540px',
         scrolling:true,
@@ -49,9 +49,19 @@ define(function(require,exports){
 	        scrolling:true,
 	        title:"用户查看"
 	    }).before('show',function(id){
-	    	var url='./'+_path+"/detail/"+id;
+	    	var url='./'+_path+"/forward/detail/"+id;
 	    	this.set('content',url);
 	});
+	
+	var changePwd = new Dialog({
+	 	width:'400px',
+        height:'200px',
+        scrolling:true,
+        title:"修改密码"
+    }).before('show',function(id){
+    	var url='./'+_path+"/forward/changePwd/"+id;
+    	this.set('content',url);
+});
 	
 	var edit = new Dialog({
         width:'800px',
@@ -98,13 +108,13 @@ define(function(require,exports){
         	var value = "";
         	if(!flag){
         		var val_ = $("input[name = SERIAL]").val();
-        		value=val_ +","+$(target).attr("data-oserial");
+        		value=val_ +","+$(target).attr("data-value");
         	}else {
         		value = "noCheck";
         	}
             if(value){
             	if("noCheck" == value){//若该节点取消选中,则去除该节点的value值
-            		var ncValue = $(target).attr("data-oserial");
+            		var ncValue = $(target).attr("data-value");
             		value = $("input[name = SERIAL]").val();
             		if(!value.indexOf(",", 0)){
             			value = "";
@@ -157,7 +167,7 @@ define(function(require,exports){
 		};
 		var orgid = $("input[name = SERIAL]").val();
 		var org= {
-				field:"m.O_SERIAL",
+				field:"orgId",
 				op:"in",
 				value:orgid
 		};
@@ -214,54 +224,54 @@ define(function(require,exports){
 	}
 	
 	// 获取系统name用于列表显示
-	getOrgObjList = function() {
-		var objList = null;
-		var parameterS = {
-			url : _path+'/getorglist',
-			type : "POST",
-			async : false,
-			success : function(data) {
-				objList = data;
-			},
-			error : function(result) {
-				Confirmbox.alert('获取组织机构数据错误！');
-			}
-		};
-		$.ajax(parameterS);
-		return objList;
-	};
+//	getOrgObjList = function() {
+//		var objList = null;
+//		var parameterS = {
+//			url : _path+'/getorglist',
+//			type : "POST",
+//			async : false,
+//			success : function(data) {
+//				objList = data;
+//			},
+//			error : function(result) {
+//				Confirmbox.alert('获取组织机构数据错误！');
+//			}
+//		};
+//		$.ajax(parameterS);
+//		return objList;
+//	};
 //	var objListName = getOrgObjList();
-	getOrgName = function(serial) {
-		var name = "";
-		var sers = serial.split(",");
-		$.each(sers, function(n, val) {
-			name += ","+objListName[val];			 
-		});
-		return name.substring(1);
-	};
+//	getOrgName = function(serial) {
+//		var name = "";
+//		var sers = serial.split(",");
+//		$.each(sers, function(n, val) {
+//			name += ","+objListName[val];			 
+//		});
+//		return name.substring(1);
+//	};
 
 	//初始化表格列表
 	function getGridColumns() {
 		return [[ 
 			     { field : 'userAcct', title : '用户账号', width : 80, align : 'left', sortable : true }, 
 			     { field : 'userName', title : '用户名称', width :80, align : 'left', sortable : true },
-//			     { field : 'O_SERIAL', title : '组织机构', width : 260, align : 'left', sortable : true ,
-//			    	  formatter: function(value,row,index){
-//			    		  var abValue = getOrgName(value);
-//			    		  var abtitle = "";
-//			    		  if (abValue.length>=23) {  
-//			    			  abtitle = abValue.substring(0,20) + "...";  
-//			    			  var content = '<a href="javascript:void(0);" title="' + abValue + '" class="note">' + abtitle + '</a>';  
-//			    			  return content;  
-//			    		  }else{
-//			    			  return abValue;
-//			    		  }
-//		              }	
-//			     },  
+			     { field : 'orgName', title : '组织机构', width : 260, align : 'left', sortable : true ,
+			    	  formatter: function(value,row,index){
+			    		  var abValue = value;
+			    		  var abtitle = "";
+			    		  if (abValue.length>=23) {  
+			    			  abtitle = abValue.substring(0,20) + "...";  
+			    			  var content = '<a href="javascript:void(0);" title="' + abValue + '" class="note">' + abtitle + '</a>';  
+			    			  return content;  
+			    		  }else{
+			    			  return abValue;
+			    		  }
+		              }	
+			     },  
 			     { field : 'userSex', title : '性别', width : 100, align : 'center', sortable : true ,formatter : formatterSexByCode}, 
 				 { field : 'userMobile', title : '手机号码', width : 120, align : 'center', sortable : true },
 				 { field : 'userTel', title : '办公电话', width : 110, align : 'center', sortable : true },
-			 	 { field : 'opt', title : '操作', width : 120, align : 'center', formatter : getGridOperation } 
+			 	 { field : 'opt', title : '操作', width : 150, align : 'center', formatter : getGridOperation } 
 		 		]];
 	}
 	
@@ -270,7 +280,8 @@ define(function(require,exports){
 		var v = '<a href="javascript:void(0)" onclick="tableRowDetailsSee(\'' + rec.userId + '\' )" >查看</a> ';
 		var e = '<a href="javascript:void(0)" onclick="tableRowDetailsEdit(\'' + rec.userId + '\')" >编辑</a> ';
 		var p = '<a href="javascript:void(0)" onclick="tableRowDetailsDelete(\'' + rec.userId + '\')" >删除</a> ';
-		return v + e + p;
+		var c = '<a href="javascript:void(0)" onclick="tableRowChangePwd(\'' + rec.userId + '\')" >修改密码</a> ';
+		return v + e + p + c;
 	}
 	
 	function formatterSexByCode(value, rec, index){
@@ -303,6 +314,10 @@ define(function(require,exports){
 	
 	tableRowDetailsEdit = function(id){
 		edit.show(id);
+	};
+	
+	tableRowChangePwd = function(id){
+		changePwd.show(id);
 	};
 	
 	tableRowDetailsDelete = function(id){

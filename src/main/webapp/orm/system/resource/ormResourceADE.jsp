@@ -103,6 +103,7 @@
 </body>
 <script type="text/javascript" src="resources/commons/js/seajs/sea-debug.js" ></script>
 <script type="text/javascript" src="resources/commons/js/seajs/sea-config-debug.js"></script>
+<script type="text/javascript" src="orm/system/resource/js/ormResourceManage.js"></script>
 <script type="text/javascript">
 	seajs.use( "<%=basePath%>orm/system/resource/js/ormResourceADE" );
 </script>

@@ -66,6 +66,7 @@ define(function(require,exports,module){
 		sys.on("change",function(target){
 			var checkObj = parent.getParentId();
 			var parentResId = checkObj.parentResId;
+			alert(parentResId);//////////////////////////////////////////////////////////////////////////////////
 			var systemId = target.attr("data-value");
 			if(!parentResId){
 				$("input[name='parentResId']").val(systemId);
@@ -226,8 +227,6 @@ define(function(require,exports,module){
 	        		showInformation(false);
 	        	}
 	        });
-	        
-	        $.fn.zTree.getZTreeObj("tree")
 	    });
 		
 		showInformation = function(type){
@@ -245,6 +244,7 @@ define(function(require,exports,module){
 			$("a").unbind();
 		};
 		$("#btnCancel").click(function(){
+			parent.location.reload(true);
 			window.frameElement.trigger('close'); 
 		});
 		

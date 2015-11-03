@@ -20,13 +20,11 @@
 </head>
 <body>
     <input type="hidden" id="roleId" value="${OrmRole.roleId}">
-    <input type="hidden" id="roleSystemId" value="${OrmRole.roleSystemId}">
+    <input type="hidden" id="systemId" value="${OrmRole.systemId}">
 	<div class="main">
 		<div  class="ui-tabs-three">
 			<ul class="ui-tabs-nav">
 				<li>功能权限</li>
-				<li>全局组织权限</li>
-				<li>全局代码权限</li>
 			</ul>
 			<div class="ui-tabs-content">
 				<div class="hidden panel">

@@ -219,8 +219,9 @@ define(function(require) {
 	};
 
 	var zNodes = getTreeAllNodes();
+	//初始化资源树
 	$.fn.zTree.init($("#tree"), setting, zNodes);
-
+	
 	// 初始化列表
 	initTreeNodeSelect();
 	function initTreeNodeSelect() {

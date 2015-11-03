@@ -30,17 +30,17 @@
                     				<div class="search-form-2item">
 										<div class="search-form-item-col">
 											<label class="ui-label">用户账号:</label>
-											<input class="ui-input ui-input-w190" name="u.USER_ACCT" data-rule-op="like">
+											<input class="ui-input ui-input-w190" name="userAcct" data-rule-op="like">
 										</div>
 										<div class="search-form-item-col">
 											<label class="ui-label">用户名称:</label>
-											<input class="ui-input ui-input-w190" name="u.USER_ACCT_CN" data-rule-op="like">
+											<input class="ui-input ui-input-w190" name="userName" data-rule-op="like">
 										</div>
 									</div>
 									<div class="search-form-2item">
 										<div class="search-form-item-col">
 											<label class="ui-label">电话号码:</label>
-											<input class="ui-input ui-input-w190" name="u.USER_MOBILE" data-rule-op="like">
+											<input class="ui-input ui-input-w190" name="userMobile" data-rule-op="like">
 										</div>
 										<div class="search-form-item-col">
 											<label class="ui-label">组织机构:</label>

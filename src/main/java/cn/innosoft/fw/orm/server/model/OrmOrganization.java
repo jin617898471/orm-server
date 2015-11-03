@@ -27,8 +27,6 @@ public class OrmOrganization implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	@Column(name="ORG_ID")
 	private String orgId;
 
