@@ -33,7 +33,7 @@ public class OrmResourceResource {
 	 * @return
 	 */
 	@RequestMapping(value = "/forward/manage")
-	public String forwardAddAction() {
+	public String forwardManageAction() {
 		return "orm/system/resource/ormResourceManage";
 	}
 
@@ -62,12 +62,6 @@ public class OrmResourceResource {
 		if (!"N".equals(str)) {
 			str = str + "," + ormResource.getSystemId() + "," + ormResource.getResourceType();
 		}
-		/*
-		 * String systemid = ormResource.getSystemId(); if
-		 * ("GLOBAL".equals(systemid)) { //如果添加全局资源，更新登陆用户的资源 systemid =
-		 * LoginUserContext.getCurrentLoginSystemId(); }
-		 * LoginUserContext.updateUserResources(systemid);
-		 */
 		return str;
 	}
 

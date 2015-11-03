@@ -244,7 +244,26 @@ define(function(require,exports,module){
 			$("a").unbind();
 		};
 		$("#btnCancel").click(function(){
-			parent.location.reload(true);
+			// 获取属性节点集合
+			function getTreeAllNodes() {
+				var back = "";
+				$.ajax({
+					type : "POST",
+					dataType : "json",
+					async : false,
+					url : _path + "/treeBeanList",
+					success : function(data) {
+						back = data;
+					},
+					error : function(data) {
+						alert("获取树节点集合异常，请联系管理员！");
+					}
+				});
+				return back;
+			}
+			var zNodes = getTreeAllNodes();
+			//初始化资源树
+			$.fn.zTree.init($("#tree"), null, zNodes);
 			window.frameElement.trigger('close'); 
 		});
 		
