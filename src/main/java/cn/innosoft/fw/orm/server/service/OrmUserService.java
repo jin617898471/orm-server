@@ -18,6 +18,7 @@ import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
 import cn.innosoft.fw.orm.server.model.OrmOrgRoleMap;
 import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
+import cn.innosoft.fw.orm.server.model.OrmOrganization;
 import cn.innosoft.fw.orm.server.model.OrmRole;
 import cn.innosoft.fw.orm.server.model.OrmUser;
 import cn.innosoft.fw.orm.server.model.OrmUserRoleMap;
@@ -165,7 +166,16 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		Map<String, Object> map = new HashMap<String, Object>();
 		OrmUser user = ormUserDao.findOne(userId);
 		map.put("user", user);
-		map.put("org", ormOrganizationService.getOrgByUserId(userId));
+		List<Map<String, Object>> orgsinfo = new ArrayList<Map<String, Object>>();
+		Map<String, Object> orginfo = new HashMap<String,Object>();
+		List<OrmOrganization> orgs =  ormOrganizationService.getOrgByUserId(userId);
+		for(OrmOrganization org : orgs){
+			orginfo.put("pname", org.getOrgName());
+			orginfo.put("oname", ormOrganizationService.findOne(org.getParentOrgId()).getOrgName());
+			orginfo.put("pname", ormOrganizationService.findOne(org.getRootOrgId()).getOrgName());
+			orgsinfo.add(orginfo);
+		}
+		map.put("org",orgsinfo);
 		List<Object[]> list = ormRoleService.findRoleInfoByUserId(userId);
 		List<OrmRole> roles = new ArrayList<OrmRole>();
 		for(Object[] objs : list){
