@@ -713,6 +713,7 @@ define(function(require){
 				async: false,
 				success: function(data){
 					showMsg("保存功能权限成功！",true);
+					$("#btnSave").attr('disabled',false);
 				},
 				error:function(result){
 					showMsg("",false);
