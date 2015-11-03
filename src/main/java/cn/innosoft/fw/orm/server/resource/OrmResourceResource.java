@@ -59,9 +59,6 @@ public class OrmResourceResource {
 	@ResponseBody
 	public String addAction(OrmResource ormResource) {
 		String str = ormResourceService.addResource(ormResource);
-		if (!"N".equals(str)) {
-			str = str + "," + ormResource.getSystemId() + "," + ormResource.getResourceType();
-		}
 		return str;
 	}
 
