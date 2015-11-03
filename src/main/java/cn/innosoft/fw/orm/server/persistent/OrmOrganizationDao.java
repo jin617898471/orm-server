@@ -14,4 +14,7 @@ public interface OrmOrganizationDao extends BaseDao<OrmOrganization, String> {
 	
 	@Query("select o.orgName from OrmOrganization o where o.orgId in (?1)")
 	List<String> getOrgNameById(List<String> orgIds);
+	
+	@Query("select o from OrmOrganization o, OrmOrgUserMap m where o.orgId=m.orgId and m.userId=?1")
+	List<OrmOrganization> getOrgByUserId(String userId);
 }

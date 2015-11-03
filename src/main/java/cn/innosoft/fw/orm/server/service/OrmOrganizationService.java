@@ -15,14 +15,15 @@ import cn.innosoft.fw.biz.core.service.AbstractBaseService;
 import cn.innosoft.fw.orm.server.model.OrmOrgRoleMap;
 import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
 import cn.innosoft.fw.orm.server.model.OrmOrganization;
-import cn.innosoft.fw.orm.server.model.OrmRole;
+import cn.innosoft.fw.orm.server.model.OrmUser;
 import cn.innosoft.fw.orm.server.model.SelectTreeBean;
-import cn.innosoft.fw.orm.server.model.ZtreeBean;
+import cn.innosoft.fw.orm.server.model.TreeNode;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgUserMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrganizationDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
+import cn.innosoft.fw.orm.server.util.StringUtil;
 
 @Service
 public class OrmOrganizationService extends AbstractBaseService<OrmOrganization, String> {
@@ -36,9 +37,6 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 
 	@Autowired
 	private OrmOrgRoleMapDao ormOrgRoleMapDao;
-
-	@Autowired
-	private OrmRoleDao ormRoleDao;
 
 	@Autowired
 	private OrmUserRoleMapDao ormUserRoleMapDao;
@@ -57,16 +55,12 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 	 * @param org
 	 */
 	public void addOrganization(OrmOrganization org) {
-		ormOrganizationDao.save(org);
-	}
-
-	/**
-	 * 更新组织机构
-	 * 
-	 * @param org
-	 */
-	public void updateOrganization(OrmOrganization org) {
-		ormOrganizationDao.update(org);
+		String id = StringUtil.getUUID();
+		if("I".equals(org.getOrgType())){
+			org.setRootOrgId(id);
+		}
+		org.setOrgId(id);
+		save(org);
 	}
 
 	/**
@@ -79,59 +73,10 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		ormOrgUserMapDao.deleteByOrgId(orgId);
 		ormOrgRoleMapDao.deleteByOrgId(orgId);
 	}
-
-	/**
-	 * 生成ZTREE，权限建模的时候用
-	 * 
-	 * @param roleId
-	 * @return
-	 */
-	public List<ZtreeBean> createZtree(String roleId) {
-		List<ZtreeBean> result = new ArrayList<ZtreeBean>();
-//		List<OrmOrganization> orgs = ormOrganizationDao.findAll();
-//		List<OrmRoleOrgRight> rights = ormRoleOrgRightDao.findByRoleId(roleId);
-//		for (OrmOrganization org : orgs) {
-//			ZtreeBean node = orgToTreeNode(org);
-//			String orgId = org.getOrgId();
-//			for (OrmRoleOrgRight ror : rights) {
-//				if (orgId.equals(ror.getOrgId()) && "N".equals(ror.getHalfSelect())) {
-//					node.setChecked(true);
-//				}
-//			}
-//			result.add(node);
-//		}
-		return result;
+	
+	public List<OrmOrganization> getOrgByUserId(String userId){
+		return ormOrganizationDao.getOrgByUserId(userId);
 	}
-
-	/**
-	 * 将组织机构实体类转换为zTree的节点
-	 * 
-	 * @param org
-	 * @return
-	 */
-	private ZtreeBean orgToTreeNode(OrmOrganization org) {
-		ZtreeBean node = new ZtreeBean();
-		node.setId(org.getOrgId());
-		node.setpId(org.getParentOrgId());
-		node.setName(org.getOrgName());
-		boolean isParent = org.getIsLeaf() == "Y" ? false : true;
-		node.setOpen(isParent);
-		Map<String, Object> attributes = new HashMap<String, Object>();
-		attributes.put("oType", org.getOrgType());
-		node.setAttributes(attributes);
-		node.setNocheck(false);
-		node.setChecked(false);
-		return node;
-	}
-
-	/**
-	 * 生成组织机构的下拉树
-	 * 
-	 * @return
-	 */
-//	public List<SelectTreeBean> createSelectTree() {
-//		return LoginUserContext.getOrgTree();
-//	}
 
 	/**
 	 * 关联用户组织机构
@@ -149,7 +94,24 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 			ormUserService.createUserRoleMap(userId, orm.getRoleId(), orgId, orm.getSystemId());
 		}
 	}
-
+	public void createOrgRoleMap(String orgId,String roleId,String systemId){
+		OrmOrgRoleMap orm = new OrmOrgRoleMap();
+		orm.setOrgId(orgId);
+		orm.setRoleId(roleId);
+		orm.setSystemId(systemId);
+		ormOrgRoleMapDao.save(orm);
+		List<OrmUser> users = ormUserService.getUserByOrgId(orgId);
+		for(OrmUser user : users){
+			ormUserService.createUserRoleMap(user.getUserId(), roleId, orgId, systemId);
+		}
+	}
+	public void deleteOrgRoleMap(String orgId,String roleId){
+		ormOrgRoleMapDao.deleteByOrgIdAndRoleId(orgId, roleId);
+		List<OrmUser> users = ormUserService.getUserByOrgId(orgId);
+		for(OrmUser user : users){
+			ormUserRoleMapDao.deleteByUserIdAndOrgId(user.getUserId(), orgId);
+		}
+	}
 	/**
 	 * 创建用户组织机构关联
 	 * 
@@ -179,49 +141,98 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 			ormUserRoleMapDao.deleteByUserIdRoleIdAndType(userId, orm.getRoleId(), "USER_ORG_TO_ROLE");
 		}
 	}
-
+	
+	public List<TreeNode> createOrgTreeByInstitution(String instId){
+		List<TreeNode> result = new ArrayList<TreeNode>();
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("instId", instId);
+		List<Map<String, Object>> list = findMapBySql("orgService-orgTree", args);
+		boolean[] flags = new boolean[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			if (instId.equals(list.get(i).get("ORG_ID"))) {
+				Map<String, Object> org = list.get(i);
+				TreeNode root = createOrgTreeNode(org);
+				flags[i] = true;
+				grenerateOrgTree(list, root, flags);
+				result.add(root);
+			}
+		}
+		System.out.println(result.size());
+		return result;
+	}
+	
+	public List<TreeNode> createInstitutionTree(){
+		List<TreeNode> result = new ArrayList<TreeNode>();
+		List<Map<String, Object>> list = findMapBySql("orgService-institutionTree");
+		boolean[] flags = new boolean[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			if ("ROOT".equals(list.get(i).get("PARENT_ORG_ID"))) {
+				Map<String, Object> org = list.get(i);
+				TreeNode root = createOrgTreeNode(org);
+				flags[i] = true;
+				grenerateOrgTree(list, root, flags);
+				result.add(root);
+			}
+		}
+		System.out.println(result.size());
+		return result;
+	}
+	
 	/**
-	 * 编辑组织机构和角色的关联
+	 * 根据自定的集合和根节点来生成组织机构树
 	 * 
-	 * @param orgId
-	 * @param roleIds
+	 * @param list
+	 * @param parentNode
+	 * @param flags
 	 */
-	public void editOrgRoleMap(String orgId, List<String> roleIds) {
-		List<OrmOrgRoleMap> orgRoleMaps = ormOrgRoleMapDao.findByOrgId(orgId);
-		List<OrmOrgUserMap> orgUserMaps = ormOrgUserMapDao.findByOrgId(orgId);
-		for (OrmOrgRoleMap orm : orgRoleMaps) {
-			String roleId = orm.getRoleId();
-			if (roleIds.contains(roleId)) {
-				roleIds.remove(roleId);
-			} else {
-				ormOrgRoleMapDao.delete(orm);
-				for (OrmOrgUserMap oum : orgUserMaps) {
-					ormUserRoleMapDao.deleteByUserIdRoleIdAndType(oum.getUserId(), roleId, "USER_ORG_TO_ROLE");
+	private static void grenerateOrgTree(List<Map<String, Object>> list, TreeNode parentNode, boolean[] flags) {
+		for (int i = 0; i < list.size(); i++) {
+			if (flags[i]) {
+				continue;
+			}
+			if (parentNode.getValue().equals(list.get(i).get("PARENT_ORG_ID"))) {
+				Map<String, Object> org = list.get(i);
+				List<TreeNode> children = parentNode.getChild();
+				if (children == null) {
+					children = new ArrayList<TreeNode>();
+					parentNode.setChild(children);
+				}
+				TreeNode node = createOrgTreeNode(org);
+				flags[i] = true;
+				children.add(node);
+				if (!"Y".equals(org.get("IS_LEAF"))) {
+					grenerateOrgTree(list, node, flags);
 				}
 			}
 		}
-		for (String roleId : roleIds) {
-			OrmRole role = ormRoleDao.findOne(roleId);
-			createOrgRoleMap(orgId, role);
-			for (OrmOrgUserMap oum : orgUserMaps) {
-				ormUserService.createUserRoleMap(oum.getUserId(), role.getRoleId(), orgId, role.getSystemId());
-			}
-		}
 	}
-
 	/**
-	 * 创建组织机构角色关联
-	 * 
-	 * @param orgId
-	 * @param role
+	 * 生成组织机构树的节点
+	 * @param org
+	 * @return
 	 */
-	public void createOrgRoleMap(String orgId, OrmRole role) {
-		OrmOrgRoleMap orm = new OrmOrgRoleMap();
-		orm.setOrgId(orgId);
-		orm.setRoleId(role.getRoleId());
-		orm.setSystemId(role.getSystemId());
-		ormOrgRoleMapDao.save(orm);
+	private static TreeNode createOrgTreeNode(Map<String, Object> org) {
+		TreeNode node = new TreeNode();
+		node.setValue((String)org.get("ORG_ID"));
+		node.setText((String)org.get("ORG_NAME"));
+		Map<String, Object> attrs = new HashMap<String, Object>();
+		attrs.put("orgCode", org.get("ORG_CODE"));
+		attrs.put("orgAddress",org.get("ORG_ADDRESS"));
+		attrs.put("orgDesc",org.get("ORG_DESC"));
+		attrs.put("orgEmail",org.get("ORG_EMAIL"));
+		attrs.put("orgNameShort",org.get("ORG_NAME_SHORT"));
+		attrs.put("orgPhone",org.get("ORG_PHONE"));
+		attrs.put("orgPostcode",org.get("ORG_POSTCODE"));
+		attrs.put("orgType", org.get("ORG_TYPE"));
+		attrs.put("rysl", org.get("NUM"));
+		node.setAttrs(attrs);
+		return node;
 	}
+	
+	
+	
+
+	
 	/**
 	 * 生成组织机构的下拉树
 	 * 

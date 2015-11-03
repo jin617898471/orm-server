@@ -20,6 +20,7 @@ import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.orm.server.model.OrmUser;
 import cn.innosoft.fw.orm.server.model.SelectTreeBean;
+import cn.innosoft.fw.orm.server.model.TreeNode;
 import cn.innosoft.fw.orm.server.service.OrmOrganizationService;
 import cn.innosoft.fw.orm.server.service.OrmUserService;
 
@@ -31,15 +32,33 @@ public class OrmUserResource {
 	private OrmUserService ormUserService;
 	@Autowired
 	private OrmOrganizationService ormOrganizationService;
+	
+	/**
+	 * 跳转到用户管理界面
+	 * @return
+	 */
 	@RequestMapping("/manager")
 	public String forwardUserManager() {
 		return "orm/org/user/ormUserManage";
 	}
+	
+	/**
+	 * 按查询条件返回用户集分页
+	 * @param pageRequest
+	 * @return
+	 */
 	@RequestMapping("/list")
 	@ResponseBody 
 	public PageResponse<Map<String, Object>> listUsers(PageRequest pageRequest){
 		return ormUserService.find(pageRequest);
 	}
+	/**
+	 * 跳转到，用户新增，查看，编辑和修改密码界面
+	 * @param model
+	 * @param sign
+	 * @param userId
+	 * @return
+	 */
 	@RequestMapping("forward/{sign}/{userId}")
 	public String forwardUserDetail(Model model,@PathVariable String sign, @PathVariable String userId){
 		if(!"add".equals(sign)){
@@ -51,6 +70,11 @@ public class OrmUserResource {
 		}
 		return "orm/org/user/ormUserADE";
 	}
+	/**
+	 * 修改密码
+	 * @param user
+	 * @return
+	 */
 	@RequestMapping("/changePwd")
 	@ResponseBody
 	public String changePwd(OrmUser user){
@@ -62,17 +86,32 @@ public class OrmUserResource {
 			return "false";
 		}
 	}
+	
+	/**
+	 * 编辑用户信息
+	 * @param user
+	 * @return
+	 */
 	@RequestMapping("/edit")
 	@ResponseBody
 	public String editUser(OrmUser user){
 		return ormUserService.updateUser(user);
 	}
-	
+	/**
+	 * 新增用户信息
+	 * @param user
+	 * @return
+	 */
 	@RequestMapping("/add")
 	@ResponseBody
 	public String addUser(OrmUser user){
 		return ormUserService.addUser(user);
 	}
+	/**
+	 * 核实用户账号唯一性
+	 * @param userAcct
+	 * @return
+	 */
 	@RequestMapping("/checkUserAcct")
 	@ResponseBody
 	public String checkUnique(String userAcct){
@@ -88,7 +127,11 @@ public class OrmUserResource {
 	public void deleteAction(@PathVariable String id) {
 		ormUserService.delete(id);
 	}
-
+	@RequestMapping("/userAssociate")
+	@ResponseBody
+	public List<OrmUser> userAssociate(String userAcct){
+		return ormUserService.userAssociate(userAcct);
+	}
 	/**
 	 * 批量删除
 	 * 
@@ -99,10 +142,34 @@ public class OrmUserResource {
 	public void deletebatchAction(@PathVariable ArrayList<String> idArray) {
 		ormUserService.deleteBatch(idArray);
 	}
-	
+	/**
+	 * 生成组织机构下拉树
+	 * @return
+	 */
 	@RequestMapping("/selectTreeOrg")
 	@ResponseBody
 	public List<SelectTreeBean> getOrgSelectTree(){
 		return ormOrganizationService.createSelectTree();
+	}
+	
+	@RequestMapping("/testFullUserInfo")
+	@ResponseBody
+	public Map<String, Object> testFullUserInfo(String userId){
+		return ormUserService.getFullUserInfo(userId);
+	}
+	@RequestMapping("/testgetUserByOrgId")
+	@ResponseBody
+	public List<OrmUser> getUserByOrgId(String orgId){
+		return ormUserService.getUserByOrgId(orgId);
+	}
+	@RequestMapping("/testInstitutionTree")
+	@ResponseBody
+	public List<TreeNode> getInstitutionTree(){
+		return ormOrganizationService.createInstitutionTree();
+	}
+	@RequestMapping("/testOrgTree")
+	@ResponseBody
+	public List<TreeNode> getOrgTree(String instId){
+		return ormOrganizationService.createOrgTreeByInstitution(instId);
 	}
 }
