@@ -26,8 +26,6 @@ public interface OrmUserRoleMapDao extends BaseDao<OrmUserRoleMap, String> {
 	public Long deleteByUserIdAndRoleId(String userId, String roleId);
 
 	public Long deleteByUserId(String userId);
-	
-	public Long deleteByuserIdIn(List<String> userIds);
 
 	public Long deleteByRoleId(String roleId);
 
@@ -40,4 +38,7 @@ public interface OrmUserRoleMapDao extends BaseDao<OrmUserRoleMap, String> {
 	 */
 	@Query(value="select system_Id from Orm_User_Role_Map where user_Id=1?",nativeQuery=true)
 	public List<String> findSystemIdByUserId(String userId);
+
+	@Query(value="select m.MAP_TYPE,o.* from Orm_User_Role_Map m,Orm_Role o where m.role_Id = o.role_id and m.user_Id=?1",nativeQuery=true)
+	public List<Object[]> findMapeTypeAndRole(String userId);
 }
