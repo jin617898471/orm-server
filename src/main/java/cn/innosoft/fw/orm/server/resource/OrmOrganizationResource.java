@@ -68,8 +68,8 @@ public class OrmOrganizationResource {
 	}
 	@RequestMapping("/role/assign")
 	@ResponseBody
-	public List<Map<String, Object>> getOrgAssignRole(String userId,String roleName,String systemName){
-		return ormRoleService.getOrgAssignRole(userId, roleName, systemName);
+	public List<Map<String, Object>> getOrgAssignRole(String orgId,String roleName,String systemName){
+		return ormRoleService.getOrgAssignRole(orgId, roleName, systemName);
 	}
 	@RequestMapping("/role/notassign")
 	@ResponseBody

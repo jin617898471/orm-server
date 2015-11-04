@@ -324,7 +324,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 			args.put("systemName", systemName);
 		}
 		List<Map<String, Object>> list = findMapBySql("userRole-assign", args);
-		return findMapBySql("userRole-assign", args);
+		return list;
 	}
 	public List<Map<String, Object>> getUserNotAssignRole(String userId,String roleName,String systemName){
 		Map<String, Object> args = new HashMap<String, Object>();
@@ -336,7 +336,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 			args.put("systemName", systemName);
 		}
 		List<Map<String, Object>> list = findMapBySql("userRole-notAssign", args);
-		return findMapBySql("userRole-notAssign", args);
+		return list;
 	}
 	public List<Map<String, Object>> getOrgAssignRole(String orgId,String roleName,String systemName){
 		Map<String, Object> args = new HashMap<String, Object>();
@@ -348,7 +348,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 			args.put("systemName", systemName);
 		}
 		List<Map<String, Object>> list = findMapBySql("orgRole-assign", args);
-		return findMapBySql("orgRole-assign", args);
+		return list;
 	}
 	public List<Map<String, Object>> getOrgNotAssignRole(String orgId,String roleName,String systemName){
 		Map<String, Object> args = new HashMap<String, Object>();
@@ -359,7 +359,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 		if(systemName != null){
 			args.put("systemName", systemName);
 		}
-		List<Map<String, Object>> list = findMapBySql("orgRole-NotAssign", args);
-		return findMapBySql("userRole-notAssign", args);
+		List<Map<String, Object>> list = findMapBySql("orgRole-notAssign", args);
+		return list;
 	}
 }

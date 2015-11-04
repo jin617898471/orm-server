@@ -89,14 +89,14 @@
 				ORM_ROLE r,
 				ORM_USER_ROLE_MAP m
 			WHERE
-				r.ROLE_ID=m.ROLE_ID,
+				r.ROLE_ID=m.ROLE_ID
 			<#if roleName?? && roleName != ''>
 				AND r.ROLE_NAME_CN like :roleName 
 			</#if>
 			<#if systemName?? && systemName != ''>
 				AND r.SYSTEM_ID = (SELECT SYSTEM_ID FROM ORM_SYSTEM WHERE SYSTEM_NAME=:systemName)
 			</#if>
-				m.USER_ID=:userId
+				AND m.USER_ID=:userId
 				]]>
 		</sql>
 		<sql id="notAssign">
@@ -104,17 +104,17 @@
 			SELECT
 				r.*
 			FROM
-				ORM_ROLE r,
+				ORM_ROLE r
 			WHERE
 				r.ROLE_ID NOT IN (
 					SELECT
-						r.ROLE_ID
+						role.ROLE_ID
 					FROM
 						ORM_ROLE role,
 						ORM_USER_ROLE_MAP map
 					WHERE
-						role.ROLE_ID=m.ROLE_ID,
-						mmap.USER_ID=:userId
+						role.ROLE_ID=map.ROLE_ID
+						AND map.USER_ID=:userId
 				)
 			<#if roleName?? && roleName != ''>
 				AND r.ROLE_NAME_CN like :roleName
@@ -132,16 +132,16 @@
 				r.*
 			FROM
 				ORM_ROLE r,
-				ORM_ORG_USER_MAP m
+				ORM_ORG_ROLE_MAP m
 			WHERE
-				r.ROLE_ID=m.ROLE_ID,
+				r.ROLE_ID=m.ROLE_ID
 			<#if roleName?? && roleName != ''>
 				AND r.ROLE_NAME_CN like :roleName 
 			</#if>
 			<#if systemName?? && systemName != ''>
 				AND r.SYSTEM_ID = (SELECT SYSTEM_ID FROM ORM_SYSTEM WHERE SYSTEM_NAME=:systemName)
 			</#if>
-				m.ORG_ID=:orgId
+				AND m.ORG_ID=:orgId
 				]]>
 		</sql>
 		<sql id="notAssign">
@@ -149,17 +149,17 @@
 			SELECT
 				r.*
 			FROM
-				ORM_ROLE r,
+				ORM_ROLE r
 			WHERE
 				r.ROLE_ID NOT IN (
 					SELECT
-						r.ROLE_ID
+						role.ROLE_ID
 					FROM
 						ORM_ROLE role,
-						ORM_ORG_USER_MAP map
+						ORM_ORG_ROLE_MAP map
 					WHERE
-						role.ROLE_ID=m.ROLE_ID,
-						mmap.ORG_ID=:orgId
+						role.ROLE_ID=map.ROLE_ID
+						AND map.ORG_ID=:orgId
 				)
 			<#if roleName?? && roleName != ''>
 				AND r.ROLE_NAME_CN like : roleName
