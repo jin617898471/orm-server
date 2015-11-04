@@ -177,19 +177,20 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		OrmUser user = ormUserDao.findOne(userId);
 		map.put("user", user);
 		List<Map<String, Object>> orgsinfo = new ArrayList<Map<String, Object>>();
-		Map<String, Object> orginfo = new HashMap<String,Object>();
 		List<OrmOrganization> orgs =  ormOrganizationService.getOrgByUserId(userId);
 		for(OrmOrganization org : orgs){
+			Map<String, Object> orginfo = new HashMap<String,Object>();
 			orginfo.put("pname", org.getOrgName());
 			orginfo.put("oname", ormOrganizationService.findOne(org.getParentOrgId()).getOrgName());
 			orginfo.put("Iname", ormOrganizationService.findOne(org.getRootOrgId()).getOrgName());
 			orgsinfo.add(orginfo);
+			
 		}
 		map.put("org",orgsinfo);
 		List<OrmRole> list = ormRoleService.getRoleByuserId(userId);
 		List<Map<String, Object>> roles = new ArrayList<Map<String, Object>>();
-		Map<String, Object> roleinfo = new HashMap<String,Object>();
 		for(OrmRole role : list){
+			Map<String, Object> roleinfo = new HashMap<String,Object>();
 			roleinfo.put("roleName", role.getRoleNameCn());
 			roleinfo.put("systemName", ormSystemService.getSystemName(role.getSystemId()));
 			roles.add(roleinfo);
