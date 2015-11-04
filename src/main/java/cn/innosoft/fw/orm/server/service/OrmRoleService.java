@@ -1,8 +1,10 @@
 package cn.innosoft.fw.orm.server.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -288,6 +290,9 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 		ormRoleResourceRightDao.deleteByRoleIdAndResourceId(roleId, resourceId);
 	}
 
+	public List<OrmRole> getRoleByuserId(String userId){
+		return ormRoleDao.getRoleByUserid(userId);
+	}
 	/**
 	 * 通过UserId查找对应的角色
 	 * MAP_TYPE(用户分配角色类型，USER_TO_ROLE：用户直接分配的角色；USER_ORG_TO_ROLE：用户通过所在岗位继承的角色)
@@ -307,5 +312,54 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	 */
 	public List<OrmRole> findRoleByOrgId(String orgId) {
 		return ormOrgRoleMapDao.findRoleByOrgId(orgId);
+	}
+	
+	public List<Map<String, Object>> getUserAssignRole(String userId,String roleName,String systemName){
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("userId", userId);
+		if(roleName != null){
+			args.put("roleName", roleName);
+		}
+		if(systemName != null){
+			args.put("systemName", systemName);
+		}
+		List<Map<String, Object>> list = findMapBySql("userRole-assign", args);
+		return list;
+	}
+	public List<Map<String, Object>> getUserNotAssignRole(String userId,String roleName,String systemName){
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("userId", userId);
+		if(roleName != null){
+			args.put("roleName", roleName);
+		}
+		if(systemName != null){
+			args.put("systemName", systemName);
+		}
+		List<Map<String, Object>> list = findMapBySql("userRole-notAssign", args);
+		return list;
+	}
+	public List<Map<String, Object>> getOrgAssignRole(String orgId,String roleName,String systemName){
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("orgId", orgId);
+		if(roleName != null){
+			args.put("roleName", roleName);
+		}
+		if(systemName != null){
+			args.put("systemName", systemName);
+		}
+		List<Map<String, Object>> list = findMapBySql("orgRole-assign", args);
+		return list;
+	}
+	public List<Map<String, Object>> getOrgNotAssignRole(String orgId,String roleName,String systemName){
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("orgId", orgId);
+		if(roleName != null){
+			args.put("roleName", roleName);
+		}
+		if(systemName != null){
+			args.put("systemName", systemName);
+		}
+		List<Map<String, Object>> list = findMapBySql("orgRole-notAssign", args);
+		return list;
 	}
 }

@@ -69,9 +69,14 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 	 * @param orgId
 	 */
 	public void deleteOrganization(String orgId) {
-		ormOrganizationDao.delete(orgId);
-		ormOrgUserMapDao.deleteByOrgId(orgId);
-		ormOrgRoleMapDao.deleteByOrgId(orgId);
+		List<OrmOrganization> orgs = ormOrganizationDao.getOrgByParentOrg(orgId);
+		for(OrmOrganization org : orgs){
+			String oId = org.getOrgId();
+			ormOrganizationDao.delete(oId);
+			ormOrgUserMapDao.deleteByOrgId(oId);
+			ormOrgRoleMapDao.deleteByOrgId(oId);
+		}
+
 	}
 	
 	public List<OrmOrganization> getOrgByUserId(String userId){
@@ -243,7 +248,7 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		List<OrmOrganization> orgs = ormOrganizationDao.findAll();
 		boolean[] flags = new boolean[orgs.size()];
 		for (int i = 0; i < orgs.size(); i++) {
-			if ("ROOT".equals(orgs.get(i).getParentOrgId().toUpperCase())) {
+			if ("ROOT".equals(orgs.get(i).getParentOrgId())) {
 				OrmOrganization org = orgs.get(i);
 				SelectTreeBean root = createOrgTreeNode(org);
 				flags[i] = true;

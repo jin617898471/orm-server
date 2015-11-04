@@ -42,19 +42,6 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	}
 
 	/**
-	 * 资源查询
-	 * 
-	 * @param pageRequest
-	 * @return
-	 */
-	public PageResponse<OrmResource> find(PageRequest pageRequest) {
-		FilterGroup group = QueryConditionHelper.add(pageRequest.getFilterGroup(), new String[] { "validSign" },
-				new String[] { "Y" }, new String[] { "equal" });
-		PageResponse<OrmResource> page = findAll(group, pageRequest);
-		return page;
-	}
-
-	/**
 	 * 添加资源
 	 * 
 	 * @param ormResource
@@ -124,15 +111,6 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		ormResourceDao.update(ormResource);
 	}
 
-	/**
-	 * 删除资源
-	 * 
-	 * @param resId
-	 */
-	public void deleteResource(String resId) {
-		ormResourceDao.delete(resId);
-		ormRoleResourceRightDao.deleteByResourceId(resId);
-	}
 
 	/**
 	 * 生成ZTREE，权限建模的时候用
@@ -176,25 +154,6 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		node.setNocheck(false);
 		node.setChecked(false);
 		return node;
-	}
-
-	/**
-	 * 创建资源角色关联
-	 * 
-	 * @param roleId
-	 * @param resId
-	 * @param halfSelcet
-	 * @param autoAssociative
-	 * @param systemId
-	 * @return
-	 */
-	public void createOrmRoleResourceRight(String roleId, String resId, String halfSelcet, String systemId) {
-		OrmRoleResourceRight rrr = new OrmRoleResourceRight();
-		rrr.setHalfSelect(halfSelcet);
-		rrr.setResourceId(resId);
-		rrr.setRoleId(roleId);
-		rrr.setSystemId(systemId);
-		ormRoleResourceRightDao.save(rrr);
 	}
 
 	/**

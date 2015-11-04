@@ -16,6 +16,7 @@ import cn.innosoft.fw.orm.server.model.OrmRole;
 import cn.innosoft.fw.orm.server.model.OrmUser;
 import cn.innosoft.fw.orm.server.model.TreeNode;
 import cn.innosoft.fw.orm.server.service.OrmOrganizationService;
+import cn.innosoft.fw.orm.server.service.OrmRoleService;
 import cn.innosoft.fw.orm.server.service.OrmUserService;
 
 @Controller
@@ -26,6 +27,8 @@ public class OrmOrganizationResource {
 	private OrmUserService ormUserService;
 	@Autowired
 	private OrmOrganizationService ormOrganizationService;
+	@Autowired
+	private OrmRoleService ormRoleService;
 	
 	@RequestMapping("/forward/manage")
 	public String forwardManage(){
@@ -63,15 +66,15 @@ public class OrmOrganizationResource {
 	public List<TreeNode> getOrgTree(@PathVariable String orgId){
 		return ormOrganizationService.createOrgTreeByInstitution(orgId);
 	}
-	@RequestMapping("/role/assign/{userId}")
+	@RequestMapping("/role/assign")
 	@ResponseBody
-	public List<OrmRole> getOrgAssignRole(@PathVariable String userId){
-		return null;
+	public List<Map<String, Object>> getOrgAssignRole(String orgId,String roleName,String systemName){
+		return ormRoleService.getOrgAssignRole(orgId, roleName, systemName);
 	}
-	@RequestMapping("/role/notassign/{userId}")
+	@RequestMapping("/role/notassign")
 	@ResponseBody
-	public List<OrmRole> getOrgNotAssignRole(@PathVariable String userId){
-		return null;
+	public List<Map<String, Object>> getOrgNotAssignRole(String orgId,String roleName,String systemName){
+		return ormRoleService.getOrgNotAssignRole(orgId, roleName, systemName);
 	}
 	@RequestMapping("/role/add/{orgId}/{roleId}/{systemId}")
 	@ResponseBody
@@ -122,15 +125,15 @@ public class OrmOrganizationResource {
 	public void updateUserPost(@PathVariable String userId,@PathVariable String orgId){
 		ormUserService.editOrgUserMap(userId, orgId);
 	}
-	@RequestMapping("/user/role/assign/{userId}")
+	@RequestMapping("/user/role/assign")
 	@ResponseBody
-	public List<OrmRole> getUserAssignRole(@PathVariable String userId){
-		return null;
+	public List<Map<String, Object>> getUserAssignRole(String userId,String roleName,String systemName){
+		return ormRoleService.getUserAssignRole(userId, roleName, systemName);
 	}
-	@RequestMapping("/user/role/notassign/{userId}")
+	@RequestMapping("/user/role/notassign")
 	@ResponseBody
-	public List<OrmRole> getUserNotAssignRole(@PathVariable String userId){
-		return null;
+	public List<Map<String, Object>> getUserNotAssignRole(String userId,String roleName,String systemName){
+		return ormRoleService.getUserNotAssignRole(userId, roleName, systemName);
 	}
 	@RequestMapping("/user/role/add/{userId}/{roleId}/{systemId}")
 	@ResponseBody

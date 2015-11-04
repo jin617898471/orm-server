@@ -16,4 +16,8 @@ public interface OrmRoleDao extends BaseDao<OrmRole, String> {
 	
 	@Query(value="select ROLE_ID from ORM_ROLE where VALID_SIGN = 'Y'",nativeQuery=true)
 	public List<String> findRoleIds();
+	
+	@Query("select r from OrmRole r, OrmUserRoleMap m where r.roleId=m.roleId and m.userId=?1")
+	List<OrmRole> getRoleByUserid(String userId);
+	
 }

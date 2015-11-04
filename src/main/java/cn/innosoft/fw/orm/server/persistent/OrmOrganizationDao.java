@@ -17,4 +17,7 @@ public interface OrmOrganizationDao extends BaseDao<OrmOrganization, String> {
 	
 	@Query("select o from OrmOrganization o, OrmOrgUserMap m where o.orgId=m.orgId and m.userId=?1")
 	List<OrmOrganization> getOrgByUserId(String userId);
+	
+	@Query(value="SELECT DISTINCT * FROM ORM_ORGANIZATION START WITH ORG_ID =?1 CONNECT BY PRIOR ORG_ID=PARENT_ORG_ID", nativeQuery=true)
+	List<OrmOrganization> getOrgByParentOrg(String orgId);
 }
