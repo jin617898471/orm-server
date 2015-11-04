@@ -71,7 +71,7 @@
 								</div>
 								<div class="ui-form-title ">
 									<h5 class="ui-form-title-borderL">组织信息</h5>
-									<div class="search-bar">
+									<div class="search-bar" style="display:none;">
 		                    			<a class="ui-button ui-button-refresh" opttype="ryorg-update">
 		                    				<i class="iconfont">&#xf004b;</i>
 		                    				编辑
@@ -233,8 +233,9 @@
 <script type="text/javascript" src="resources/commons/js/seajs/sea-debug.js" ></script>
 <script type="text/javascript" src="resources/commons/js/seajs/sea-config-debug.js"></script>
 <script>
+	var IOrgId = "d79572935f6f48298a1377255a2b4927" ;
 	var basePath="<%=basePath%>";
-	seajs.use( "<%=basePath%>orm/org/org/js/ormCodeManage" );
+	seajs.use( "<%=basePath%>orm/org/org/js/orgManager" );
 </script>
 <script id="orgAddOrUpdate" type="text/html">  
 	<form class="ui-form clearfix .org-dialog" data-widget="validator">
@@ -248,7 +249,7 @@
  										<textarea class="ui-textarea" name="{{$value.en}}">{{$value.text}}</textarea>
 							</div>
 						{{else}}
-							<input class="ui-input ui-input-w190 {{$value.en}}" name="{{$value.en}}" value="{{$value.text}}">
+							<input class="ui-input ui-input-w190 {{$value.en}}" name="{{$value.en}}" {{if $value.disabled}}disabled="disabled"{{/if}} value="{{$value.text}}">
 						{{/if}}
 					</div>
 				{{/each}}

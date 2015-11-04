@@ -1,11 +1,13 @@
 package cn.innosoft.fw.orm.server.resource;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,25 +29,29 @@ public class OrmOrganizationResource {
 	
 	@RequestMapping("/forward/manage")
 	public String forwardManage(){
-		return "/org/org/orgManager";
+		return "orm/org/org/orgManager";
 	}
 	@RequestMapping("/forward/role/assign/{orgId}")
-	public String forwardOrgRoleAssign(Model model,String orgId){
-		model.addAttribute("orgId", orgId);
-		return "/org/org/orgManager";
+	public String forwardOrgRoleAssign(Model model,@PathVariable String orgId){
+		model.addAttribute("id", orgId);
+		model.addAttribute("type", "org");
+		return "orm/org/org/roleAssign";
 	}
 	
 	@RequestMapping("/add")
+	@ResponseBody
 	public void addOrg(OrmOrganization org){
 		ormOrganizationService.addOrganization(org);
 	}
 	@RequestMapping("/delete")
+	@ResponseBody
 	public void deleteOrg(String orgId){
 		ormOrganizationService.deleteOrganization(orgId);
 	}
 	@RequestMapping("/update")
-	public void updateOrg(OrmOrganization org){
-		ormOrganizationService.updateSome(org);
+	@ResponseBody
+	public void updateOrg(OrmOrganization org,String[] enforceUpdateField){
+		ormOrganizationService.updateSome(org,Arrays.asList(enforceUpdateField));
 	}
 	@RequestMapping("/tree")
 	@ResponseBody
@@ -54,82 +60,91 @@ public class OrmOrganizationResource {
 	}
 	@RequestMapping("/tree/{orgId}")
 	@ResponseBody
-	public List<TreeNode> getOrgTree(String orgId){
+	public List<TreeNode> getOrgTree(@PathVariable String orgId){
 		return ormOrganizationService.createOrgTreeByInstitution(orgId);
 	}
 	@RequestMapping("/role/assign/{userId}")
 	@ResponseBody
-	public List<OrmRole> getOrgAssignRole(String userId){
+	public List<OrmRole> getOrgAssignRole(@PathVariable String userId){
 		return null;
 	}
 	@RequestMapping("/role/notassign/{userId}")
 	@ResponseBody
-	public List<OrmRole> getOrgNotAssignRole(String userId){
+	public List<OrmRole> getOrgNotAssignRole(@PathVariable String userId){
 		return null;
 	}
 	@RequestMapping("/role/add/{orgId}/{roleId}/{systemId}")
-	public void addRoleToOrg(String orgId,String roleId,String systemId){
+	@ResponseBody
+	public void addRoleToOrg(@PathVariable String orgId,@PathVariable String roleId,@PathVariable String systemId){
 		ormOrganizationService.createOrgRoleMap(orgId, roleId, systemId);
 	}
 	@RequestMapping("/role/delete/{orgId}/{roleId}")
-	public void deleteRoleFromOrg(String orgId,String roleId){
+	@ResponseBody
+	public void deleteRoleFromOrg(@PathVariable String orgId,@PathVariable String roleId){
 		ormOrganizationService.deleteOrgRoleMap(orgId, roleId);
 	}
 	
 	
-	@RequestMapping("/forward/user/role/assign/{orgId}")
-	public String forwardUserRoleAssign(Model model,String userId){
-		model.addAttribute("orgId", userId);
-		return "/org/org/orgManager";
+	@RequestMapping("/forward/user/role/assign/{userId}")
+	public String forwardUserRoleAssign(Model model,@PathVariable String userId){
+		model.addAttribute("id", userId);
+		model.addAttribute("type", "user");
+		return "orm/org/org/roleAssign";
 	}
 	@RequestMapping("/user/list/{orgId}")
 	@ResponseBody
-	public List<OrmUser> getUserByOrgId(String orgId){
+	public List<OrmUser> getUserByOrgId(@PathVariable String orgId){
 		return ormUserService.getUserByOrgId(orgId);
 	}
-	@RequestMapping("/user/add/")
+	@RequestMapping("/user/add")
+	@ResponseBody
 	public void addUserToPost(String userId,String orgId){
 		ormOrganizationService.addUserToOrg(userId, orgId);
 	}
-	@RequestMapping("/user/delete/")
+	@RequestMapping("/user/delete")
+	@ResponseBody
 	public void deleteUserFromOrg(String userId,String orgId){
 		ormOrganizationService.deleteUserFromOrg(userId, orgId);
 	}
-	@RequestMapping("/user/associate/{nameOrAcct}")
+	@RequestMapping("/user/associate")
 	@ResponseBody
 	public List<OrmUser> userAssociate(String nameOrAcct){
 		return ormUserService.userAssociate(nameOrAcct);
 	}
 	
 	@RequestMapping("/user/update")
-	public void updateUserInfo(OrmUser user){
-		ormUserService.updateSome(user);
+	@ResponseBody
+	public void updateUserInfo(OrmUser user,String[] enforceUpdateField){
+		ormUserService.updateSome(user,Arrays.asList(enforceUpdateField));
 	}
 	@RequestMapping("/user/postUpdate/{userId}/{orgId}")
-	public void updateUserPost(String userId,String orgId){
+	@ResponseBody
+	public void updateUserPost(@PathVariable String userId,@PathVariable String orgId){
 		ormUserService.editOrgUserMap(userId, orgId);
 	}
 	@RequestMapping("/user/role/assign/{userId}")
 	@ResponseBody
-	public List<OrmRole> getUserAssignRole(String userId){
+	public List<OrmRole> getUserAssignRole(@PathVariable String userId){
 		return null;
 	}
 	@RequestMapping("/user/role/notassign/{userId}")
 	@ResponseBody
-	public List<OrmRole> getUserNotAssignRole(String userId){
+	public List<OrmRole> getUserNotAssignRole(@PathVariable String userId){
 		return null;
 	}
 	@RequestMapping("/user/role/add/{userId}/{roleId}/{systemId}")
-	public void addRoleToUser(String userId,String roleId,String systemId){
+	@ResponseBody
+	public void addRoleToUser(@PathVariable String userId,@PathVariable String roleId,@PathVariable String systemId){
 		ormUserService.createUserRoleMap(userId, roleId, null, systemId);
 	}
 	@RequestMapping("/user/role/delete/{userId}/{roleId}")
-	public void addRoleFromUser(String userId,String roleId){
+	@ResponseBody
+	public void addRoleFromUser(@PathVariable String userId,@PathVariable String roleId){
 		ormUserService.deletUserRoleMap(userId, roleId);
 	}
 	@RequestMapping("/user/detail/{userId}")
 	@ResponseBody
-	public Map<String, Object> getFullUserInfo(String userId){
+	public Map<String, Object> getFullUserInfo(@PathVariable String userId){
 		return ormUserService.getFullUserInfo(userId);
 	}
 }

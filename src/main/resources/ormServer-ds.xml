@@ -79,7 +79,7 @@
 	</tx:advice>
 	
 	<aop:config proxy-target-class="true">
-		<aop:pointcut id="ormServerMyMethod" expression="execution(* cn.innosoft.fw.orm.server..service.*.*(..)) || execution(* cn.innosoft.fw.orm.server..service.*.*(..))" />
+		<aop:pointcut id="ormServerMyMethod" expression="execution(* cn.innosoft.fw..service.*.*(..)) || execution(* cn.innosoft.fw.orm.server..service.*.*(..))" />
 		<aop:advisor advice-ref="ormServerTxAdvice" pointcut-ref="ormServerMyMethod" />
 	</aop:config>
 

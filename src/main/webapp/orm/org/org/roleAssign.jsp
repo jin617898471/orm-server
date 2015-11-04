@@ -149,9 +149,9 @@
 <script type="text/javascript" src="resources/commons/js/seajs/sea-debug.js" ></script>
 <script type="text/javascript" src="resources/commons/js/seajs/sea-config-debug.js"></script>
 <script>
-	var assignObjId = "0001";
-	var assignObj = "user";
-	seajs.use( "<%=basePath%>orm/org/org/js/assignRole" );
+	var assignObjId = "${id}";
+	var assignObj = "${type}";
+	seajs.use( "<%=basePath%>orm/org/org/js/roleAssign" );
 </script>
 </body>
 </html>

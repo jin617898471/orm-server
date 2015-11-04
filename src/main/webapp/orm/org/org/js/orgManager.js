@@ -20,12 +20,23 @@ define(function(require){
 		async: {
 			enable: true,
 			url: function(treeId, treeNode){
-				var type = treeNode.attrs.otype;
+				var type = treeNode.attrs.orgType;
 				if("P"==type){ 
-					return getUrl("p_user_list");
+					return urlCfg["p_user_list"]+treeNode.value;
 				}
+				return [];
 			},
-			autoParam: ["value=orgId"]
+			dataFilter:function( treeId, parentNode, data ){
+				$.each(data,function(index,node){//把后端查询出来的用户list改造成ztree能识别的对象
+					var attrs = $.extend(true,{},node);
+					attrs.orgType = "RY";
+					node.attrs = attrs;
+					node.iconSkin = "org_RY";;
+					node.value = node.userId;
+					node.text = node.userName;
+				});
+				return data ;
+			}
 		},
 		callback : {
 			onClick : function(event, treeId, treeNode){
@@ -33,28 +44,81 @@ define(function(require){
 			}
 		}
 	};
+	
+	
+	
 	var urlCfg = {
-		org_tree : "aaa",         	//查询机构树
-		org_tree_inner : "aaa",		//查询机构内部树
-		p_user_list : "aaa",		//查询岗位下用户
-		p_role_info: "aaa",//查询岗位角色信息
-		user_detail : "aaa",//查询用户的详情信息（基本信息、角色信息、组织信息）
-		org_add : "aaa",//组织机构节点新增
-		org_update : "aaa",//组织机构节点编辑
-		org_delete : "aaa",//组织机构节点删除
-		ry_add : "aaa",//岗位下新增用户
-		ry_update : "aaa",//更新用户信息
-		ry_delete : "aaa",//岗位下删除用户
+		org_tree : "org/tree",         	//查询机构树
+		org_tree_inner : "org/tree/"+IOrgId,		//查询机构内部树
+		p_user_list : "org/user/list/",		//查询岗位下用户
+		p_role_info: "org/role/assign/{userId}",//查询岗位角色信息
+		user_detail : "org/user/detail/",//查询用户的详情信息（基本信息、角色信息、组织信息）
+		org_add : "org/add",//组织机构节点新增
+		org_update : "org/update",//组织机构节点编辑
+		org_delete : "org/delete",//组织机构节点删除
+		ry_add : "org/user/add",//岗位下新增用户
+		ry_update : "org/user/update",//更新用户信息
+		ry_delete : "org/user/delete",//岗位下删除用户
+		ry_associate : "org/user/associate",//通过用户账号或名称联想搜索用户
+		p_role_assign : "org/forward/role/assign",//跳转岗位分配角色页面
+		ry_role_assign : "org/forward/user/role/assign",//跳转用户分配角色页面
 	}
+	
+	
+	function init(){
+		$.post( getUrl("org_tree_inner"),initLeftTreee );
+	}
+	init();
+	
+	function handleOrgData( data ){
+		var setIcon = function( list ){
+			var hasItem = list && list.length>0 ;
+			if( !hasItem ){
+				return null;
+			}
+			$.each(list,function(n,item){
+				var otype = item["attrs"] && item["attrs"]["orgType"];
+				if( !(item["attrs"].child && item["attrs"].child.length) ){
+					item["isParent"] = false;
+				}
+				if( "I"==otype ){
+					item["iconSkin"] = "org_i";
+					item["open"] = true;
+				}else if( "O"==otype ){
+					item["iconSkin"] = "org_o";
+				}else if( "P"==otype ){
+					item["iconSkin"] = "org_p";
+					item["isParent"] = true;
+				}
+				item["attrs"]["orgId"]=item.value;
+				item["attrs"]["orgName"]=item.text;
+				setIcon( item["child"] );
+			});
+		};
+		setIcon( data );
+		return data;
+	}
+	
+	function getSelectNode(){
+		return $.fn.zTree.getZTreeObj("tree").getSelectedNodes()[0];
+	}
+	function getFirstNode(){
+		return $.fn.zTree.getZTreeObj("tree").getNodes()[0];
+	}
+	function initLeftTreee( data ){
+		$.fn.zTree.init($("#tree"), setting, handleOrgData( data ) );
+		showRightContent( getFirstNode() );
+	}
+	
 	function getUrl( type ){
-		return urlCfg( type );
+		return urlCfg[ type ];
 	}
 	
 	//根据左侧树选中的节点显示右侧面板的内有
 	function showRightContent( treeNode ){
 		var pathname = getPathName(treeNode);
 		$("#orgPath").html(pathname);
-		var type = treeNode.attrs.otype;
+		var type = treeNode.attrs.orgType;
 		$("#orgInfo .ui-box-container").hide();
 		if("RY"==type){  //人员的所有信息都需要从后台查询
 			var rydetail = getRyDettail(treeNode.value);
@@ -99,7 +163,7 @@ define(function(require){
 	};
 	function addDiyDom(treeId, treeNode) {
 		var aObj = $("#" + treeNode.tId + "_a");
-		var type = treeNode.attrs.otype;
+		var type = treeNode.attrs.orgType;
 		var rysl = treeNode.attrs.rysl || 0;
 		if("RY" == type){
 			var editStr = "";
@@ -108,13 +172,30 @@ define(function(require){
 		}
 		aObj.append(editStr);
 	}
-	$.fn.zTree.init($("#tree"), setting,getOrg() );
 	
-	function getOrg(){
-		return OrmJsObj.getOrmOrg();
+	function getOrgTree(){
+		var parameter = {
+			url : getUrl("p_user_list"),
+			type : "POST",
+			success : function(data) {
+				var org = getOrg(data);
+				
+			}
+		};
+		$.ajax(parameter);
 	}
-	function getRyDettail(){
-		return {user:OrmJsObj.getOrmOrg()[0].child[0].child[0].child[0].attrs};
+	
+	function getRyDettail( userId ){
+		var data = {};
+		$.ajax({
+			url:urlCfg["user_detail"]+userId,
+			type:"POST",
+			async:false,
+			success:function( msg ){
+				data = msg;
+			}
+		});
+		return data;
 	}
 	function getPRole(){
 		return {};
@@ -122,7 +203,7 @@ define(function(require){
 	
 	var contentCfg = {
 		ryinfo:[{en:"userName",cn:"人员姓名"},
-		        {en:"userAcct",cn:"人员账号"},
+		        {en:"userAcct",cn:"人员账号",disabled:true},
 		        {en:"userSex",cn:"人员性别"},
 		        {en:"userBirth",cn:"出生日期"},
 		        {en:"userIdentitycard",cn:"身份证号"},
@@ -158,23 +239,56 @@ define(function(require){
         closeTpl:"&#xf00a5;",
         message: '',
         width:"365",
-        confirmTpl: '<a class="ui-button">保存</a>',
+        confirmTpl: '<a class="ui-button orgORuserSave">保存</a>',
         cancelTpl: '<a class="ui-button">关闭</a>'
     }).before("show",function( data ){
     	this.element.find(".ui-dialog-message").html( data.html );
     	this.element.find(".ui-dialog-title").show().html( data.title );
+    	this.element.find(".orgORuserSave").attr("url",data.url);
     }).render();
+	
+	$(".orgORuserSave").live("click",function(){
+		var url = $(this).attr("url");
+		var data ={};
+		var enforceUpdateField="";
+		var input = $(this).parent().parent().parent().find("input").each(function(){
+			var value = $(this).val();
+			var name = $(this).attr("name");
+			if( value ){
+				data[ name ] = value;
+			}else{
+				enforceUpdateField+=","+name;
+			}
+		});
+		var input = $(this).parent().parent().parent().find("textarea").each(function(){
+			var value = $(this).val();
+			var name = $(this).attr("name");
+			if( value ){
+				data[ name ] = value;
+			}else{
+				enforceUpdateField+=","+name;
+			}
+		});
+		if( enforceUpdateField ){
+			enforceUpdateField = enforceUpdateField.substr(1);
+		}
+		data.enforceUpdateField = enforceUpdateField;
+		$.post(url,data,function(){
+//			init();
+		});
+	});
 	
 	//组织机构、用户的删除确认框
 	var deleteConfirm = new Confirmbox({
 		closeTpl:"&#xf00a5;",
 		message: '',
 		width:"365",
-		confirmTpl: '<a class="ui-button">确定</a>',
+		confirmTpl: '<a class="ui-button orgORuserSave">确定</a>',
 		cancelTpl: '<a class="ui-button">取消</a>'
 	}).before("show",function( data ){
 		this.element.find(".ui-dialog-message").html( data.html );
 		this.element.find(".ui-dialog-title").show().html( data.title );
+		this.element.find(".orgORuserSave").attr("url",data.url);
 	}).render();
 	
 	//组织机构、用户的角色编辑弹出框
@@ -215,46 +329,66 @@ define(function(require){
 		"ryrole-update":"编辑人员角色",	
 		"ryorg-update":"编辑人员岗位",	
 	}
-	var urlCfg={
+	var openWidowUrllCfg={
 		"prole-update":"/orm/org/org/assignRole.jsp",	
 		"ryrole-update":"/orm/org/org/assignRole.jsp",	
 		"ryorg-update":"/orm/org/org/assignOrg.jsp",	
 	}
 	$(".ui-button").bind("click",function(){
 		var nr = $(this).attr("opttype");
-		if( titleCfg[nr] ){
+		if( titleCfg[nr] ){ //人员或组织机构的增删改
 			var opttype = nr.split("-")[1];
 			var title = titleCfg[nr];
 			var orgtype = nr.split("-")[0];
 			if("delete"==opttype){
 				var html = "&nbsp;&nbsp;&nbsp;确定要删除该"+orgCfg[orgtype]+"?";
-				deleteConfirm.show( {title:title,html:html} );
+				var url = urlCfg["org_delete"];
+				var input = "<input name='orgId' value='"+getSelectNode().value+"' style='display:none;' />";
+				if("ry"==orgtype){
+					url = urlCfg["ry_delete"];
+					var input = "<input name='orgId' value='"+getSelectNode().getParentNode().value+"' style='display:none;' />";
+					input += "<input name='userId' value='"+getSelectNode().value+"' style='display:none;' />";
+				}
+				html+=input;
+				deleteConfirm.show( {title:title,html:html,url:url} );
 			}else if("update"==opttype){
 				var list = contentCfg[orgtype+"info"];
 				var html = artTemplate('orgAddOrUpdate', {list:list} );
-				addConfirm.show( {title:title,html:html} );
+				var url = urlCfg["org_update"];
+				if("ry"==orgtype){
+					url = urlCfg["ry_update"];
+				}
+				addConfirm.show( {title:title,html:html,url:url} );
 			}else if("add"==opttype){
 				var list = contentCfg[orgtype+"info"];
 				var newlist = $.extend(true,[],list);
-				$.each(newlist,function(index,node){
-					node.text="";
-				});
 				if("ry-add" ==nr ){ //新增人员的面板只显示姓名
-					newlist = [ newlist[0] ];
+					var url = urlCfg["ry_add"];
+					newlist = [ {en:"userName",cn:"人员姓名"},{en:"userId",cn:"userId",hide:true},{en:"orgId",cn:"orgId",hide:true,text:getSelectNode().value}  ];
+				}else{
+					var url = urlCfg["org_add"];
+					$.each(newlist,function(index,node){
+						node.text="";
+					});
+					newlist.push({en:"parentOrgId",cn:"parentOrgId",hide:true,text:getSelectNode().value});
+					var rid = (getSelectNode().getParentNode() && getSelectNode().getParentNode().value) || "";
+					newlist.push({en:"rootOrgId",cn:"rootOrgId",hide:true,text:rid});
+					newlist.push({en:"orgType",cn:"orgType",hide:true,text:orgtype.toUpperCase()});
 				}
 				var html = artTemplate('orgAddOrUpdate', {list:newlist} );
-				addConfirm.show( {title:title,html:html} );
+				addConfirm.show( {title:title,html:html,url:url} );
 				if("ry-add" ==nr ){ //新增人员的面板通过联想搜索查询已有用户
 					InitAutoComplete();
 				}
 			}
-		}else if( titleCfg2[nr] ){
+		}else if( titleCfg2[nr] ){ //弹出新窗口
 			var orgtype = nr.split("-")[0];
 			var title = titleCfg2[nr];
 			var ryorp = "prole"== orgtype?"p":"ry";
+			var field = ryorp+"_role_assign";
 			var content= contentCfg[ryorp+"info"];
 			var cobj = content[content.length-1];
-			ruleEditConfirm.show( {title:title,url:basePath+urlCfg[nr]+"?"+cobj.en+"="+cobj.text } );  //url:http://xxx:xxx/xxx?(orgId/userId)=xxx
+			ruleEditConfirm.show( {title:title,url:basePath+urlCfg[field]+"/"+cobj.text } );  //url:http://xxx:xxx/xxx?(orgId/userId)=xxx
 		}
 	});
 	
@@ -263,21 +397,33 @@ define(function(require){
 		userAutoComplete && userAutoComplete.destroy();
 		userAutoComplete = new AutoComplete({
 			trigger: ".userName",
-			dataSource: getUserList,
+			dataSource: function( query ){
+				var data = [];
+				$.ajax({
+					url:urlCfg["ry_associate"],
+					data:{"nameOrAcct":query},
+					type:"POST",
+					async:false,
+					success:function(msg){
+						data=msg;
+					}
+				});
+				$.each(data,function(index,node){
+					node.label=node.userName;
+				})
+				return data;
+			},
 			filter:function(data){
 				return data;
 			},
 			width: 178,
 			height:150,
 			classPrefix:"ui-select",
-			html:"<i style='color:red'> {{userId}}</i>&nbsp;&nbsp;&nbsp;{{userAcct}}"
+			html:"<i style='color:red'> {{userName}}</i>&nbsp;&nbsp;&nbsp;{{userAcct}}"
 		}).on('itemSelected', function(data, item){
-			$(".userName").val( data.userId ); //联想搜索选中时把userId存在userName的input中
+			$(".userId").val( data.userId ); //联想搜索选中时把userId存在userName的input中
 		}).render();
 		$(".ui-select").css("zIndex",999);
 	}
 	
-	function getUserList(){
-		return [{"label":"金石锋","userAcct":"jinsf","userId":"0001"},{"label":"曹珊珊","userAcct":"css","userId":"0002"}];
-	}
 });
