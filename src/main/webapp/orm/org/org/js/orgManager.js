@@ -292,7 +292,7 @@ define(function(require){
 	//组织机构、用户的角色编辑弹出框
 	var ruleEditConfirm = new Dialog({
         width:'690px',
-        height:'800px',
+        height:'780px',
         scrolling:true,
     }).before('show',function(data){
     	this.element.find(".ui-dialog-title").show().html( data.title );

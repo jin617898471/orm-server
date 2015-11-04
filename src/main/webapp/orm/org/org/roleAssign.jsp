@@ -9,15 +9,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Document</title>
+<title>分配角色</title>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/base.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/widget.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>orm/org/org/css/CodeManager.css">
 <base href="<%=basePath%>">
-<script type="text/javascript" src="orm/OrmJsObj.js" ></script>
 <style>
 .main {
-    width: 690px;
+    width: 670px;
 }
 .ui-label {
     margin: 5px 2px 0 14px;
@@ -37,7 +36,7 @@
 .role-left {
     float: left;
     width: 300px;
-    height:690px;
+    height:670px;
     overflow:auto;
     margin-left: 10px;
 }
@@ -49,7 +48,7 @@
 .role-right {
     float: right;
     width: 280px;
-    height:690px;
+    height:670px;
     margin-right: -10px;
     overflow:auto;
 }
@@ -100,7 +99,7 @@
 							<div class="ui-form-item-col">
 								<label class="ui-label org-title">所属系统:</label>
 <!-- 								<input class="ui-input " value="" /> -->
-								<a class="ui-select-trigger systemId" id="systemId" >
+								<a class="ui-select-trigger systemId" style="width: 188px;" id="systemId" >
 		            				<span data-role="trigger-content"></span>          
 		            				<i class="iconfont blue" title="下三角形">&#xf0044;</i>
 		        				</a> 
@@ -121,7 +120,7 @@
 								<div class="content" >
 								<script id="roleTemplate" type="text/html">  
 									{{each list}}
-										<div class="ui-form-item-have2col {{if $value.lock}}d_lock{{/if}}" id="{{$value.roleId}}" maptype="{{$value.mapType}}">
+										<div class="ui-form-item-have2col {{if $value.lock}}d_lock{{/if}}" id="{{$value.roleId}}" systemId="{{$value.systemId}}" maptype="{{$value.mapType}}">
 											<label class="ui-label" title="{{$value.roleName}}" >{{$value.roleName}}</label>
 											<label class="ui-label" title="{{$value.systemName}}">{{$value.systemName}}</label>
 										</div>

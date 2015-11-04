@@ -6,7 +6,6 @@ define(function(require){
 	Dialog=require("inno/dialog/1.0.0/dialog-debug");
 	Select = require("inno/select/1.0.0/select-debug");
 	var artTemplate=require("../../../org/org/js/art-template");
-	OrmJsObj.resourceInit($,document);
 	
 	function setLeftContent(){
 		var data = getNotAssignRole();
@@ -22,12 +21,13 @@ define(function(require){
 	var urlCfg = {
 		org_assign:"org/role/assign",
 		org_notassign:"org/role/notassign",
-		org_add:"org/role/add/{orgId}/{roleId}/{systemId}",
-		org_delete:"org/role/delete/{orgId}/{roleId}",
+		org_add:"org/role/add/",
+		org_delete:"org/role/delete/",
 		user_assign:"org/user/role/assign",
 		user_notassign:"org/user/role/notassign",
-		user_add:"org/user/role/add/{userId}/{roleId}/{systemId}",
-		user_delete:"org/user/role/delete/{userId}/{roleId}"
+		user_add:"org/user/role/add/",
+		user_delete:"org/user/role/delete/",
+		system_list:"resource/ormresource/systemList"
 	}
 	
 	function getUrl( type ){
@@ -36,7 +36,7 @@ define(function(require){
 	}
 	function getNotAssignRole(){
 		var roleName = $("#roleName").val();
-		var id = $("#systemId").attr("data-value");
+		var systemId = $("#select-systemId").val();
 		var arr =  [];
 		var par = {};
 		var url = getUrl("notassign");
@@ -46,6 +46,7 @@ define(function(require){
 			par.userId=userId;
 		}
 		par.roleName=roleName;
+		par.systemId=systemId;
 		$.ajax({
 			url:url,
 			data:par,
@@ -59,9 +60,22 @@ define(function(require){
 	}
 	function getAssignRole(){
 		var arr =  [];
-		for(var i=20;i<30;i++){
-			arr.push({"roleId":"id"+i,"roleName":"管理员"+i,"systemName":"统一用户组织机构及权限管理系统","mapType":"USER_ORG_TO_ROLE"});
+		var par = {};
+		var url = getUrl("assign");
+		if( assignObj="org" ){
+			par.orgId=orgId;
+		}else{
+			par.userId=userId;
 		}
+		$.ajax({
+			url:url,
+			data:par,
+			type:"POST",
+			async:false,
+			success:function(msg){
+				arr = msg ;
+			}
+		});
 		if("user"==assignObj){
 			$.each(arr,function(index,node){
 				if(node.mapType=="USER_ORG_TO_ROLE"){
@@ -71,11 +85,25 @@ define(function(require){
 		}
 		return arr;
 	}
-	function addRole(){
-		
+	function addRole(roleId,systemId){
+		var url = getUrl("add");
+		if( assignObj="org" ){
+			url+=orgId;
+		}else{
+			url+=userId;
+		}
+		url+="/"+roleId+"/"+systemId;
+		$.post(url);
 	}
-	function deleteRole(){
-		
+	function deleteRole(roleId,systemId){
+		var url = getUrl("add");
+		if( assignObj="org" ){
+			url+=orgId;
+		}else{
+			url+=userId;
+		}
+		url+="/"+roleId;
+		$.post(url);
 	}
 	
 	var systemIdSelect = new Select({
@@ -85,9 +113,31 @@ define(function(require){
 		model : getSystemList(),
 	}).render();
 	
+	// 获取系统name用于列表显示
 	function getSystemList(){
-		return [{"value":"0001","text":"组织机构权限管理系统"},{"value":"0002","text":"清单编制系统"}];
+		var arr = [];
+		var parameterS = {
+			url : urlCfg["system_list"],
+			type : "POST",
+			async : false,
+			success : function(data) {
+				$.each(data, function(n, systemObj) {
+					modelJSON = {
+						value : systemObj.systemId,
+						text : systemObj.systemName
+					};
+					arr.push(modelJSON);
+				});
+			},
+			error : function(result) {
+				Confirmbox.alert('获取系统列表数据错误！');
+			}
+		};
+		$.ajax(parameterS);
+		return arr;
 	}
+	
+	
 	
 	setLeftContent();
 	setRightContent();
@@ -148,7 +198,7 @@ define(function(require){
 		var parent = role.parent();
 		$(".role-right .content").append(role);		
 		parent.remove( role );
-		addRole( role.attr("id") );
+		addRole( role.attr("id"),role.attr("systemId") );
 	}
 	function cancelRole( role ){
 		if("user"==assignObj && "USER_ORG_TO_ROLE"==role.attr("maptype")){
@@ -158,7 +208,7 @@ define(function(require){
 		var parent = role.parent();
 		$(".role-left .content").append(role);		
 		parent.remove( role );
-		deleteRole( role.attr("id") );
+		deleteRole( role.attr("id"),role.attr("systemId") );
 	}
 	
 });
