@@ -248,7 +248,7 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		List<OrmOrganization> orgs = ormOrganizationDao.findAll();
 		boolean[] flags = new boolean[orgs.size()];
 		for (int i = 0; i < orgs.size(); i++) {
-			if ("ROOT".equals(orgs.get(i).getParentOrgId().toUpperCase())) {
+			if ("ROOT".equals(orgs.get(i).getParentOrgId())) {
 				OrmOrganization org = orgs.get(i);
 				SelectTreeBean root = createOrgTreeNode(org);
 				flags[i] = true;

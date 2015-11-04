@@ -14,6 +14,7 @@ import cn.innosoft.fw.orm.server.model.OrmRole;
 import cn.innosoft.fw.orm.server.model.OrmUser;
 import cn.innosoft.fw.orm.server.model.TreeNode;
 import cn.innosoft.fw.orm.server.service.OrmOrganizationService;
+import cn.innosoft.fw.orm.server.service.OrmRoleService;
 import cn.innosoft.fw.orm.server.service.OrmUserService;
 
 @Controller
@@ -24,6 +25,8 @@ public class OrmOrganizationResource {
 	private OrmUserService ormUserService;
 	@Autowired
 	private OrmOrganizationService ormOrganizationService;
+	@Autowired
+	private OrmRoleService ormRoleService;
 	
 	@RequestMapping("/forward/manage")
 	public String forwardManage(){
@@ -54,18 +57,18 @@ public class OrmOrganizationResource {
 	}
 	@RequestMapping("/tree/{orgId}")
 	@ResponseBody
-	public List<TreeNode> getOrgTree(String orgId){
-		return ormOrganizationService.createOrgTreeByInstitution(orgId);
+	public List<TreeNode> getOrgTree(String instId){
+		return ormOrganizationService.createOrgTreeByInstitution(instId);
 	}
-	@RequestMapping("/role/assign/{userId}")
+	@RequestMapping("/role/assign")
 	@ResponseBody
-	public List<OrmRole> getOrgAssignRole(String userId){
-		return null;
+	public List<Map<String, Object>> getOrgAssignRole(String userId,String roleName,String systemName){
+		return ormRoleService.getOrgAssignRole(userId, roleName, systemName);
 	}
-	@RequestMapping("/role/notassign/{userId}")
+	@RequestMapping("/role/notassign")
 	@ResponseBody
-	public List<OrmRole> getOrgNotAssignRole(String userId){
-		return null;
+	public List<Map<String, Object>> getOrgNotAssignRole(String orgId,String roleName,String systemName){
+		return ormRoleService.getOrgNotAssignRole(orgId, roleName, systemName);
 	}
 	@RequestMapping("/role/add/{orgId}/{roleId}/{systemId}")
 	public void addRoleToOrg(String orgId,String roleId,String systemId){
@@ -109,15 +112,15 @@ public class OrmOrganizationResource {
 	public void updateUserPost(String userId,String orgId){
 		ormUserService.editOrgUserMap(userId, orgId);
 	}
-	@RequestMapping("/user/role/assign/{userId}")
+	@RequestMapping("/user/role/assign")
 	@ResponseBody
-	public List<OrmRole> getUserAssignRole(String userId){
-		return null;
+	public List<Map<String, Object>> getUserAssignRole(String userId,String roleName,String systemName){
+		return ormRoleService.getUserAssignRole(userId, roleName, systemName);
 	}
-	@RequestMapping("/user/role/notassign/{userId}")
+	@RequestMapping("/user/role/notassign")
 	@ResponseBody
-	public List<OrmRole> getUserNotAssignRole(String userId){
-		return null;
+	public List<Map<String, Object>> getUserNotAssignRole(String userId,String roleName,String systemName){
+		return ormRoleService.getUserNotAssignRole(userId, roleName, systemName);
 	}
 	@RequestMapping("/user/role/add/{userId}/{roleId}/{systemId}")
 	public void addRoleToUser(String userId,String roleId,String systemId){

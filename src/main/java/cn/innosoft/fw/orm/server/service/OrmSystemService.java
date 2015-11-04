@@ -101,4 +101,8 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 		return ormSystemDao.findByValidSign("Y");
 		//return null;
 	}
+	
+	public String getSystemName(String systemId){
+		return ormSystemDao.findOne(systemId).getSystemName();
+	}
 }

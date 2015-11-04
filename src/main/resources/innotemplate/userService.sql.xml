@@ -46,6 +46,7 @@
 	</class>
 	<class id="orgService">
 		<sql id="institutionTree">
+			<![CDATA[
 			with temporg as (select * from ORM_ORGANIZATION where org_type = 'I'),
      		treeorg as (
          		SELECT ORG_ID, PARENT_ORG_ID, CONNECT_BY_ROOT (ORG_ID) root FROM (
@@ -59,8 +60,10 @@
          			) b ON a.ORG_ID = b.ORG_ID
 				) group by root
 			) b right join temporg c on b.id = c.org_id order by num desc 
+			]]>
 		</sql>
 		<sql id="orgTree">
+		<![CDATA[
 			with temporg as (select * from ORM_ORGANIZATION where ROOT_ORG_ID = :instId),
      		treeorg as (
          		SELECT ORG_ID, PARENT_ORG_ID, CONNECT_BY_ROOT (ORG_ID) root FROM (
@@ -74,6 +77,97 @@
          			) b ON a.ORG_ID = b.ORG_ID
 				) group by root
 			) b right join temporg c on b.id = c.org_id order by num desc 		
+			]]>
+		</sql>
+	</class>
+	<class id="userRole">
+		<sql id="assign">
+		<![CDATA[
+			SELECT
+				r.*
+			FROM
+				ORM_ROLE r,
+				ORM_USER_ROLE_MAP m
+			WHERE
+				r.ROLE_ID=m.ROLE_ID,
+			<#if roleName?? && roleName != ''>
+				AND r.ROLE_NAME_CN like :roleName 
+			</#if>
+			<#if systemName?? && systemName != ''>
+				AND r.SYSTEM_ID = (SELECT SYSTEM_ID FROM ORM_SYSTEM WHERE SYSTEM_NAME=:systemName)
+			</#if>
+				m.USER_ID=:userId
+				]]>
+		</sql>
+		<sql id="notAssign">
+		<![CDATA[
+			SELECT
+				r.*
+			FROM
+				ORM_ROLE r,
+			WHERE
+				r.ROLE_ID NOT IN (
+					SELECT
+						r.ROLE_ID
+					FROM
+						ORM_ROLE role,
+						ORM_USER_ROLE_MAP map
+					WHERE
+						role.ROLE_ID=m.ROLE_ID,
+						mmap.USER_ID=:userId
+				)
+			<#if roleName?? && roleName != ''>
+				AND r.ROLE_NAME_CN like :roleName
+			</#if>
+			<#if systemName?? && systemName != ''>
+				AND r.SYSTEM_ID = (SELECT SYSTEM_ID FROM ORM_SYSTEM WHERE SYSTEM_NAME=:systemName)
+			</#if>
+			]]>
+		</sql>
+	</class>
+		<class id="orgRole">
+		<sql id="assign">
+		<![CDATA[
+			SELECT
+				r.*
+			FROM
+				ORM_ROLE r,
+				ORM_ORG_USER_MAP m
+			WHERE
+				r.ROLE_ID=m.ROLE_ID,
+			<#if roleName?? && roleName != ''>
+				AND r.ROLE_NAME_CN like :roleName 
+			</#if>
+			<#if systemName?? && systemName != ''>
+				AND r.SYSTEM_ID = (SELECT SYSTEM_ID FROM ORM_SYSTEM WHERE SYSTEM_NAME=:systemName)
+			</#if>
+				m.ORG_ID=:orgId
+				]]>
+		</sql>
+		<sql id="notAssign">
+		<![CDATA[
+			SELECT
+				r.*
+			FROM
+				ORM_ROLE r,
+			WHERE
+				r.ROLE_ID NOT IN (
+					SELECT
+						r.ROLE_ID
+					FROM
+						ORM_ROLE role,
+						ORM_ORG_USER_MAP map
+					WHERE
+						role.ROLE_ID=m.ROLE_ID,
+						mmap.ORG_ID=:orgId
+				)
+			<#if roleName?? && roleName != ''>
+				AND r.ROLE_NAME_CN like : roleName
+			</#if>
+			<#if systemName?? && systemName != ''>
+				AND r.SYSTEM_ID = (SELECT SYSTEM_ID FROM ORM_SYSTEM WHERE SYSTEM_NAME=:systemName)
+			</#if>
+			]]>
 		</sql>
 	</class>
 </template>
