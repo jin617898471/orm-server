@@ -151,6 +151,7 @@
 <script>
 	var assignObjId = "${id}";
 	var assignObj = "${type}";
+	eval("var "+assignObj+"Id='"+assignObjId+"'");
 	seajs.use( "<%=basePath%>orm/org/org/js/roleAssign" );
 </script>
 </body>

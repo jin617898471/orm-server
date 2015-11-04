@@ -202,8 +202,8 @@ define(function(require){
 	var contentCfg = {
 		ryinfo:[{en:"userName",cn:"人员姓名"},
 		        {en:"userAcct",cn:"人员账号",disabled:true},
-		        {en:"userSex",cn:"人员性别"},
-		        {en:"userBirth",cn:"出生日期"},
+		        {en:"userSex",cn:"人员性别",isSelect:true},
+		        {en:"userBirth",cn:"出生日期",isCalendar:true},
 		        {en:"userIdentitycard",cn:"身份证号"},
 		        {en:"userMobile",cn:"手机号码"},
 		        {en:"userTel",cn:"办公号码"},
@@ -361,7 +361,6 @@ define(function(require){
 					new Calendar({
 						trigger: 'input[name=\'userBirth\']'
 					});
-					//禁止输入
 					$("input[name = 'userBirth']").keydown(function(){
 					   return false;
 					});

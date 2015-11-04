@@ -19,13 +19,42 @@ define(function(require){
 		$(".role-right").find(".content").html( html );
 	}
 	
+	var urlCfg = {
+		org_assign:"org/role/assign",
+		org_notassign:"org/role/notassign",
+		org_add:"org/role/add/{orgId}/{roleId}/{systemId}",
+		org_delete:"org/role/delete/{orgId}/{roleId}",
+		user_assign:"org/user/role/assign",
+		user_notassign:"org/user/role/notassign",
+		user_add:"org/user/role/add/{userId}/{roleId}/{systemId}",
+		user_delete:"org/user/role/delete/{userId}/{roleId}"
+	}
+	
+	function getUrl( type ){
+		var url = urlCfg[ assignObj+"_"+type ];
+		return url;
+	}
 	function getNotAssignRole(){
-		var name = $("#roleName").val();
+		var roleName = $("#roleName").val();
 		var id = $("#systemId").attr("data-value");
 		var arr =  [];
-		for(var i=0;i<20;i++){
-			arr.push({"roleId":"id"+i,"roleName":"管理员"+i,"systemName":"统一用户组织机构及权限管理系统","mapType":"USER_TO_ROLE"});
+		var par = {};
+		var url = getUrl("notassign");
+		if( assignObj="org" ){
+			par.orgId=orgId;
+		}else{
+			par.userId=userId;
 		}
+		par.roleName=roleName;
+		$.ajax({
+			url:url,
+			data:par,
+			type:"POST",
+			async:false,
+			success:function(msg){
+				arr = msg ;
+			}
+		});
 		return arr;
 	}
 	function getAssignRole(){
