@@ -244,7 +244,6 @@ define(function(require,exports,module){
 			$("a").unbind();
 		};
 		$("#btnCancel").click(function(){
-			parent.location.reload(true);
 			window.frameElement.trigger('close'); 
 		});
 		

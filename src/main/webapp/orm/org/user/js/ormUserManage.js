@@ -271,7 +271,7 @@ define(function(require,exports){
 			     { field : 'userSex', title : '性别', width : 100, align : 'center', sortable : true ,formatter : formatterSexByCode}, 
 				 { field : 'userMobile', title : '手机号码', width : 120, align : 'center', sortable : true },
 				 { field : 'userTel', title : '办公电话', width : 110, align : 'center', sortable : true },
-			 	 { field : 'opt', title : '操作', width : 150, align : 'center', formatter : getGridOperation } 
+			 	 { field : 'opt', title : '操作', width : 140, align : 'center', formatter : getGridOperation } 
 		 		]];
 	}
 	

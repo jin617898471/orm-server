@@ -2,8 +2,6 @@ define(function(require, exports, module) {
 	var Select = require("inno/select/1.0.0/select-debug"),
 		Confirmbox = require("inno/dialog/1.0.0/confirmbox-debug"),
 		Validator = require("inno/validator/1.0.0/validator-debug"),
-		//SelectTree = require("inno/select-tree/1.0.0/select-tree-debug"), 
-		//CodeProvider = require("../../../common/js/codeProvider"),
 		Form = require("form"),
 		$ = require("$");
 
@@ -25,9 +23,6 @@ define(function(require, exports, module) {
 	} else {
 		$("input[name='roleNameEn']").attr("disabled", true);
 	}
-
-	//var roleOrg = $("#roleOId").val();
-	//var roleTypeObj = $("#roleType").val();
 	var roleSystem = $("#systemId").val();
 
 	// 中文转拼音
@@ -67,13 +62,6 @@ define(function(require, exports, module) {
 			return first + spare;
 		}
 	};
-//	document.blur = function(e) {
-//		var act = document.activeElement.name; // 获得焦点的ID
-//		if (act == "roleNameCn") {
-//			var valrole = $("input[name='roleNameCn']").val();
-//			$("input[name='roleNameEn']").attr("value", CC2PY(valrole));
-//		}
-//	};
 	
 	$("input[name=roleNameCn]").blur(
 		function() {
@@ -95,10 +83,6 @@ define(function(require, exports, module) {
 		rule : 'minlength{"min":-1}'
 	});
 
-	//document.onmousemove = function(e) {
-		//checkAllSelect();
-	//};
-
 	// 验证
 	var message = '';
 	checkAllSelect = function() {
@@ -114,24 +98,6 @@ define(function(require, exports, module) {
 			$(".iconfonthide2").show();
 			return false;
 		}
-//		if (arrvalue[1] == "") {
-//			message = '请选择角色类型！';
-//			$(".msgText").html(message);
-//			$(".iconfonthide").hide();
-//			return false;
-//		}
-//		if (arrvalue[2] == "") {
-//			message = '请选择是否反向角色！';
-//			$(".msgText").html(message);
-//			$(".iconfonthide").hide();
-//			return false;
-//		}
-//		if (arrvalue[3].length == 2) {
-//			message = '请选择组织机构！';
-//			$(".msgText").html(message);
-//			$(".iconfonthide").hide();
-//			return false;
-//		}
 		$(".iconfonthide").show();
 		$(".msgText").html("");
 		return true;
@@ -180,81 +146,6 @@ define(function(require, exports, module) {
 		$("a").unbind();
 	};
 
-	//CodeProvider.provider({"queryBeans":[{'codeSerial':'ROLE_TYPE','dataType':'select'}]});
-	
-	// 初始化角色类型下拉框查询列
-//	getRoleTypeList = function() {
-//		var arr = [];
-//		modelJSON = {
-//			value : '',
-//			text : '-请选择-'
-//		};
-//		arr.push(modelJSON);
-//		var arr2 = CodeProvider.getCode("ROLE_TYPE");
-//		$.each(arr2, function(i,val){
-//			if(val.value != 'ROOTADMIN'){
-//				arr.push(val);
-//			}
-//		});
-//		return arr;
-//	};
-	
-	// 初始化角色类型下拉列表
-//	var roleType = new Select({
-//		trigger: '.roleType',
-//		width:'190px',
-//		name:'roleType',
-//		model: getRoleTypeList(),
-//	}).render();
-//
-//	roleType.selectValue(roleTypeObj);
-//
-//	CodeProvider.provider({"queryBeans":[{'codeSerial':'ROLE_NEGATIVE_FLAG','dataType':'select'}]});
-	
-	// 初始化反向角色下拉框查询列
-//	getNegativeFlagList = function() {
-//		var arr = [];
-//		modelJSON = {
-//			value : '',
-//			text : '-请选择-'
-//		};
-//		arr.push(modelJSON);
-//		var arr2 = CodeProvider.getCode("ROLE_NEGATIVE_FLAG");
-//		$.each(arr2, function(i,val){
-//			arr.push(val);
-//		});
-//		return arr;
-//	};
-//
-//	// 获得机构tree
-//	getOrgSelectTree = function() {
-//		var data = "";
-//		var parameter = {
-//			url : 'organization/ormuser/selectTreeOrg',
-//			type : "POST",
-//			async : false,
-//			success : function(result) {
-//				data = result;
-//			},
-//			error : function(result) {
-//				Confirmbox.alert('查询失败！');
-//			}
-//		};
-//		$.ajax(parameter);
-//		return data;
-//	};
-//
-//	var roleOrgId = new SelectTree({
-//		trigger : '.org',
-//		mult : false,
-//		width : '190px',
-//		height : '180px',
-//		name : "roleOId",
-//		model : getOrgSelectTree(),
-//	}).render();
-//
-//	roleOId.selectValue(roleOrg);
-
 	// submit
 	var roleADEForm = new Form({
 		trigger : "#roleADEForm",
@@ -288,10 +179,6 @@ define(function(require, exports, module) {
 							} else {
 								showInformation(true);
 								$(".msgText").text(name+"成功");
-//								Confirmbox.alert(name + '成功！', function() {
-//									parent.resetutilsearchlist();
-//									window.frameElement.trigger("close");
-//								});
 								if(parent.tableRefresh){
 									parent.tableRefresh();
 								}else{
