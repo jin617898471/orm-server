@@ -121,7 +121,7 @@
 								<script id="roleTemplate" type="text/html">  
 									{{each list}}
 										<div class="ui-form-item-have2col {{if $value.lock}}d_lock{{/if}}" id="{{$value.roleId}}" systemId="{{$value.systemId}}" maptype="{{$value.mapType}}">
-											<label class="ui-label" title="{{$value.roleName}}" >{{$value.roleName}}</label>
+											<label class="ui-label" title="{{$value.roleNameCn}}" >{{$value.roleNameCn}}</label>
 											<label class="ui-label" title="{{$value.systemName}}">{{$value.systemName}}</label>
 										</div>
 									{{/each}}

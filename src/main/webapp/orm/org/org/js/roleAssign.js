@@ -46,7 +46,7 @@ define(function(require){
 			par.userId=userId;
 		}
 		par.roleName=roleName;
-		par.systemId=systemId;
+		par.systemName=systemId;
 		$.ajax({
 			url:url,
 			data:par,
@@ -96,7 +96,7 @@ define(function(require){
 		$.post(url);
 	}
 	function deleteRole(roleId,systemId){
-		var url = getUrl("add");
+		var url = getUrl("delete");
 		if( assignObj="org" ){
 			url+=orgId;
 		}else{
@@ -121,6 +121,7 @@ define(function(require){
 			type : "POST",
 			async : false,
 			success : function(data) {
+				arr.push({"value":"","text":"&nbsp&nbsp&nbsp&nbsp"});
 				$.each(data, function(n, systemObj) {
 					modelJSON = {
 						value : systemObj.systemId,
@@ -197,7 +198,7 @@ define(function(require){
 	function selectRole( role ){
 		var parent = role.parent();
 		$(".role-right .content").append(role);		
-		parent.remove( role );
+//		parent.remove( role );
 		addRole( role.attr("id"),role.attr("systemId") );
 	}
 	function cancelRole( role ){
@@ -207,7 +208,7 @@ define(function(require){
 		}
 		var parent = role.parent();
 		$(".role-left .content").append(role);		
-		parent.remove( role );
+//		parent.remove( role );
 		deleteRole( role.attr("id"),role.attr("systemId") );
 	}
 	

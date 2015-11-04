@@ -52,7 +52,7 @@ define(function(require){
 		org_tree : "org/tree",         	//查询机构树
 		org_tree_inner : "org/tree/"+IOrgId,		//查询机构内部树
 		p_user_list : "org/user/list/",		//查询岗位下用户
-		p_role_info: "org/role/assign/{userId}",//查询岗位角色信息
+		p_role_info: "org/role/assign/",//查询岗位角色信息
 		user_detail : "org/user/detail/",//查询用户的详情信息（基本信息、角色信息、组织信息）
 		org_add : "org/add",//组织机构节点新增
 		org_update : "org/update",//组织机构节点编辑
@@ -195,8 +195,20 @@ define(function(require){
 		});
 		return data;
 	}
-	function getPRole(){
-		return {};
+	function getPRole( orgid ){
+		var data = {};
+		$.ajax({
+			url:urlCfg["p_role_info"]+"?orgId="+orgid,
+			type:"POST",
+			async:false,
+			success:function( msg ){
+				data = msg;
+			}
+		});
+		$.each(data,function(index,node){
+			node.roleName=node.roleNameCn;
+		});
+		return data;
 	}
 	
 	var contentCfg = {
