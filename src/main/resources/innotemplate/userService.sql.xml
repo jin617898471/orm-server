@@ -84,27 +84,39 @@
 		<sql id="assign">
 		<![CDATA[
 			SELECT
-				r.*
+				r.ROLE_ID as roleId,
+				r.ROLE_NAME_CN as roleNameCn,
+				r.SYSTEM_ID as systemId,
+				s.SYSTEM_NAME as systemName,
+				m.MAP_TYPE as mapType
 			FROM
 				ORM_ROLE r,
-				ORM_USER_ROLE_MAP m
+				ORM_USER_ROLE_MAP m,
+				ORM_SYSTEM s
 			WHERE
 				r.ROLE_ID=m.ROLE_ID
 			<#if roleName?? && roleName != ''>
 				AND r.ROLE_NAME_CN like :roleName 
 			</#if>
-			<#if systemName?? && systemName != ''>
-				AND r.SYSTEM_ID = (SELECT SYSTEM_ID FROM ORM_SYSTEM WHERE SYSTEM_NAME=:systemName)
+			<#if systemId?? && systemId != ''>
+				AND r.SYSTEM_ID = :systemId
 			</#if>
 				AND m.USER_ID=:userId
+				AND r.SYSTEM_ID=s.SYSTEM_ID
 				]]>
 		</sql>
 		<sql id="notAssign">
 		<![CDATA[
 			SELECT
-				r.*
+				r.ROLE_ID as roleId,
+				r.ROLE_NAME_CN as roleNameCn,
+				r.SYSTEM_ID as systemId,
+				s.SYSTEM_NAME as systemName,
+				m.MAP_TYPE as mapType
 			FROM
-				ORM_ROLE r
+				ORM_ROLE r,
+				ORM_SYSTEM s,
+				ORM_USER_ROLE_MAP m
 			WHERE
 				r.ROLE_ID NOT IN (
 					SELECT
@@ -116,11 +128,14 @@
 						role.ROLE_ID=map.ROLE_ID
 						AND map.USER_ID=:userId
 				)
+				AND r.SYSTEM_ID=s.SYSTEM_ID
+				AND r.ROLE_ID=m.ROLE_ID
+				AND m.USER_ID=:userId
 			<#if roleName?? && roleName != ''>
 				AND r.ROLE_NAME_CN like :roleName
 			</#if>
-			<#if systemName?? && systemName != ''>
-				AND r.SYSTEM_ID = (SELECT SYSTEM_ID FROM ORM_SYSTEM WHERE SYSTEM_NAME=:systemName)
+			<#if systemId?? && systemId != ''>
+				AND r.SYSTEM_ID = :systemId
 			</#if>
 			]]>
 		</sql>
@@ -129,27 +144,36 @@
 		<sql id="assign">
 		<![CDATA[
 			SELECT
-				r.*
+				r.ROLE_ID as roleId,
+				r.ROLE_NAME_CN as roleNameCn,
+				r.SYSTEM_ID as systemId,
+				s.SYSTEM_NAME as systemName
 			FROM
 				ORM_ROLE r,
-				ORM_ORG_ROLE_MAP m
+				ORM_ORG_ROLE_MAP m,
+				ORM_SYSTEM s
 			WHERE
 				r.ROLE_ID=m.ROLE_ID
 			<#if roleName?? && roleName != ''>
 				AND r.ROLE_NAME_CN like :roleName 
 			</#if>
-			<#if systemName?? && systemName != ''>
-				AND r.SYSTEM_ID = (SELECT SYSTEM_ID FROM ORM_SYSTEM WHERE SYSTEM_NAME=:systemName)
+			<#if systemId?? && systemId != ''>
+				AND r.SYSTEM_ID = :systemId
 			</#if>
 				AND m.ORG_ID=:orgId
+				AND r.SYSTEM_ID=s.SYSTEM_ID
 				]]>
 		</sql>
 		<sql id="notAssign">
 		<![CDATA[
 			SELECT
-				r.*
+				r.ROLE_ID as roleId,
+				r.ROLE_NAME_CN as roleNameCn,
+				r.SYSTEM_ID as systemId,
+				s.SYSTEM_NAME as systemName
 			FROM
-				ORM_ROLE r
+				ORM_ROLE r,
+				ORM_SYSTEM s
 			WHERE
 				r.ROLE_ID NOT IN (
 					SELECT
@@ -161,11 +185,12 @@
 						role.ROLE_ID=map.ROLE_ID
 						AND map.ORG_ID=:orgId
 				)
+				AND r.SYSTEM_ID=s.SYSTEM_ID
 			<#if roleName?? && roleName != ''>
 				AND r.ROLE_NAME_CN like : roleName
 			</#if>
-			<#if systemName?? && systemName != ''>
-				AND r.SYSTEM_ID = (SELECT SYSTEM_ID FROM ORM_SYSTEM WHERE SYSTEM_NAME=:systemName)
+			<#if systemId?? && systemId != ''>
+				AND r.SYSTEM_ID = :systemId
 			</#if>
 			]]>
 		</sql>

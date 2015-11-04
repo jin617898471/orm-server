@@ -107,6 +107,16 @@
 					<input class="ui-input ui-input-w190" name="userEmail" value="${OrmUser.userEmail}" >
 					<div class="ui-form-explain"></div>
 				</div>
+				<div class="ui-form-item-col">
+					<label class="ui-label">传真:</label>
+					<input class="ui-input ui-input-w190" name="userFax" value="${OrmUser.userFax}" >
+					<div class="ui-form-explain"></div>
+				</div>
+				<div class="ui-form-item-col">
+					<label class="ui-label">身份证号:</label>
+					<input class="ui-input ui-input-w190" name="userIdentitycard" value="${OrmUser.userIdentitycard}" >
+					<div class="ui-form-explain"></div>
+				</div>
 				<div class="ui-form-item-have2col" style = "display:none">
 					<input class="ui-input ui-input-w190" name="validSign" value="Y" >
 					<div class="ui-form-explain"></div>
