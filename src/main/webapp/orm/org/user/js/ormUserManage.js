@@ -197,6 +197,7 @@ define(function(require,exports){
 				    success:function(data){
 				    	Confirmbox.alert('删除成功！',function(){
 				    		tableRefresh();
+				    		$('#tblResult').datagrid('clearSelections')
 				    	});
 				    },
 				    error:function(result){

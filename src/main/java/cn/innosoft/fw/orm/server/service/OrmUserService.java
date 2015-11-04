@@ -1,6 +1,8 @@
 package cn.innosoft.fw.orm.server.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,6 +104,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	 */
 	public String addUser(OrmUser ormUser) {
 		try {
+			ormUser.setCreateDt(new Date());
 			ormUser= ormUserDao.save(ormUser);
 			editOrgUserMap(ormUser.getUserId(), ormUser.getOrgIds());
 			return "true";
@@ -134,7 +137,11 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	 */
 	public String updateUser(OrmUser ormUser) {
 		try {
-			updateSome(ormUser);
+			ormUser.setUpdateDt(new Date());
+			//需要强制更新的字段
+			String[] param = new String[]{"updateDt","updateUserId","userBirth","userEmail","userFax","userIdentitycard",
+					"userMobile","userName","userSex","userTel"};
+			updateSome(ormUser,Arrays.asList(param));
 			String strOIds = ormUser.getOrgIds();
 			editOrgUserMap(ormUser.getUserId(), strOIds);
 			return "true";
