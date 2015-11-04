@@ -182,7 +182,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		for(OrmOrganization org : orgs){
 			orginfo.put("pname", org.getOrgName());
 			orginfo.put("oname", ormOrganizationService.findOne(org.getParentOrgId()).getOrgName());
-			orginfo.put("pname", ormOrganizationService.findOne(org.getRootOrgId()).getOrgName());
+			orginfo.put("Iname", ormOrganizationService.findOne(org.getRootOrgId()).getOrgName());
 			orgsinfo.add(orginfo);
 		}
 		map.put("org",orgsinfo);

@@ -68,13 +68,13 @@ public class OrmOrganizationResource {
 	}
 	@RequestMapping("/role/assign")
 	@ResponseBody
-	public List<Map<String, Object>> getOrgAssignRole(String orgId,String roleName,String systemName){
-		return ormRoleService.getOrgAssignRole(orgId, roleName, systemName);
+	public List<Map<String, Object>> getOrgAssignRole(String orgId,String roleName,String systemId){
+		return ormRoleService.getOrgAssignRole(orgId, roleName, systemId);
 	}
 	@RequestMapping("/role/notassign")
 	@ResponseBody
-	public List<Map<String, Object>> getOrgNotAssignRole(String orgId,String roleName,String systemName){
-		return ormRoleService.getOrgNotAssignRole(orgId, roleName, systemName);
+	public List<Map<String, Object>> getOrgNotAssignRole(String orgId,String roleName,String systemId){
+		return ormRoleService.getOrgNotAssignRole(orgId, roleName, systemId);
 	}
 	@RequestMapping("/role/add/{orgId}/{roleId}/{systemId}")
 	@ResponseBody
@@ -127,13 +127,13 @@ public class OrmOrganizationResource {
 	}
 	@RequestMapping("/user/role/assign")
 	@ResponseBody
-	public List<Map<String, Object>> getUserAssignRole(String userId,String roleName,String systemName){
-		return ormRoleService.getUserAssignRole(userId, roleName, systemName);
+	public List<Map<String, Object>> getUserAssignRole(String userId,String roleName,String systemId){
+		return ormRoleService.getUserAssignRole(userId, roleName, systemId);
 	}
 	@RequestMapping("/user/role/notassign")
 	@ResponseBody
-	public List<Map<String, Object>> getUserNotAssignRole(String userId,String roleName,String systemName){
-		return ormRoleService.getUserNotAssignRole(userId, roleName, systemName);
+	public List<Map<String, Object>> getUserNotAssignRole(String userId,String roleName,String systemId){
+		return ormRoleService.getUserNotAssignRole(userId, roleName, systemId);
 	}
 	@RequestMapping("/user/role/add/{userId}/{roleId}/{systemId}")
 	@ResponseBody

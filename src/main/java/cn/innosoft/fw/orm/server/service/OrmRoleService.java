@@ -318,7 +318,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("userId", userId);
 		if(roleName != null){
-			args.put("roleName", roleName);
+			args.put("roleName", "%"+roleName+"%");
 		}
 		if(systemName != null){
 			args.put("systemId", systemName);
@@ -330,7 +330,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("userId", userId);
 		if(roleName != null){
-			args.put("roleName", roleName);
+			args.put("roleName", "%"+roleName+"%");
 		}
 		if(systemName != null){
 			args.put("systemId", systemName);
@@ -342,7 +342,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("orgId", orgId);
 		if(roleName != null){
-			args.put("roleName", roleName);
+			args.put("roleName", "%"+roleName+"%");
 		}
 		if(systemName != null){
 			args.put("systemId", systemName);
@@ -354,7 +354,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("orgId", orgId);
 		if(roleName != null){
-			args.put("roleName", roleName);
+			args.put("roleName", "%"+roleName+"%");
 		}
 		if(systemName != null){
 			args.put("systemId", systemName);
