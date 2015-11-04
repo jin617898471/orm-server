@@ -40,13 +40,13 @@ define(function(require){
 		var arr =  [];
 		var par = {};
 		var url = getUrl("notassign");
-		if( assignObj="org" ){
+		if( assignObj=="org" ){
 			par.orgId=orgId;
 		}else{
 			par.userId=userId;
 		}
 		par.roleName=roleName;
-		par.systemName=systemId;
+		par.systemId=systemId;
 		$.ajax({
 			url:url,
 			data:par,
@@ -62,7 +62,7 @@ define(function(require){
 		var arr =  [];
 		var par = {};
 		var url = getUrl("assign");
-		if( assignObj="org" ){
+		if( assignObj=="org" ){
 			par.orgId=orgId;
 		}else{
 			par.userId=userId;

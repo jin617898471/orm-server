@@ -87,9 +87,9 @@
 											</div>
 											{{each list}}
 												<div class="ui-form-item-have2col">
-													<label class="ui-label">{{$value[0]}}</label>
-													<label class="ui-label">{{$value[1]}}</label>
-													<label class="ui-label">{{$value[2]}}</label>
+													<label class="ui-label">{{$value.Iname}}</label>
+													<label class="ui-label">{{$value.oname}}</label>
+													<label class="ui-label">{{$value.pname}}</label>
 												</div>
 											{{/each}}
    										</script>  
