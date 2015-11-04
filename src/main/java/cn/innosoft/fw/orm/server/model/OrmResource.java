@@ -12,6 +12,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -209,5 +210,4 @@ public class OrmResource implements Serializable {
 	public void setValidSign(String validSign) {
 		this.validSign = validSign;
 	}
-
 }

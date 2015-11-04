@@ -96,7 +96,7 @@
 			WHERE
 				r.ROLE_ID=m.ROLE_ID
 			<#if roleName?? && roleName != ''>
-				AND r.ROLE_NAME_CN like :roleName 
+				AND r.ROLE_NAME_CN LIKE :roleName 
 			</#if>
 			<#if systemId?? && systemId != ''>
 				AND r.SYSTEM_ID = :systemId
@@ -132,7 +132,7 @@
 				AND r.ROLE_ID=m.ROLE_ID
 				AND m.USER_ID=:userId
 			<#if roleName?? && roleName != ''>
-				AND r.ROLE_NAME_CN like :roleName
+				AND r.ROLE_NAME_CN LIKE :roleName
 			</#if>
 			<#if systemId?? && systemId != ''>
 				AND r.SYSTEM_ID = :systemId
@@ -155,7 +155,7 @@
 			WHERE
 				r.ROLE_ID=m.ROLE_ID
 			<#if roleName?? && roleName != ''>
-				AND r.ROLE_NAME_CN like :roleName 
+				AND r.ROLE_NAME_CN LIKE :roleName 
 			</#if>
 			<#if systemId?? && systemId != ''>
 				AND r.SYSTEM_ID = :systemId
@@ -187,7 +187,7 @@
 				)
 				AND r.SYSTEM_ID=s.SYSTEM_ID
 			<#if roleName?? && roleName != ''>
-				AND r.ROLE_NAME_CN like : roleName
+				AND r.ROLE_NAME_CN LIKE :roleName
 			</#if>
 			<#if systemId?? && systemId != ''>
 				AND r.SYSTEM_ID = :systemId
