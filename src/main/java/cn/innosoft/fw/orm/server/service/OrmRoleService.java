@@ -2,6 +2,7 @@ package cn.innosoft.fw.orm.server.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +60,8 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	 * @param ormRole
 	 */
 	public void updateRole(OrmRole ormRole) {
+		ormRole.setUpdateDt(new Date());
+		//ormRole.setUpdateUserId(LoginUserContext.getUserId());
 		ormRoleDao.update(ormRole);
 	}
 

@@ -173,11 +173,11 @@ public class OrmRoleResource {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/getOrgnizationGroup")
-	@ResponseBody
-	public List<SelectTreeBean> getOrgnizationGroup() {
-		return ormOrganizationService.createSelectTree();
-	}
+//	@RequestMapping("/getOrgnizationGroup")
+//	@ResponseBody
+//	public List<SelectTreeBean> getOrgnizationGroup() {
+//		return ormOrganizationService.createSelectTree();
+//	}
 
 	/**
 	 * 系统选择下拉框

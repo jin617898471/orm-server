@@ -106,6 +106,8 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	 * @param ormResource
 	 */
 	public void updateResource(OrmResource ormResource) {
+		//ormResource.setUpdateUserId(LoginUserContext.getUserId());
+		ormResource.setUpdateDt(new Date());
 		ormResourceDao.update(ormResource);
 	}
 
