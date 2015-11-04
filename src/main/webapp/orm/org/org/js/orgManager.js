@@ -5,6 +5,7 @@ define(function(require){
 	Confirmbox=require("inno/dialog/1.0.0/confirmbox-debug");
 	Dialog=require("inno/dialog/1.0.0/dialog-debug");
 	AutoComplete=require("arale/autocomplete/1.3.0/autocomplete-debug");
+	Calendar = require("inno/calendar/1.0.0/calendar-debug");
 	var artTemplate=require("../../../org/org/js/art-template");
 	
 	var setting = {
@@ -64,11 +65,8 @@ define(function(require){
 		ry_role_assign : "org/forward/user/role/assign",//跳转用户分配角色页面
 	}
 	
-	
-	function init(){
-		$.post( getUrl("org_tree_inner"),initLeftTreee );
-	}
-	init();
+	//初始化左侧的树
+	$.post( getUrl("org_tree_inner"),initLeftTreee );
 	
 	function handleOrgData( data ){
 		var setIcon = function( list ){
@@ -359,6 +357,15 @@ define(function(require){
 					url = urlCfg["ry_update"];
 				}
 				addConfirm.show( {title:title,html:html,url:url} );
+				if("ry"==orgtype){
+					new Calendar({
+						trigger: 'input[name=\'userBirth\']'
+					});
+					//禁止输入
+					$("input[name = 'userBirth']").keydown(function(){
+					   return false;
+					});
+				}
 			}else if("add"==opttype){
 				var list = contentCfg[orgtype+"info"];
 				var newlist = $.extend(true,[],list);

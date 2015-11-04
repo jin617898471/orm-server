@@ -9,12 +9,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Document</title>
+<title>组织机构管理</title>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/base.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/widget.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>orm/org/org/css/CodeManager.css">
 <base href="<%=basePath%>">
-<script type="text/javascript" src="orm/OrmJsObj.js" ></script>
 </head>
 <body>
 	<div class="main">
