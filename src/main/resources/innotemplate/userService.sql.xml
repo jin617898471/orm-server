@@ -84,11 +84,11 @@
 		<sql id="assign">
 		<![CDATA[
 			SELECT
-				r.ROLE_ID as roleId,
-				r.ROLE_NAME_CN as roleNameCn,
-				r.SYSTEM_ID as systemId,
-				s.SYSTEM_NAME as systemName,
-				m.MAP_TYPE as mapType
+				r.ROLE_ID as "roleId",
+				r.ROLE_NAME_CN as "roleNameCn",
+				r.SYSTEM_ID as "systemId",
+				s.SYSTEM_NAME as "systemName",
+				m.MAP_TYPE as "mapType"
 			FROM
 				ORM_ROLE r,
 				ORM_USER_ROLE_MAP m,
@@ -108,11 +108,11 @@
 		<sql id="notAssign">
 		<![CDATA[
 			SELECT
-				r.ROLE_ID as roleId,
-				r.ROLE_NAME_CN as roleNameCn,
-				r.SYSTEM_ID as systemId,
-				s.SYSTEM_NAME as systemName,
-				m.MAP_TYPE as mapType
+				r.ROLE_ID as "roleId",
+				r.ROLE_NAME_CN as "roleNameCn",
+				r.SYSTEM_ID as "systemId",
+				s.SYSTEM_NAME as "systemName",
+				m.MAP_TYPE as "mapType"
 			FROM
 				ORM_ROLE r,
 				ORM_SYSTEM s,
@@ -144,10 +144,10 @@
 		<sql id="assign">
 		<![CDATA[
 			SELECT
-				r.ROLE_ID as roleId,
-				r.ROLE_NAME_CN as roleNameCn,
-				r.SYSTEM_ID as systemId,
-				s.SYSTEM_NAME as systemName
+				r.ROLE_ID as "roleId",
+				r.ROLE_NAME_CN as "roleNameCn",
+				r.SYSTEM_ID as "systemId",
+				s.SYSTEM_NAME as "systemName"
 			FROM
 				ORM_ROLE r,
 				ORM_ORG_ROLE_MAP m,
@@ -167,10 +167,10 @@
 		<sql id="notAssign">
 		<![CDATA[
 			SELECT
-				r.ROLE_ID as roleId,
-				r.ROLE_NAME_CN as roleNameCn,
-				r.SYSTEM_ID as systemId,
-				s.SYSTEM_NAME as systemName
+				r.ROLE_ID as "roleId",
+				r.ROLE_NAME_CN as "roleNameCn",
+				r.SYSTEM_ID as "systemId",
+				s.SYSTEM_NAME as "systemName"
 			FROM
 				ORM_ROLE r,
 				ORM_SYSTEM s
