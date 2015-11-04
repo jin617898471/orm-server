@@ -59,6 +59,24 @@
 .ui-select{
     z-index: 999;
 }
+body .ui-calendar{
+    z-index: 999;
+}
+
+.iorgjr{
+	line-height: 0;
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    border: 0 none;
+    cursor: pointer;
+    outline: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+}
 
 
 .ui-box-head{

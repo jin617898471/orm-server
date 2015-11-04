@@ -98,7 +98,6 @@
 							</div>
 							<div class="ui-form-item-col">
 								<label class="ui-label org-title">所属系统:</label>
-<!-- 								<input class="ui-input " value="" /> -->
 								<a class="ui-select-trigger systemId" style="width: 188px;" id="systemId" >
 		            				<span data-role="trigger-content"></span>          
 		            				<i class="iconfont blue" title="下三角形">&#xf0044;</i>

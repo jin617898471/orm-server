@@ -31,7 +31,8 @@ public class OrmOrganizationResource {
 	private OrmRoleService ormRoleService;
 	
 	@RequestMapping("/forward/manage")
-	public String forwardManage(){
+	public String forwardManage(Model model,String orgId){
+		model.addAttribute("orgId", orgId);
 		return "orm/org/org/orgManager";
 	}
 	@RequestMapping("/forward/role/assign/{orgId}")

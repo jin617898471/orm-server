@@ -93,17 +93,21 @@ define(function(require){
 			url+=userId;
 		}
 		url+="/"+roleId+"/"+systemId;
-		$.post(url);
+		$.post(url,function(){
+			parent.reloadRightContent();
+		});
 	}
 	function deleteRole(roleId,systemId){
 		var url = getUrl("delete");
-		if( assignObj="org" ){
+		if( assignObj=="org" ){
 			url+=orgId;
 		}else{
 			url+=userId;
 		}
 		url+="/"+roleId;
-		$.post(url);
+		$.post(url,function(){
+			parent.reloadRightContent();
+		});
 	}
 	
 	var systemIdSelect = new Select({
@@ -198,7 +202,6 @@ define(function(require){
 	function selectRole( role ){
 		var parent = role.parent();
 		$(".role-right .content").append(role);		
-//		parent.remove( role );
 		addRole( role.attr("id"),role.attr("systemId") );
 	}
 	function cancelRole( role ){
@@ -208,7 +211,6 @@ define(function(require){
 		}
 		var parent = role.parent();
 		$(".role-left .content").append(role);		
-//		parent.remove( role );
 		deleteRole( role.attr("id"),role.attr("systemId") );
 	}
 	
