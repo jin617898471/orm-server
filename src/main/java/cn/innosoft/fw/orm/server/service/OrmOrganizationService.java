@@ -114,7 +114,7 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		ormOrgRoleMapDao.deleteByOrgIdAndRoleId(orgId, roleId);
 		List<OrmUser> users = ormUserService.getUserByOrgId(orgId);
 		for(OrmUser user : users){
-			ormUserRoleMapDao.deleteByUserIdAndOrgId(user.getUserId(), orgId);
+			ormUserRoleMapDao.deleteByUserIdAndRoleIdAndOrgId(user.getUserId(), roleId, orgId);
 		}
 	}
 	/**
