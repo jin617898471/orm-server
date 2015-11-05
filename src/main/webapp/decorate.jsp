@@ -1,9 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*"%>
+<%@ page import="cn.innosoft.fw.orm.client.service.LoginUserContext"%>
+<%@ page import="cn.innosoft.fw.orm.client.model.TreeNode"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 	request.setAttribute("basePath", basePath);
+	String userName = LoginUserContext.getUsername();
+	List<TreeNode> resList = LoginUserContext.createResourceMenuTree();
+// 	List<TreeNode> resList = new ArrayList<TreeNode>();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,82 +46,56 @@
 				<i class="iconfont" style="font-size: 26px;">&#xf00c1;</i>组织机构及权限管理系统
 			</a>
 			<div class="user-info">
-				<span id="username">管理员</span>
+				<span id="username"><%=userName %></span>
 				<a class="user-info-item" href="">
 					<i class="iconfont" style="right: 10px; top: 2px">&#xf0051;</i>
 				</a>
 			</div>
 			
 			<ul class="header-nav" id="nav">
+			<%
+				for(int i=0;i<resList.size();i++){
+					TreeNode node = resList.get(i);
+					String name = node.getText();
+					String url = node.getValue();
+					List<TreeNode> children = node.getChild();
+			%>
 				<li class="nav-list">
-					<a resurl="" class="nav-list-inner url">
-						<i class="iconfont"></i>组织机构管理
+					<a resurl="<%=basePath+url %>" class="nav-list-inner url">
+						<i class="iconfont"></i><%=name %>
 					</a>
 					<div class="sub-nav-container-white" style="display: none;">
 						<div class="sub-nav-container-shadow"></div>
 						<div class="sub-nav-container-arrow"></div>
 						<div class="sub-nav-content">
-							<ul>
-								<li class="sub-nav-list">
-									<a resurl="" class="sub-nav-list-inner url">
-										<i class="iconfont"></i>组织机构管理
-									</a>
-								</li>
-								<li class="sub-nav-list">
-									<a resurl="" class="sub-nav-list-inner url">
-										<i class="iconfont"></i>用户管理
-									</a>
-								</li>
-							</ul>
+						<%
+							if(children!=null && children.size()>0){
+						%>
+								<ul>
+									<%
+										for(int j=0;j<children.size();j++){
+											TreeNode child = children.get(j);
+											String cname = child.getText();
+											String curl = child.getValue();
+									%>
+										<li class="sub-nav-list">
+											<a resurl="<%=basePath+curl %>" class="sub-nav-list-inner url">
+												<i class="iconfont"></i><%=cname %>
+											</a>
+										</li>
+									<%
+										}
+									%>
+								</ul>
+						<%
+							}
+						%>
 						</div>
 					</div>
 				</li>
-				<li class="nav-list">
-					<a resurl="" class="nav-list-inner url">
-						<i class="iconfont"></i>权限管理
-					</a>
-					<div class="sub-nav-container-white" style="display: none;">
-						<div class="sub-nav-container-shadow"></div>
-						<div class="sub-nav-container-arrow"></div>
-						<div class="sub-nav-content">
-							<ul>
-								<li class="sub-nav-list">
-									<a resurl="" class="sub-nav-list-inner url">
-										<i class="iconfont"></i>角色管理
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</li>
-				<li class="nav-list">
-					<a resurl="" class="nav-list-inner url">
-						<i class="iconfont"></i>系统管理
-					</a>
-					<div class="sub-nav-container-white" style="display: none;">
-						<div class="sub-nav-container-shadow"></div>
-						<div class="sub-nav-container-arrow"></div>
-						<div class="sub-nav-content">
-							<ul>
-								<li class="sub-nav-list">
-									<a resurl="" class="sub-nav-list-inner url">
-										<i class="iconfont"></i>系统注册
-									</a>
-								</li>
-								<li class="sub-nav-list">
-									<a resurl="" class="sub-nav-list-inner url">
-										<i class="iconfont"></i>资源注册
-									</a>
-								</li>
-								<li class="sub-nav-list">
-									<a resurl="" class="sub-nav-list-inner url">
-										<i class="iconfont"></i>代码注册
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</li>
+			<%
+				}
+			%>
 			</ul>
 		</div>
 	</div>

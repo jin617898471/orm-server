@@ -87,7 +87,7 @@ define(function(require){
 	}
 	function addRole(roleId,systemId){
 		var url = getUrl("add");
-		if( assignObj="org" ){
+		if( assignObj=="org" ){
 			url+=orgId;
 		}else{
 			url+=userId;
