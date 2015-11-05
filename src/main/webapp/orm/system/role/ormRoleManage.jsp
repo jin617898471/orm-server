@@ -84,4 +84,5 @@
 	<script>
 		seajs.use("<%=basePath%>orm/system/role/js/ormRoleManage");
 	</script>
+	</body>
 </html>
