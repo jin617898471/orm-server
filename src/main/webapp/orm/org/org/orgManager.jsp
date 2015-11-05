@@ -62,7 +62,7 @@
 											{{each list}}
 													<div class="ui-form-item-have2col" {{if $value.hide}}style="display:none;"{{/if}}>
 														<label class="ui-label org-title">{{$value.cn}}:</label>
-														<label class="ui-label org-value {{if $value.textarea}}ui-label_width{{/if}}" en="{{$value.en}}">{{$value.text}}</label>
+														<label class="ui-label org-value {{if $value.textarea}}ui-label_width{{/if}}" en="{{$value.en}}">{{if $value.isSelect}}{{$value.textCn}}{{else}}{{$value.text}}{{/if}}</label>
 													</div>
 											{{/each}}
    										</script>  
@@ -203,6 +203,10 @@
 								<div class="ui-form-title ">
 									<h5 class="ui-form-title-borderL">机构信息</h5>
 									<div class="search-bar">
+		                    			<a class="ui-button ui-button-add" opttype="i-add">
+		                    				<i class="iconfont">&#xf00a2;</i>
+		                    				新增子机构
+		                    			</a>
 		                    			<a class="ui-button ui-button-add" opttype="o-add">
 		                    				<i class="iconfont">&#xf00a2;</i>
 		                    				新增子部门
@@ -232,7 +236,7 @@
 <script type="text/javascript" src="resources/commons/js/seajs/sea-debug.js" ></script>
 <script type="text/javascript" src="resources/commons/js/seajs/sea-config-debug.js"></script>
 <script>
-	var IOrgId = "d79572935f6f48298a1377255a2b4927" ;
+	var IOrgId = "${orgId}" ;
 	var basePath="<%=basePath%>";
 	seajs.use( "<%=basePath%>orm/org/org/js/orgManager" );
 </script>
@@ -247,6 +251,11 @@
 							<div class="ui-textarea-border ui-input-w190" style="float: left;height:60px;">
  										<textarea class="ui-textarea" name="{{$value.en}}">{{$value.text}}</textarea>
 							</div>
+						{{else if $value.isSelect}}
+							<a class="ui-select-trigger {{$value.en}}" name="{{$value.en}}" value="{{$value.text}}">
+		            			<span data-role="trigger-content">{{$value.text}}</span>          
+		            			<i class="iconfont blue" title="下三角形">&#xf0044;</i>
+		        			</a> 
 						{{else}}
 							<input class="ui-input ui-input-w190 {{$value.en}}" name="{{$value.en}}" {{if $value.disabled}}disabled="disabled"{{/if}} value="{{$value.text}}">
 						{{/if}}
