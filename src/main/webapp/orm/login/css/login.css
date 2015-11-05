@@ -1,0 +1,150 @@
+html{
+	height: 100%;
+	min-height: 660px;
+	background-color: #f1f2f6
+}
+body{
+	height: 100%;
+	margin:0;
+}
+.login-main{
+	height: 100%;
+	width: 100%;
+	position: relative;
+	
+}
+.login-floater{
+	float: left;
+	height: 50%;
+	margin-bottom: -255px;
+	width: 100%;
+}
+.login-banner{
+	clear: both;
+	height: 331px;
+	position: relative;
+	background: url("imgs/banner-bg.jpg") no-repeat #5d9cec;
+	background-position:center;
+}
+.login-container{
+	width: 745px;
+	height: 345px;
+	margin:0 auto;
+	position: relative;
+}
+
+.login-content{
+	width: 745px;
+	height: 345px;
+	position: absolute;
+	background:url("imgs/login-bg.png") no-repeat;
+	top: 42px;
+}
+
+.computer-icon{
+	width: 149px;
+	height: 149px;
+	background: url("imgs/computer.png") no-repeat;
+	position: absolute;
+	bottom: -135px;
+	right: -35px;
+}
+
+
+.login-panel{
+	width: 240px;
+	height: 220px;
+	position: absolute;
+	right: 40px;
+	top: 68px;
+}
+
+.login-panel dt{
+	padding: 1px 10px;
+	width: 220px; 
+	height: 30px;
+	line-height: 30px;
+	font-size: 14px;
+	color: #666666
+}
+
+.login-panel .login-operate{
+	height: 40px;
+	line-height: 40px;
+}
+
+.login-panel .login-check{
+	margin-bottom: 5px;
+	font-size: 12px;
+	color: #555555;
+}
+
+.login-panel .ui-input{
+	width: 173px;
+	height: 28px;
+	line-height: 28px \9;
+	padding-left: 40px;
+}
+
+.login-panel .ui-input-user{
+	background: url("imgs/user-icon.png") no-repeat 0px;
+}
+
+.login-panel .ui-input-password{
+	background: url("imgs/pwd-icon.png") no-repeat 0px;
+}
+
+.login-panel .ui-button{
+	width: 220px;
+	height: 36px;
+	line-height: 36px;
+	font-size: 14px;
+	background: #5d9cec;
+}
+
+.forget-pwd{
+	margin-left: 30px;
+}
+
+.login-tip{
+	position: absolute;
+	bottom: -145px;
+	left: 15px;
+	height: 100px;
+}
+
+.login-tip h3{
+	font-size: 13px;
+	color: #888888;
+}
+.login-tip ul{
+	margin-top: 8px;
+	margin-left: 45px;
+}
+
+.login-tip li{
+	float: left;
+	margin:0 15px;
+	width: 43px;
+	position: relative;
+}
+
+.login-tip li span{
+	position: absolute;
+	right: -50px;
+	bottom: 3px;
+	font-size: 12px;
+	color: #888888;
+}
+
+.login-footer{
+	position: absolute;
+	bottom: 10px;
+	width: 100%;
+	text-align: center;
+}
+
+.login-footer span{
+	color: #4d4d4d;
+	font-size: 12px;
+}

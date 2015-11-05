@@ -6,10 +6,10 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 	request.setAttribute("basePath", basePath);
-// 	String userName = (String) session.getAttribute("userName");
-// 	List<TreeNode> resList = (List<TreeNode>) session.getAttribute("resList");
-	String userName = "";
-	List<TreeNode> resList = new ArrayList<TreeNode>();
+	String userName = (String) session.getAttribute("userName");
+	List<TreeNode> resList = (List<TreeNode>) session.getAttribute("resList");
+// 	String userName = "";
+// 	List<TreeNode> resList = new ArrayList<TreeNode>();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,7 +48,7 @@
 			</a>
 			<div class="user-info">
 				<span id="username"><%=userName %></span>
-				<a class="user-info-item" href="">
+				<a class="user-info-item" href="<%=basePath%>/logout">
 					<i class="iconfont" style="right: 10px; top: 2px">&#xf0051;</i>
 				</a>
 			</div>
