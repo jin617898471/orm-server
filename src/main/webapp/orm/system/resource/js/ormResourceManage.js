@@ -80,42 +80,42 @@ define(function(require) {
 	});
 
 	// 获取系统列表（下拉框和列表）
-	getSystemList = function() {
-		var result = "";
-		var parameterS = {
-			url : 'resource/ormresource/systemList',
-			type : "POST",
-			async : false,
-			success : function(data) {
-				result = data;
-				sysCode = result;
-			},
-			error : function(result) {
-				Confirmbox.alert('获取系统列表数据错误！');
-			}
-		};
-		$.ajax(parameterS);
-		return result;
-	};
+//	getSystemList = function() {
+//		var result = "";
+//		var parameterS = {
+//			url : 'resource/ormresource/systemList',
+//			type : "POST",
+//			async : false,
+//			success : function(data) {
+//				result = data;
+//				sysCode = result;
+//			},
+//			error : function(result) {
+//				Confirmbox.alert('获取系统列表数据错误！');
+//			}
+//		};
+//		$.ajax(parameterS);
+//		return result;
+//	};
 
 	// 拼接系统下拉格式
-	getSelectSystem = function() {
-		var arr = [];
-		var modelJSON = {
-			value : "",
-			text : "-请选择-"
-		};
-		arr.push(modelJSON);
-		var data = getSystemList();
-		$.each(data, function(n, systemObj) {
-			modelJSON = {
-				value : systemObj.systemId,
-				text : systemObj.systemName
-			};
-			arr.push(modelJSON);
-		});
-		return arr;
-	};
+//	getSelectSystem = function() {
+//		var arr = [];
+//		var modelJSON = {
+//			value : "",
+//			text : "-请选择-"
+//		};
+//		arr.push(modelJSON);
+//		var data = getSystemList();
+//		$.each(data, function(n, systemObj) {
+//			modelJSON = {
+//				value : systemObj.systemId,
+//				text : systemObj.systemName
+//			};
+//			arr.push(modelJSON);
+//		});
+//		return arr;
+//	};
 
 	// 资源类型代码，资源类型：000代表系统，100代表，200代表，300代表模块，400代表功能点，500代表WEB功能页面，600代表页面上的操作，900代表其他。
 	getResTypeList = function() {
@@ -353,13 +353,13 @@ define(function(require) {
 		return [ [ {
 			field : 'resourceName',
 			title : '资源名称',
-			width : 140,
+			width : 120,
 			align : 'left',
 			sortable : true
 		}, {
 			field : 'resourceUrl',
 			title : 'URL',
-			width : 140,
+			width : 240,
 			align : 'left',
 			sortable : true
 		}, {
@@ -371,38 +371,39 @@ define(function(require) {
 		},// ,formatter
 		// :
 		// formatterTypeByResource},
+//		{
+//			field : 'systemId',
+//			title : '所属系统',
+//			width : 100,
+//			align : 'left',
+//			sortable : true,
+//			formatter : formatterSysByResource
+//		}, 
 		{
-			field : 'systemId',
-			title : '所属系统',
-			width : 100,
-			align : 'left',
-			sortable : true,
-			formatter : formatterSysByResource
-		}, {
 			field : 'opt',
 			title : '操作',
-			width : 120,
+			width : 140,
 			align : 'center',
 			formatter : getGridOperation
 		} ] ];
 	}
 
 	// 列表系统翻译
-	function formatterSysByResource(value, rec, index) {
-		var data = getSystemList();
-		if (value) {
-			for (var int = 0; int < data.length; int++) {
-				var sys = data[int];
-				for ( var i in sys) {
-					var name = sys.systemName;
-					if (sys[i] == value) {
-						return name;
-					}
-				}
-			}
-		}
-		return "";
-	}
+//	function formatterSysByResource(value, rec, index) {
+//		var data = getSystemList();
+//		if (value) {
+//			for (var int = 0; int < data.length; int++) {
+//				var sys = data[int];
+//				for ( var i in sys) {
+//					var name = sys.systemName;
+//					if (sys[i] == value) {
+//						return name;
+//					}
+//				}
+//			}
+//		}
+//		return "";
+//	}
 
 	// 列表类型翻译
 	function formatterTypeByResource(value, rec, index) {

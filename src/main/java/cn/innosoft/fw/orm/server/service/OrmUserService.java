@@ -105,6 +105,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	public String addUser(OrmUser ormUser) {
 		try {
 			ormUser.setCreateDt(new Date());
+			ormUser.setValidSign("Y");
 			ormUser= ormUserDao.save(ormUser);
 			editOrgUserMap(ormUser.getUserId(), ormUser.getOrgIds());
 			return "true";

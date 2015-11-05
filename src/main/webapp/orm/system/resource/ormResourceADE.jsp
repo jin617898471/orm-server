@@ -39,21 +39,11 @@
 						<div class="ui-form-explain"></div>
 					</div>
 				</div>
-				<div class="ui-form-item-column clearfix">
-					<div class="ui-form-item-col">
-						<label class="ui-label">所属系统:</label>
-						<a class="ui-select-trigger ui-select-trigger-none systemId" style = "width:188px">
-	            				<span data-role="trigger-content"></span>          
-	            				<i class="iconfont blue" title="下三角形">&#xf0044;</i>
-	        			</a>
-						<span class="ui-form-required">*</span>
-						<div class="ui-form-explain"></div>
-					</div>
-					<div class="ui-form-item-col">
+
+				<div class="ui-form-item-col">
 						<label class="ui-label">URL:</label>
 						<input class="ui-input ui-input-w190"  name ="resourceUrl" value="${OrmResource.resourceUrl}">
 					</div>
-				</div>
 				<div class="ui-form-item-column clearfix">
 					<div class="ui-form-item-col">
 						<label class="ui-label">资源标识:</label>
@@ -73,6 +63,10 @@
 					<div class="ui-form-item-col">
 						<label class="ui-label">parentResId:</label>
 						<input class="ui-input ui-input-w190"  name ="parentResId" value="${OrmResource.parentResId}">
+					</div>
+					<div class="ui-form-item-col">
+						<label class="ui-label">systemId:</label>
+						<input class="ui-input ui-input-w190"  name ="systemId" value="${OrmResource.systemId}">
 					</div>
 					<div class="ui-form-item-col">
 						<label class="ui-label">resourceId:</label>

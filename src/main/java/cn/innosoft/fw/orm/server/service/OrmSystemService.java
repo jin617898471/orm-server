@@ -27,13 +27,13 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 	@Autowired
 	private OrmSystemDao ormSystemDao;
 	@Autowired
-	private OrmCodeDao ormCodeDao;
+	private OrmCodeService ormCodeService;
 	@Autowired
 	private OrmOrgRoleMapDao ormOrgRoleMapDao;
 	@Autowired
-	private OrmResourceDao ormResourceDao;
+	private OrmResourceService ormResourceService;
 	@Autowired
-	private OrmRoleDao ormRoleDao;
+	private OrmRoleService ormRoleService;
 	@Autowired
 	private OrmRoleResourceRightDao ormRoleResourceRightDao;
 	@Autowired
@@ -67,10 +67,10 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 	 */
 	public void deleteSystem(String systemId) {
 		ormSystemDao.delete(systemId);
-		ormCodeDao.deleteBySystemId(systemId);
+		ormCodeService.deleteBySystemId(systemId);
 		ormOrgRoleMapDao.deleteBySystemId(systemId);
-		ormResourceDao.deleteBySystemId(systemId);
-		ormRoleDao.deleteBySystemId(systemId);
+		ormResourceService.deleteBySystemId(systemId);
+		ormRoleService.deleteBySystemId(systemId);
 		ormRoleResourceRightDao.deleteBySystemId(systemId);
 		ormUserRoleMapDao.deleteBySystemId(systemId);
 	}
