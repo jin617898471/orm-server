@@ -273,7 +273,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	 * @param roleIds
 	 */
 	public void deletUserRoleMap(String userId, String roleId) {
-		ormUserRoleMapDao.deleteByUserIdAndRoleId(userId, roleId);
+		ormUserRoleMapDao.deleteByUserIdAndRoleIdAndMapType(userId, roleId,"USER_TO_ROLE");
 	}
 
 	/**
