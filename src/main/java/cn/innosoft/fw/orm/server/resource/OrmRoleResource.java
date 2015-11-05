@@ -31,8 +31,6 @@ public class OrmRoleResource {
 	@Autowired
 	private OrmRoleService ormRoleService;
 	
-	@Autowired
-	private OrmOrganizationService ormOrganizationService;
 	
 	@Autowired
 	private OrmSystemService ormSystemService;

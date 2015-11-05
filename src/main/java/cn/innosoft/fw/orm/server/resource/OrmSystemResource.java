@@ -1,8 +1,12 @@
 package cn.innosoft.fw.orm.server.resource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +18,12 @@ import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
 import cn.innosoft.fw.orm.server.service.OrmSystemService;
+import cn.innosoft.fw.orm.server.service.OrmUserService;
 
 @Controller
 @RequestMapping(value = "ormsystem")
 public class OrmSystemResource {
-
+	private static final Logger logger = LogManager.getLogger(OrmSystemResource.class);
 	@Autowired
 	private OrmSystemService ormSystemService;
 	
@@ -30,6 +35,10 @@ public class OrmSystemResource {
 	 * @param id
 	 * @return
 	 */
+	@RequestMapping("/forward/manage")
+	public String forwardManager(){
+		return "orm/system/system/ormSystemManage";
+	}
 	@RequestMapping("/forward/details/{id}")
 	public String forwardDetailsAction(Model model,@PathVariable String id){
 		
@@ -38,7 +47,7 @@ public class OrmSystemResource {
 		model.addAttribute("sign","details");
 		//返回到系统详情页面
 
-		return "/orm/ormsystem/ormSystemADE.jsp";
+		return "orm/system/system/ormSystemADE";
 	}
 	
 	/**
@@ -55,7 +64,7 @@ public class OrmSystemResource {
 		model.addAttribute("OrmSystem",ormSystem);
 		model.addAttribute("sign","edit");
 		//返回到系统详情页面
-		return "/orm/ormsystem/ormSystemADE.jsp";
+		return "orm/system/system/ormSystemADE";
 	}
 	
 	/**
@@ -68,7 +77,7 @@ public class OrmSystemResource {
 		
 		model.addAttribute("sign","add");
 		//返回到系统详情页面
-		return "/orm/ormsystem/ormSystemADE.jsp";
+		return "orm/system/system/ormSystemADE";
 	}
 	
 	/**
@@ -83,24 +92,17 @@ public class OrmSystemResource {
 	}
 	
 	/**
-<<<<<<< HEAD
-=======
 	 * 用于添加和修改OrmSystem时系统标识符的唯一判断
 	 * @param systemId
 	 * @return
 	 */
-	@RequestMapping("/checkOnlyOne")
+	@RequestMapping("/checkOnlyOne/{systemCode}")
 	@ResponseBody
-	public boolean checkOnlyOne(@PathVariable String systemId){
-		if(ormSystemService.findOne(systemId)!=null){
-			return true;
-		}else{
-			return false;
-		}
+	public boolean checkOnlyOne(@PathVariable String systemCode){
+		return ormSystemService.checkSystemOnly(systemCode);
 	}
 	
 	/**
->>>>>>> branch 'dev' of git@gitlab.9tuo.com:applicationframework/orm-server.git
 	 * 通过前端传过来的OrmSystem对象来添加数据
 	 * @param ormSystem
 	 * @return
@@ -108,10 +110,15 @@ public class OrmSystemResource {
 	@RequestMapping("/addSystem")
 	@ResponseBody
 	public String addSystemAction(OrmSystem ormSystem){
-		
-		ormSystemService.add(ormSystem);
+		try {
+			ormSystem.setCreateDt(new Date());
+			ormSystemService.add(ormSystem);
+			return "true";
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return "false";
+		}
 		//没有出现异常,返回"true"到前端
-		return "true";
 	}
 	
 	/**
@@ -122,8 +129,9 @@ public class OrmSystemResource {
 	@RequestMapping("/editSystem")
 	@ResponseBody
 	public String editSystemAction(OrmSystem ormSystem){
-		
-		ormSystemService.add(ormSystem);
+		ormSystem.setUpdateDt(new Date());
+		String[] colums = new String[]{"systemDesc","systemName","updateDt","updateUserId"};
+		ormSystemService.updateSome(ormSystem,Arrays.asList(colums));
 		//没有出现异常,返回"true"到前端
 		return "true";
 	}
@@ -132,10 +140,9 @@ public class OrmSystemResource {
 	 * 通过ID来删除系统数据
 	 * @param id
 	 */
-	@RequestMapping("/deleteSystem/{id}")
+	@RequestMapping("/delete/{id}")
 	@ResponseBody
 	public void deleteSystemAction(@PathVariable String id){
-		
 		ormSystemService.deleteSystem(id);
 	}
 	
@@ -143,10 +150,9 @@ public class OrmSystemResource {
 	 * 根据以逗号分隔的OrmSystemId字符串批量删除数据
 	 * @param idArray
 	 */
-	@RequestMapping("/deleteBatch/{idArray}")
+	@RequestMapping("/deletebatch/{idArray}")
 	@ResponseBody
 	public void deleteBatchSystemAction(@PathVariable ArrayList<String> idArray){
-		
 		ormSystemService.deleteBatchSystemById(idArray);
 	}
 	
@@ -158,14 +164,5 @@ public class OrmSystemResource {
 	@ResponseBody
 	public List<OrmSystem> findOrmSystemAll(){
 		return ormSystemService.findOrmSystemAll();
-	}
-	
-	/**
-	 * 根据Id查询OrmSystem信息
-	 * @param ormSystemId
-	 * @return
-	 */
-	public OrmSystem getOrmSystemById(String ormSystemId){
-		return ormSystemService.findOne(ormSystemId);
 	}
 }

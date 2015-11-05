@@ -10,7 +10,7 @@
 <title>系统管理主页</title>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/base.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/widget.css">
-<link rel="stylesheet" type="text/css" href="<%=basePath%>orm/ormsystem/css/ormSystemManage.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>orm/system/system/css/ormSystemManage.css">
 <base href="<%=basePath%>">
 </head>
 <body>
@@ -73,7 +73,7 @@
 	<script type="text/javascript" src="resources/commons/js/seajs/sea-debug.js" ></script>
     <script type="text/javascript" src="resources/commons/js/seajs/sea-config-debug.js"></script>
 	<script>
-		seajs.use("<%=basePath%>orm/ormsystem/js/ormSystemManage");
+		seajs.use("<%=basePath%>orm/system/system/js/ormSystemManage");
 	</script>
 </body>
 </html>

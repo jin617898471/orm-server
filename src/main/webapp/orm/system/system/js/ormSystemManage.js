@@ -110,6 +110,7 @@ define(function(require, exports, module) {
 					async : false,
 					success : function(data) {
 						tableRefresh();
+						$('#tblResult').datagrid('clearSelections')
 					},
 					error : function(result) {
 						Confirmbox.alert('删除失败！');

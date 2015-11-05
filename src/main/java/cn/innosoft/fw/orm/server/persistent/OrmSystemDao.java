@@ -18,5 +18,7 @@ public interface OrmSystemDao extends BaseDao<OrmSystem, String> {
 	 */
 	@Query(value="select system_id from orm_system where valid_sign = ?1",nativeQuery=true)
 	public List<String> findSystemIdByValidSign(String validSign);
+	
+	List<OrmSystem> findBySystemCode(String systemCode);
 
 }
