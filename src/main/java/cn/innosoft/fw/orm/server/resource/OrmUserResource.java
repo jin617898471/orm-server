@@ -37,7 +37,7 @@ public class OrmUserResource {
 	 * 跳转到用户管理界面
 	 * @return
 	 */
-	@RequestMapping("/manager")
+	@RequestMapping("/manage")
 	public String forwardUserManager() {
 		return "orm/org/user/ormUserManage";
 	}

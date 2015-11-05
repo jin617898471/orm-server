@@ -18,10 +18,12 @@ import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
 import cn.innosoft.fw.orm.server.model.OrmResource;
 import cn.innosoft.fw.orm.server.model.OrmRoleResourceRight;
+import cn.innosoft.fw.orm.server.model.OrmSystem;
 import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.persistent.OrmResourceDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleResourceRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmSystemDao;
+import cn.innosoft.fw.orm.server.util.StringUtil;
 
 @Service
 public class OrmResourceService extends AbstractBaseService<OrmResource, String> {
@@ -47,6 +49,8 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	 * @param ormResource
 	 */
 	public String addResource(OrmResource ormResource) {
+		String id = StringUtil.getUUID();
+		ormResource.setResourceId(id);
 		String parentId = ormResource.getParentResId();
 		String resType = ormResource.getResourceType();
 		String msg = compareParentResType(parentId, resType);
@@ -99,7 +103,10 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		}
 		return "Y";
 	}
-
+	
+	public void deleteBySystemId(String systemId){
+		ormResourceDao.deleteBySystemId(systemId);
+	}
 	/**
 	 * 更新资源
 	 * 
@@ -134,7 +141,22 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		}
 		return result;
 	}
-
+	
+	public void createSystemRes(OrmSystem system){
+		String id = StringUtil.getUUID();
+		OrmResource res = new OrmResource();
+		res.setResourceId(id);
+		res.setCreateDt(new Date());
+		res.setIsLeaf("Y");
+		res.setParentResId("ROOT");
+		res.setValidSign("Y");
+		res.setRootResId(id);
+		res.setResourceCode(system.getSystemCode());
+		res.setResourceName(system.getSystemName());
+		res.setResourceType("000");
+		res.setSystemId(system.getSystemId());
+		ormResourceDao.add(res);
+	}
 	/**
 	 * 生成资源ztree<建模>
 	 * 

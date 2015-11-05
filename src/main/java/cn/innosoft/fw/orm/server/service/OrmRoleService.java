@@ -86,7 +86,9 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	public OrmRole findByRoleId(String id) {
 		return ormRoleDao.findByRoleId(id);
 	}
-
+	public void deleteBySystemId(String systemId){
+		ormRoleDao.deleteBySystemId(systemId);
+	}
 	/**
 	 * 批量删除
 	 * 

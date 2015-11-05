@@ -95,7 +95,9 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 		
 		return node;
 	}
-	
+	public void deleteBySystemId(String systemId){
+		ormCodeDao.deleteBySystemId(systemId);
+	}
 	/**
 	 * 获取整个代码树
 	 * @return

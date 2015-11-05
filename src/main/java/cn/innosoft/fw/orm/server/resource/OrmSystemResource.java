@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
+import cn.innosoft.fw.orm.server.service.OrmResourceService;
 import cn.innosoft.fw.orm.server.service.OrmSystemService;
 import cn.innosoft.fw.orm.server.service.OrmUserService;
 
@@ -26,6 +27,9 @@ public class OrmSystemResource {
 	private static final Logger logger = LogManager.getLogger(OrmSystemResource.class);
 	@Autowired
 	private OrmSystemService ormSystemService;
+	
+	@Autowired
+	private OrmResourceService ormResourceService;
 	
 	/**
 	 * 通过传入的SystemId来返回一个System对象
@@ -111,8 +115,10 @@ public class OrmSystemResource {
 	@ResponseBody
 	public String addSystemAction(OrmSystem ormSystem){
 		try {
+			ormSystem.setValidSign("Y");
 			ormSystem.setCreateDt(new Date());
-			ormSystemService.add(ormSystem);
+			ormSystem = ormSystemService.add(ormSystem);
+			ormResourceService.createSystemRes(ormSystem);
 			return "true";
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

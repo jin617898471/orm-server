@@ -55,12 +55,18 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 	 * @param org
 	 */
 	public void addOrganization(OrmOrganization org) {
+		String parentId = org.getParentOrgId();
+		OrmOrganization pOrg = findOne(parentId);
+		pOrg.setIsLeaf("N");
+		update(pOrg);
+		org.setIsLeaf("Y");
+		org.setValidSign("Y");
 		String id = StringUtil.getUUID();
 		if("I".equals(org.getOrgType())){
 			org.setRootOrgId(id);
 		}
 		org.setOrgId(id);
-		save(org);
+		add(org);
 	}
 
 	/**

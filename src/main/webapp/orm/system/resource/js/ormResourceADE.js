@@ -9,7 +9,7 @@ define(function(require,exports,module){
 		//判断标识：标识为新增或者查看或者编辑
 		var sign = $("#sign").val();
 		
-		var systemId = ""; // 用于过滤下拉系统
+//		var systemId = ""; // 用于过滤下拉系统
 		
 		var type = new Select({
 	    	trigger: '.resourceType',
@@ -20,14 +20,14 @@ define(function(require,exports,module){
 		
 	    type.selectValue($("#resourceType").val());
 	    
-		var sys = new Select({
-	    	trigger: '.systemId',
-	    	width:'190px',
-	    	name:'systemId',
-	    	model: getSysList()
-		}).render();
+//		var sys = new Select({
+//	    	trigger: '.systemId',
+//	    	width:'190px',
+//	    	name:'systemId',
+//	    	model: getSysList()
+//		}).render();
 		
-		sys.selectValue($("#systemId").val());
+//		sys.selectValue($("#systemId").val());
 		
 		if(sign == "detail"){
 			$(":text").each(function() {
@@ -42,7 +42,8 @@ define(function(require,exports,module){
 			systemId = checkObj.systemId;
 			if(parentResId){
 				$("input[name='parentResId']").val(parentResId);
-				sys.selectValue(systemId);
+				$("input[name='systemId']").val(systemId);
+//				sys.selectValue(systemId);
 			}else{
 				$("input[name='parentResId']").val(systemId);
 			}
@@ -63,49 +64,49 @@ define(function(require,exports,module){
 	        rule: 'minlength{"min":-1}'
 	    });
 		
-		sys.on("change",function(target){
-			var checkObj = parent.getParentId();
-			var parentResId = checkObj.parentResId;
-			alert(parentResId);//////////////////////////////////////////////////////////////////////////////////
-			var systemId = target.attr("data-value");
-			if(!parentResId){
-				$("input[name='parentResId']").val(systemId);
-			}
-	    });
+//		sys.on("change",function(target){
+//			var checkObj = parent.getParentId();
+//			var parentResId = checkObj.parentResId;
+//			alert(parentResId);//////////////////////////////////////////////////////////////////////////////////
+//			var systemId = target.attr("data-value");
+//			if(!parentResId){
+//				$("input[name='parentResId']").val(systemId);
+//			}
+//	    });
 		
-	    function getSysList(){
-	    	var system  = parent.getSelectSystem();
-	    	var checkObj = parent.getParentId();
-	    	var type = checkObj.type;
-			var id = checkObj.systemId;
-			//if(type == "system"){
-			//	return system;
-			//}
-	    	if(sign == "edit"){
-	    		for ( var int = 0; int < system.length; int++) {
-					var sys = system[int];
-					sys.disabled = true;
-					sys.selected = false;
-				}
-	    	}else{
-				if(id){
-					for ( var int = 0; int < system.length; int++) {
-						var sys = system[int];
-						var sid = sys.value;
-						if(sid == id){
-							sys.disabled = false;
-							sys.selected = true;
-						}else{
-							sys.disabled = true;
-							sys.selected = false;
-						}
-					}
-				}else{
-					return system;
-				}
-	    	}
-	    	return system;
-	    };
+//	    function getSysList(){
+//	    	var system  = parent.getSelectSystem();
+//	    	var checkObj = parent.getParentId();
+//	    	var type = checkObj.type;
+//			var id = checkObj.systemId;
+//			//if(type == "system"){
+//			//	return system;
+//			//}
+//	    	if(sign == "edit"){
+//	    		for ( var int = 0; int < system.length; int++) {
+//					var sys = system[int];
+//					sys.disabled = true;
+//					sys.selected = false;
+//				}
+//	    	}else{
+//				if(id){
+//					for ( var int = 0; int < system.length; int++) {
+//						var sys = system[int];
+//						var sid = sys.value;
+//						if(sid == id){
+//							sys.disabled = false;
+//							sys.selected = true;
+//						}else{
+//							sys.disabled = true;
+//							sys.selected = false;
+//						}
+//					}
+//				}else{
+//					return system;
+//				}
+//	    	}
+//	    	return system;
+//	    };
 	    
 	    function getResTypeList(){
 	    	var resource  = parent.getSelectResType();
