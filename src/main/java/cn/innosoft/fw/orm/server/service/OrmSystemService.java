@@ -59,14 +59,6 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 		return page;
 	}
 
-	public void addSystem(OrmSystem system) {
-		ormSystemDao.save(system);
-	}
-
-	public void updateSystem(OrmSystem system) {
-		ormSystemDao.update(system);
-	}
-
 	
 	/**
 	 * 删除System
@@ -92,7 +84,10 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 			deleteSystem(idArray.get(i));
 		}
 	}
-	
+	public boolean checkSystemOnly(String SystemCode){
+		List<OrmSystem> list = ormSystemDao.findBySystemCode(SystemCode);
+		return list.size()==0;
+	}
 	/**
 	 * 查询所有的OrmSystem记录
 	 * @return

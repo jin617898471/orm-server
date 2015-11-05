@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 		Form = require("form"),
 		$ = require("$");
 
-	var _path = "/orm-sever/pages/ormsystem";
+	var _path = "ormsystem";
 
 	// 验证
 	var validator = new Validator({
@@ -60,7 +60,7 @@ define(function(require, exports, module) {
 				}
 			};
 			$.ajax(parameter);
-			if (check) {
+			if (!check) {
 				message = '系统标识重复！';
 				$(".msgText").html(message);
 				$(".iconfonthide").hide();
@@ -125,6 +125,9 @@ define(function(require, exports, module) {
 						successFn : function() {
 							showInformation(true);
 							$(".msgText").text(name+"成功");
+							if(parent.resetutilsearchlist){
+								parent.resetutilsearchlist();
+							}
 						},
 						errorFn : function() {
 							showInformation(false);
