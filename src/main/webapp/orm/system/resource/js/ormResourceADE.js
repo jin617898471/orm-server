@@ -38,7 +38,7 @@ define(function(require,exports,module){
 			$("#btnSave").css("visibility","hidden");
 		}else if(sign == "add"){
 			var checkObj = parent.getParentId();
-			var parentResId = checkObj.parentResId;
+			var parentResId = checkObj.parentResId();
 			systemId = checkObj.systemId;
 			if(parentResId){
 				$("input[name='parentResId']").val(parentResId);

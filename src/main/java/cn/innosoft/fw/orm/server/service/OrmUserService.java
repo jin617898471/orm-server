@@ -29,6 +29,7 @@ import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgUserMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
+import cn.innosoft.fw.orm.server.util.EnCryptUtil;
 
 /**
  * 
@@ -106,6 +107,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		try {
 			ormUser.setCreateDt(new Date());
 			ormUser.setValidSign("Y");
+			ormUser.setUserPwd( EnCryptUtil.desMd5Encrypt( ormUser.getUserPwd() ));
 			ormUser= ormUserDao.save(ormUser);
 			editOrgUserMap(ormUser.getUserId(), ormUser.getOrgIds());
 			return "true";

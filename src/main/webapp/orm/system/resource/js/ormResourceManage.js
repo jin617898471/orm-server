@@ -472,13 +472,18 @@ define(function(require) {
 	// 为子页面提供方法，获取父页面点击节点的ID
 	getParentId = function() {
 		var parent = {
-			parentResId : parentResId,
+			parentResId : getSelectNode,
 			systemId : systemId,
 			type : typeRes,
 			resourceType : resourceType
 		};
 		return parent;
 	};
+	
+	//左侧树-获取选中的节点对象
+	function getSelectNode(){
+		return $.fn.zTree.getZTreeObj("tree").getSelectedNodes()[0].id;
+	}
 
 	// 刷新
 	tableRefresh = function(pid, id, name, type, system, resourceType) {
