@@ -88,7 +88,7 @@
 	<script type="text/javascript" src="resources/commons/js/seajs/sea-debug.js" ></script>
     <script type="text/javascript" src="resources/commons/js/seajs/sea-config-debug.js"></script>
 	<script>
-		seajs.use("../orm/org/user/js/ormUserManage");
+		seajs.use("<%=basePath%>orm/org/user/js/ormUserManage");
 	</script>
 </body>
 </html>
