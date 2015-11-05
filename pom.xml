@@ -17,7 +17,7 @@
         <dependency>
 			 <groupId>inno-fw</groupId>
 			  <artifactId>orm-client</artifactId>
-			  <version>3.0</version>
+			  <version>3.0.0-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
