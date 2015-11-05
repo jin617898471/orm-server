@@ -6,9 +6,10 @@
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 	request.setAttribute("basePath", basePath);
-	String userName = LoginUserContext.getUsername();
-	List<TreeNode> resList = LoginUserContext.createResourceMenuTree();
-// 	List<TreeNode> resList = new ArrayList<TreeNode>();
+// 	String userName = (String) session.getAttribute("userName");
+// 	List<TreeNode> resList = (List<TreeNode>) session.getAttribute("resList");
+	String userName = "";
+	List<TreeNode> resList = new ArrayList<TreeNode>();
 %>
 <!DOCTYPE html>
 <html lang="en">
