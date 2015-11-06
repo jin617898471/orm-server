@@ -8,8 +8,6 @@
 	request.setAttribute("basePath", basePath);
 	String userName = (String) session.getAttribute("userName");
 	List<TreeNode> resList = (List<TreeNode>) session.getAttribute("resList");
-// 	String userName = "";
-// 	List<TreeNode> resList = new ArrayList<TreeNode>();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,33 +16,18 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" type="text/css" href="resources/commons/css/base.css">
 	<link rel="stylesheet" type="text/css" href="resources/commons/css/widget.css">
-<!-- 	<link rel="stylesheet" type="text/css" href="theme.css"> -->
+	<link rel="stylesheet" type="text/css" href="theme.css">
 	<script type="text/javascript" src="resources/commons/js/seajs/sea-debug.js"></script>
 	<script type="text/javascript" src="resources/commons/js/seajs/sea-config-debug.js"></script>
 	<title><sitemesh:write property='title' /></title>
 	<sitemesh:write property='head' />
-	<style>
-		span#username {
-		    color: #FFFFFF;
-		    display: inline-block;
-		    height: 38px;
-		    line-height: 38px;
-		    position: relative;
-		    min-width: 90px;
-		    vertical-align: top;
-		    text-align: right;
-		    margin-top: 2px;
-		    margin-right: 5px;
-		    font-weight: bold;
-		}
-	</style>
 </head>
 <body>
 
 	<div class="header">
 		<div class="header-container">
 			<a class="logo">
-				<i class="iconfont" style="font-size: 26px;">&#xf00c1;</i>组织机构及权限管理系统
+				<i class="iconfont" style="font-size: 26px;">&#xf00c1;</i>组织机构权限管理系统
 			</a>
 			<div class="user-info">
 				<span id="username"><%=userName %></span>

@@ -12,7 +12,7 @@
 <title>分配角色</title>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/base.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/widget.css">
-<link rel="stylesheet" type="text/css" href="<%=basePath%>orm/org/org/css/CodeManager.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>theme.css">
 <base href="<%=basePath%>">
 <style>
 .main {

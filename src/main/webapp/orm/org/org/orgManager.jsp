@@ -11,6 +11,7 @@
 <title>组织机构管理</title>
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/base.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/widget.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>theme.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>orm/org/org/css/orgManager.css">
 <base href="<%=basePath%>">
 </head>

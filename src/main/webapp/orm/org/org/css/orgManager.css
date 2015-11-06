@@ -79,6 +79,10 @@ body .ui-calendar{
 }
 
 
+.
+
+
+
 .ui-box-head{
 	border-bottom: 1px solid #d3e3f6;
 	color: #333333;
@@ -120,35 +124,4 @@ body .ui-calendar{
 	line-height: 40px;
     float: right;       
     margin-top: -8px;
-}
-.search-bar .ui-button{
-	background: none;
-	color: #333333;
-	font-weight: normal;
-}
-.search-bar a.ui-button:hover{
-	color: #5d9cec;
-}
-
-.search-more{
-	width: 90px;
-	height: 28px;
-	position: absolute;
-	bottom: -29px;
-	left: 17px;
-	background: #fafafa;
-	border:1px solid #e3e5e8;
-	border-top: none;
-	border-radius: 0 0 3px 3px;
-	line-height: 28px;
-	text-align: center;
-}
-
-.search-more .iconfont{
-	font-size: 12px;
-	padding-left: 5px;
-}
-
-.ui-datagrid{
-	padding: 5px;
 }
