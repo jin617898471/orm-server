@@ -15,7 +15,7 @@ public interface OrmUserDao extends BaseDao<OrmUser, String> {
 	
 	List<OrmUser> findFirst10ByUserAcctLikeOrUserNameLikeOrderByCreateDt(String userAcct,String userName);
 	
-	@Query("select u from OrmUser u,OrmOrgUserMap m where u.userId=m.userId and m.orgId=?1")
+	@Query("select u from OrmUser u,OrmOrgUserMap m where u.userId=m.userId and m.orgId=?1 order by m.orderNumber")
 	List<OrmUser> getUserByOrgId(String orgId);
 }
  

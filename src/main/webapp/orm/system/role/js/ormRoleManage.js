@@ -92,7 +92,10 @@ define(function(require,exports){
 				op : "equal",
 				value : arrvalue[0]
 			};
-			s["rules"].push(modeljson);
+			if(modeljson.value){
+				s["rules"].push(modeljson);
+			}
+			
 			modeljson = {
 				field : "roleId",
 				op : "in",
@@ -204,11 +207,13 @@ define(function(require,exports){
 	// 初始化系统下拉框查询列
 	getSystemList = function() {
 		var arr = [];
+		
 		var parameterS = {
 			url : 'resource/ormresource/systemList',
 			type : "POST",
 			async : false,
 			success : function(data) {
+				arr.push({value:null,text:'所有系统'});
 				$.each(data, function(n, systemObj) {
 					modelJSON = {
 						value : systemObj.systemId,

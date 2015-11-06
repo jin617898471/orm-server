@@ -74,7 +74,8 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		add(org);
 	}
 	public void updateOrg(OrmOrganization org,String[] enforceUpdateField){
-		List<String> fields = Arrays.asList(enforceUpdateField);
+		List<String> fields = new ArrayList<String>();
+		fields.addAll(Arrays.asList(enforceUpdateField));
 		fields.add("updateDt");fields.add("updateUserId");
 		org.setUpdateDt(new Date());
 		org.setUpdateUserId(LoginUserContext.getUser().getUserId());
