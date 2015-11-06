@@ -67,7 +67,9 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<bean class="cn.innosoft.fw.biz.log.LogInterceptor">
-				<property name="level" value="0" />	 <!-- 0：不记录日志到数据库；1：只记录业务日志；2：记录技术日志：3：记录详情日志  -->
+				<property name="level" value="3" />	 <!-- 0：不记录日志到数据库；1：只记录业务日志；2：记录技术日志：3：记录详情日志  -->
+				<property name="operateUserHelperClass" value="cn.innosoft.fw.orm.client.service.LoginUserContext" />	
+				<property name="operateUserGetMethod" value="getUserId" />	
 			</bean>
 		</mvc:interceptor>
 	</mvc:interceptors>

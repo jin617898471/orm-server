@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
+import cn.innosoft.fw.biz.log.FwLog;
+import cn.innosoft.fw.biz.log.FwLogFactory;
 import cn.innosoft.fw.orm.server.model.OrmUser;
 import cn.innosoft.fw.orm.server.model.SelectTreeBean;
 import cn.innosoft.fw.orm.server.model.TreeNode;
@@ -27,11 +24,12 @@ import cn.innosoft.fw.orm.server.service.OrmUserService;
 @Controller
 @RequestMapping(value = "user")
 public class OrmUserResource {
-	private static final Logger logger = LogManager.getLogger(OrmUserResource.class);
 	@Autowired
 	private OrmUserService ormUserService;
 	@Autowired
 	private OrmOrganizationService ormOrganizationService;
+	
+	private FwLog log = FwLogFactory.getLog(this.getClass());
 	
 	/**
 	 * 跳转到用户管理界面
@@ -78,6 +76,7 @@ public class OrmUserResource {
 	@RequestMapping("/changePwd")
 	@ResponseBody
 	public String changePwd(OrmUser user){
+		log.info("修改用户密码");
 		return ormUserService.ChangePwd(user);
 	}
 	
@@ -89,6 +88,7 @@ public class OrmUserResource {
 	@RequestMapping("/edit")
 	@ResponseBody
 	public String editUser(OrmUser user){
+		log.info("修改用户基本信息");
 		return ormUserService.updateUser(user);
 	}
 	/**
@@ -99,6 +99,7 @@ public class OrmUserResource {
 	@RequestMapping("/add")
 	@ResponseBody
 	public String addUser(OrmUser user){
+		log.info("新增用户");
 		return ormUserService.addUser(user);
 	}
 	/**
@@ -119,6 +120,7 @@ public class OrmUserResource {
 	@RequestMapping("/delete/{id}")
 	@ResponseBody
 	public void deleteAction(@PathVariable String id) {
+		log.info("删除用户");
 		ormUserService.delete(id);
 	}
 
@@ -131,6 +133,7 @@ public class OrmUserResource {
 	@RequestMapping("/deletebatch/{idArray}")
 	@ResponseBody
 	public void deletebatchAction(@PathVariable ArrayList<String> idArray) {
+		log.info("批量用户");
 		ormUserService.deleteBatch(idArray);
 	}
 	/**

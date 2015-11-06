@@ -17,19 +17,12 @@
             ">
 	<context:property-placeholder location="classpath*:*-jdbc.properties" />
 	
-	<bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
-        <property name="statementExecutableSqlLogEnable" value="true" />
-        <property name="dataSourceLogEnabled" value="true" />
-        <property name="connectionLogEnabled" value="true" />
-        <property name="statementLogEnabled" value="true" />
-  	</bean>
-	
 	<bean id="ormServerDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<property name="url" value="${ormServer.jdbc.url}" />
 		<property name="username" value="${ormServer.jdbc.username}" />
 		<property name="password" value="${ormServer.jdbc.password}" />
 		<property name="filters" value="stat" />
-		<property name="maxActive" value="1" />
+		<property name="maxActive" value="5" />
 		<property name="initialSize" value="1" />
 		<property name="maxWait" value="600" />
 		<property name="minIdle" value="1" />
@@ -43,7 +36,9 @@
 		<property name="maxPoolPreparedStatementPerConnectionSize" value="50" />
 		<property name="proxyFilters">
 	        <list>
-	            <ref bean="log-filter"/>
+	            <bean class="com.alibaba.druid.filter.logging.Log4jFilter">
+			        <property name="statementExecutableSqlLogEnable" value="true" />
+			  	</bean>
 	        </list>
 	    </property>
 	</bean>

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
+import cn.innosoft.fw.biz.log.FwLog;
+import cn.innosoft.fw.biz.log.FwLogFactory;
 import cn.innosoft.fw.orm.server.model.OrmResource;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
 import cn.innosoft.fw.orm.server.service.OrmResourceService;
@@ -26,6 +28,8 @@ public class OrmResourceResource {
 
 	@Autowired
 	private OrmSystemService ormSystemService;
+	
+	private FwLog log = FwLogFactory.getLog(this.getClass());
 
 	/**
 	 * 跳转到资源管理页面
@@ -58,6 +62,7 @@ public class OrmResourceResource {
 	@RequestMapping(value = "/add")
 	@ResponseBody
 	public String addAction(OrmResource ormResource) {
+		log.info("新增资源");
 		String str = ormResourceService.addResource(ormResource);
 		return str;
 	}
@@ -85,6 +90,7 @@ public class OrmResourceResource {
 	@RequestMapping("/edit")
 	@ResponseBody
 	public String updateAction(OrmResource ormResource) {
+		log.info("修改资源");
 		ormResourceService.updateResource(ormResource);
 		return ormResource.getResourceId();
 	}
@@ -111,6 +117,7 @@ public class OrmResourceResource {
 	@RequestMapping("/delete/{id}")
 	@ResponseBody
 	public void deleteAction(@PathVariable String id) {
+		log.info("删除资源");
 		ormResourceService.delete(id);
 	}
 
@@ -122,6 +129,7 @@ public class OrmResourceResource {
 	@RequestMapping("/deletebatch/{idArray}")
 	@ResponseBody
 	public void deletebatchAction(@PathVariable ArrayList<String> idArray) {
+		log.info("批量删除资源");
 		ormResourceService.deleteByIds(idArray);
 	}
 

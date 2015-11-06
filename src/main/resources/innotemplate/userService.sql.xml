@@ -59,7 +59,7 @@
                			SELECT ORG_ID, user_id FROM ORM_ORG_USER_MAP
          			) b ON a.ORG_ID = b.ORG_ID
 				) group by root
-			) b right join temporg c on b.id = c.org_id order by num desc 
+			) b right join temporg c on b.id = c.org_id order by ORDER_NUMBER ASC 
 			]]>
 		</sql>
 		<sql id="orgTree">
@@ -76,7 +76,7 @@
                			SELECT ORG_ID, user_id FROM ORM_ORG_USER_MAP
          			) b ON a.ORG_ID = b.ORG_ID
 				) group by root
-			) b right join temporg c on b.id = c.org_id order by num desc 		
+			) b right join temporg c on b.id = c.org_id order by ORDER_NUMBER ASC 		
 			]]>
 		</sql>
 	</class>

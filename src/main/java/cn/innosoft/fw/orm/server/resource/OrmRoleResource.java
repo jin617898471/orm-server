@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
+import cn.innosoft.fw.biz.log.FwLog;
+import cn.innosoft.fw.biz.log.FwLogFactory;
 import cn.innosoft.fw.orm.server.model.OrmRole;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
 import cn.innosoft.fw.orm.server.model.SelectTreeBean;
@@ -36,6 +38,8 @@ public class OrmRoleResource {
 	
 	@Autowired
 	private OrmResourceService ormResourceService;
+	
+	private FwLog log = FwLogFactory.getLog(this.getClass());
 	
 	/**
 	 * 跳转到角色管理页面
@@ -68,6 +72,7 @@ public class OrmRoleResource {
 	@RequestMapping("/add")
 	@ResponseBody
 	public void addAction(OrmRole ormRole) {
+		log.info("新增角色");
 		ormRole.setRoleType("NORMAL");
 		//ormRole.setCreateUserId(LoginUserContext.getUserId());
 		ormRole.setCreateDt(new Date());
@@ -125,6 +130,7 @@ public class OrmRoleResource {
 	@RequestMapping("/edit")
 	@ResponseBody
 	public String updateAction(OrmRole ormRole) {
+		log.info("修改角色");
 		ormRoleService.updateRole(ormRole);
 		return ormRole.getRoleId();
 	}
@@ -151,6 +157,7 @@ public class OrmRoleResource {
 	@RequestMapping("/delete/{id}")
 	@ResponseBody
 	public void deleteAction(@PathVariable String id) {
+		log.info("删除角色");
 		ormRoleService.deleteRole(id);
 	}
 
@@ -162,6 +169,7 @@ public class OrmRoleResource {
 	@RequestMapping("/deletebatch/{idArray}")
 	@ResponseBody
 	public void deletebatchAction(@PathVariable ArrayList<String> idArray) {
+		log.info("批量删除角色");
 		ormRoleService.deleteByIds(idArray);
 	}
 
@@ -225,6 +233,7 @@ public class OrmRoleResource {
 	@RequestMapping("/grantResource")
 	@ResponseBody
 	public Map<String, Object> grantResource(String roleId, String resourceIds) throws Exception {
+		log.info("修改角色的资源权限");
 		Map<String,Object> map=new HashMap<String,Object>();
 		try {
 			ormRoleService.grantResource(roleId, resourceIds);

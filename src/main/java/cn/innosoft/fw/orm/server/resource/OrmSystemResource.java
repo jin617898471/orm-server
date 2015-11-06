@@ -1,12 +1,8 @@
 package cn.innosoft.fw.orm.server.resource;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
+import cn.innosoft.fw.biz.log.FwLog;
+import cn.innosoft.fw.biz.log.FwLogFactory;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
-import cn.innosoft.fw.orm.server.service.OrmResourceService;
 import cn.innosoft.fw.orm.server.service.OrmSystemService;
-import cn.innosoft.fw.orm.server.service.OrmUserService;
 
 @Controller
 @RequestMapping(value = "ormsystem")
@@ -27,8 +23,7 @@ public class OrmSystemResource {
 	@Autowired
 	private OrmSystemService ormSystemService;
 	
-	@Autowired
-	private OrmResourceService ormResourceService;
+	private FwLog log = FwLogFactory.getLog(this.getClass());
 	
 	/**
 	 * 通过传入的SystemId来返回一个System对象
@@ -62,7 +57,6 @@ public class OrmSystemResource {
 	 */
 	@RequestMapping("/forward/edit/{id}")
 	public String forwardEditAction(Model model,@PathVariable String id){
-		
 		OrmSystem ormSystem = ormSystemService.findOne(id);
 		model.addAttribute("OrmSystem",ormSystem);
 		model.addAttribute("sign","edit");
@@ -113,6 +107,7 @@ public class OrmSystemResource {
 	@RequestMapping("/addSystem")
 	@ResponseBody
 	public String addSystemAction(OrmSystem ormSystem){
+		log.info("新增系统");
 		return ormSystemService.addSystem(ormSystem);
 	}
 	
@@ -124,6 +119,7 @@ public class OrmSystemResource {
 	@RequestMapping("/editSystem")
 	@ResponseBody
 	public String editSystemAction(OrmSystem ormSystem){
+		log.info("修改系统");
 		return ormSystemService.updateSystem(ormSystem);
 	}
 	
@@ -134,6 +130,7 @@ public class OrmSystemResource {
 	@RequestMapping("/delete/{id}")
 	@ResponseBody
 	public void deleteSystemAction(@PathVariable String id){
+		log.info("删除系统");
 		ormSystemService.deleteSystem(id);
 	}
 	
@@ -144,6 +141,7 @@ public class OrmSystemResource {
 	@RequestMapping("/deletebatch/{idArray}")
 	@ResponseBody
 	public void deleteBatchSystemAction(@PathVariable ArrayList<String> idArray){
+		log.info("批量删除系统");
 		ormSystemService.deleteBatchSystemById(idArray);
 	}
 	

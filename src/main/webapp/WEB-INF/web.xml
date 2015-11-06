@@ -33,6 +33,8 @@
 			classpath:ormServer-beans.xml
 			classpath*:ormClient-beans.xml
 			classpath:ormServer-servlet.xml
+			classpath*:log-beans.xml
+			classpath*:log-ds.xml
 		</param-value>
 	</context-param>
 
