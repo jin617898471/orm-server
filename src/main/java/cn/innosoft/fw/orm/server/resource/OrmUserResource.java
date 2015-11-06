@@ -119,7 +119,7 @@ public class OrmUserResource {
 	@RequestMapping("/delete/{id}")
 	@ResponseBody
 	public void deleteAction(@PathVariable String id) {
-		ormUserService.delete(id);
+		ormUserService.deleteUser(id);
 	}
 
 
