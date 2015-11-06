@@ -24,7 +24,6 @@ import cn.innosoft.fw.orm.server.service.OrmUserService;
 @Controller
 @RequestMapping(value = "ormsystem")
 public class OrmSystemResource {
-	private static final Logger logger = LogManager.getLogger(OrmSystemResource.class);
 	@Autowired
 	private OrmSystemService ormSystemService;
 	
@@ -114,17 +113,7 @@ public class OrmSystemResource {
 	@RequestMapping("/addSystem")
 	@ResponseBody
 	public String addSystemAction(OrmSystem ormSystem){
-		try {
-			ormSystem.setValidSign("Y");
-			ormSystem.setCreateDt(new Date());
-			ormSystem = ormSystemService.add(ormSystem);
-			ormResourceService.createSystemRes(ormSystem);
-			return "true";
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			return "false";
-		}
-		//没有出现异常,返回"true"到前端
+		return ormSystemService.addSystem(ormSystem);
 	}
 	
 	/**
@@ -135,11 +124,7 @@ public class OrmSystemResource {
 	@RequestMapping("/editSystem")
 	@ResponseBody
 	public String editSystemAction(OrmSystem ormSystem){
-		ormSystem.setUpdateDt(new Date());
-		String[] colums = new String[]{"systemDesc","systemName","updateDt","updateUserId"};
-		ormSystemService.updateSome(ormSystem,Arrays.asList(colums));
-		//没有出现异常,返回"true"到前端
-		return "true";
+		return ormSystemService.updateSystem(ormSystem);
 	}
 	
 	/**

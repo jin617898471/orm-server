@@ -1,8 +1,12 @@
 package cn.innosoft.fw.orm.server.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +16,7 @@ import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
+import cn.innosoft.fw.orm.client.service.LoginUserContext;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
 import cn.innosoft.fw.orm.server.persistent.OrmCodeDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
@@ -20,10 +25,12 @@ import cn.innosoft.fw.orm.server.persistent.OrmRoleDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleResourceRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmSystemDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
+import cn.innosoft.fw.orm.server.resource.OrmSystemResource;
 
 @Service
 public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 
+	private static final Logger logger = LogManager.getLogger(OrmSystemResource.class);
 	@Autowired
 	private OrmSystemDao ormSystemDao;
 	@Autowired
@@ -59,6 +66,33 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 		return page;
 	}
 
+	public String addSystem(OrmSystem ormSystem){
+		try {
+			ormSystem.setValidSign("Y");
+			ormSystem.setCreateDt(new Date());
+			ormSystem.setCreateUserId(LoginUserContext.getUser().getUpdateUserId());
+			ormSystem = add(ormSystem);
+			ormResourceService.createSystemRes(ormSystem);
+			return "true";
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return "false";
+		}
+	}
+	public String updateSystem(OrmSystem ormSystem){
+		try{
+			ormSystem.setUpdateDt(new Date());
+			ormSystem.setCreateUserId(LoginUserContext.getUser().getUserId());
+			String[] colums = new String[]{"systemDesc","systemName","updateDt","updateUserId"};
+			updateSome(ormSystem,Arrays.asList(colums));
+			//没有出现异常,返回"true"到前端
+			return "true";
+		}catch(Exception e){
+			logger.error(e.getMessage(),e);
+			return "false";
+		}
+		
+	}
 	
 	/**
 	 * 删除System

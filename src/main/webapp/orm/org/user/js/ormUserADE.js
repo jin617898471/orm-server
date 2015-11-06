@@ -6,7 +6,6 @@ define(function(require,exports,module){
 		Validator = require("inno/validator/1.0.0/validator-debug"),
 		Calendar = require("inno/calendar/1.0.0/calendar-debug"),
 		AutoComplete=require("arale/autocomplete/1.3.0/autocomplete-debug"),
-//		CodeProvider = require("../../../common/js/codeProvider");
 		SelectTree=require("inno/select-tree/1.0.0/select-tree-debug");
 		Form = require("form"),
 		$=require("$");
@@ -59,8 +58,6 @@ define(function(require,exports,module){
     	element: '#UserADEForm',
     	failSilently: true
 	});
-	
-//	CodeProvider.provider({"queryBeans":[{'codeSerial':'USER_SEX','dataType':'select'}]});
 	
 	validator.addItem({
         element: 'input[name=\'userEmail\']',

@@ -1,6 +1,7 @@
 package cn.innosoft.fw.orm.server.resource;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.innosoft.fw.orm.client.service.LoginUserContext;
 import cn.innosoft.fw.orm.server.model.OrmOrganization;
 import cn.innosoft.fw.orm.server.model.OrmRole;
 import cn.innosoft.fw.orm.server.model.OrmUser;
@@ -55,7 +57,7 @@ public class OrmOrganizationResource {
 	@RequestMapping("/update")
 	@ResponseBody
 	public void updateOrg(OrmOrganization org,String[] enforceUpdateField){
-		ormOrganizationService.updateSome(org,Arrays.asList(enforceUpdateField));
+		ormOrganizationService.updateOrg(org,enforceUpdateField);
 	}
 	@RequestMapping("/tree")
 	@ResponseBody

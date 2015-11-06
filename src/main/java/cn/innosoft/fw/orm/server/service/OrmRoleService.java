@@ -15,6 +15,7 @@ import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
+import cn.innosoft.fw.orm.client.service.LoginUserContext;
 import cn.innosoft.fw.orm.server.model.OrmResource;
 import cn.innosoft.fw.orm.server.model.OrmRole;
 import cn.innosoft.fw.orm.server.model.OrmRoleResourceRight;
@@ -51,6 +52,8 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	 * @param ormRole
 	 */
 	public void addRole(OrmRole ormRole) {
+		ormRole.setCreateDt(new Date());
+		ormRole.setCreateUserId(LoginUserContext.getUser().getUserId());
 		ormRoleDao.save(ormRole);
 	}
 
@@ -61,6 +64,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	 */
 	public void updateRole(OrmRole ormRole) {
 		ormRole.setUpdateDt(new Date());
+		ormRole.setUpdateUserId(LoginUserContext.getUser().getUserId());
 		//ormRole.setUpdateUserId(LoginUserContext.getUserId());
 		ormRoleDao.update(ormRole);
 	}

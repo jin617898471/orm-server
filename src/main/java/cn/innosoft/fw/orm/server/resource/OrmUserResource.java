@@ -78,13 +78,7 @@ public class OrmUserResource {
 	@RequestMapping("/changePwd")
 	@ResponseBody
 	public String changePwd(OrmUser user){
-		try {
-			ormUserService.updateSome(user);
-			return "true";
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			return "false";
-		}
+		return ormUserService.ChangePwd(user);
 	}
 	
 	/**

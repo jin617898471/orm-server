@@ -1,8 +1,6 @@
 define(function(require, exports) {
 	var $ = require("$");
-	var test = require('./test')
-	// 验证
-	test.say();
+
 	$("input[name=account]").blur(
 		function() {
 			var account = $("input[name=account]").val();

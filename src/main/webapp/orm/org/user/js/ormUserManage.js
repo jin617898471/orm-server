@@ -4,7 +4,6 @@ define(function(require,exports){
 		Confirmbox=require("inno/dialog/1.0.0/confirmbox-debug"),
 		Form = require("form"),
 		SelectTree=require("inno/select-tree/1.0.0/select-tree-debug"),
-//		CodeProvider = require("../../common/js/codeProvider");
 		$=require("$");
 
 	require("easyui");
@@ -73,7 +72,6 @@ define(function(require,exports){
     	this.set('content',url);
     });
 	
-//	CodeProvider.provider({"queryBeans":[{'codeSerial':'USER_SEX','dataType':'select'}]});s
 	
 	inittable("");//初始化表格
 	
