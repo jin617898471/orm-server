@@ -1,6 +1,8 @@
 package cn.innosoft.fw.orm.server.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
+import cn.innosoft.fw.orm.client.service.LoginUserContext;
 import cn.innosoft.fw.orm.server.model.OrmOrgRoleMap;
 import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
 import cn.innosoft.fw.orm.server.model.OrmOrganization;
@@ -61,6 +64,8 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		update(pOrg);
 		org.setIsLeaf("Y");
 		org.setValidSign("Y");
+		org.setCreateDt(new Date());
+		org.setCreateUserId(LoginUserContext.getUser().getUserId());
 		String id = StringUtil.getUUID();
 		if("I".equals(org.getOrgType())){
 			org.setRootOrgId(id);
@@ -68,7 +73,13 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		org.setOrgId(id);
 		add(org);
 	}
-
+	public void updateOrg(OrmOrganization org,String[] enforceUpdateField){
+		List<String> fields = Arrays.asList(enforceUpdateField);
+		fields.add("updateDt");fields.add("updateUserId");
+		org.setUpdateDt(new Date());
+		org.setUpdateUserId(LoginUserContext.getUser().getUserId());
+		updateSome(org,Arrays.asList(enforceUpdateField));
+	}
 	/**
 	 * 删除组织机构
 	 * 

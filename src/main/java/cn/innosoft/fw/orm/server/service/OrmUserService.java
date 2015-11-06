@@ -18,6 +18,7 @@ import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
+import cn.innosoft.fw.orm.client.service.LoginUserContext;
 import cn.innosoft.fw.orm.server.model.OrmOrgRoleMap;
 import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
 import cn.innosoft.fw.orm.server.model.OrmOrganization;
@@ -33,8 +34,6 @@ import cn.innosoft.fw.orm.server.util.EnCryptUtil;
 
 /**
  * 
- * @author Zouch
- * @date 2015年9月28日 上午10:17:48
  */
 @Service
 public class OrmUserService extends AbstractBaseService<OrmUser, String> {
@@ -106,6 +105,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	public String addUser(OrmUser ormUser) {
 		try {
 			ormUser.setCreateDt(new Date());
+			ormUser.setCreateUserId(LoginUserContext.getUser().getUserId());
 			ormUser.setValidSign("Y");
 			ormUser.setUserPwd( EnCryptUtil.desMd5Encrypt( ormUser.getUserPwd() ));
 			ormUser= ormUserDao.save(ormUser);
@@ -141,6 +141,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	public String updateUser(OrmUser ormUser) {
 		try {
 			ormUser.setUpdateDt(new Date());
+			ormUser.setUpdateUserId(LoginUserContext.getUser().getUserId());
 			//需要强制更新的字段
 			String[] param = new String[]{"updateDt","updateUserId","userBirth","userEmail","userFax","userIdentitycard",
 					"userMobile","userName","userSex","userTel"};
@@ -154,6 +155,18 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		}
 	}
 
+	public String ChangePwd(OrmUser ormUser){
+		try {
+			ormUser.setUpdateDt(new Date());
+			ormUser.setUpdateUserId(LoginUserContext.getUser().getUserId());
+			ormUser.setUserPwd(EnCryptUtil.desMd5Encrypt( ormUser.getUserPwd() ));
+			updateSome(ormUser);
+			return "true";
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return "false";
+		}
+	}
 	/**
 	 * 查询单个账户
 	 * @param userId

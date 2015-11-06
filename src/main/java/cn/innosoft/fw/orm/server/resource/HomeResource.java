@@ -15,22 +15,19 @@ import cn.innosoft.fw.orm.client.service.LoginUserContext;
 @RequestMapping(value = "home")
 public class HomeResource {
 	
-	@RequestMapping(value = "/home")
+	@RequestMapping(value = "")
 	public String forwardUserManager(HttpSession session,HttpServletResponse response) {
 		String userName = LoginUserContext.getUsername();
 		List<TreeNode> resList = LoginUserContext.createResourceMenuTree();
 		session.setAttribute("userName", userName);
 		session.setAttribute("resList", resList);
 		String url = "";
-		if(resList.size()>0){
+		if(resList!=null && resList.size()>0){
 			url = resList.get(0).getValue();
+		}else{
+			return "redirect:/noright.jsp";
 		}
 		return "redirect:/"+url;
-//		try {
-//			response.sendRedirect(url);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 	}
 	
 }

@@ -16,6 +16,7 @@ import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
+import cn.innosoft.fw.orm.client.service.LoginUserContext;
 import cn.innosoft.fw.orm.server.model.OrmResource;
 import cn.innosoft.fw.orm.server.model.OrmRoleResourceRight;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
@@ -60,9 +61,10 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		ormResource.setValidSign("Y");
 		ormResource.setIsLeaf("Y");
 		ormResource.setCreateDt(new Date());
+		ormResource.setCreateUserId(LoginUserContext.getUser().getUserId());
 		// ormResource.setCreateUserId(LoginUserContext.getUserId());
 		// ormResource.setCreateUserId(LoginUserContext.getUserId());
-		ormResource.setUpdateDt(new Date());
+//		ormResource.setUpdateDt(new Date());
 		// ormResource.setUpdateUserId(LoginUserContext.getUserId());
 		// ormResource.setUpdateUserId(LoginUserContext.getUserId());
 		updateIfParentIsLeaf(parentId);
@@ -115,6 +117,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	public void updateResource(OrmResource ormResource) {
 		//ormResource.setUpdateUserId(LoginUserContext.getUserId());
 		ormResource.setUpdateDt(new Date());
+		ormResource.setUpdateUserId(LoginUserContext.getUser().getUserId());
 		ormResourceDao.update(ormResource);
 	}
 
@@ -147,6 +150,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		OrmResource res = new OrmResource();
 		res.setResourceId(id);
 		res.setCreateDt(new Date());
+		res.setCreateUserId(LoginUserContext.getUser().getUserId());
 		res.setIsLeaf("Y");
 		res.setParentResId("ROOT");
 		res.setValidSign("Y");
