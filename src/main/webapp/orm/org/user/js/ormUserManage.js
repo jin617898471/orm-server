@@ -24,7 +24,7 @@ define(function(require,exports){
 			url : _path+'/listPage',
 			sortName : 'u.CREATE_DT',
 			sortOrder : 'desc',
-			idField : 'u.USER_ID',
+			idField : 'userId',
 			frozenColumns : getGridFrozenColumns(),
 			columns : getGridColumns(),
 			pagination : true,
@@ -252,9 +252,9 @@ define(function(require,exports){
 	//初始化表格列表
 	function getGridColumns() {
 		return [[ 
-			     { field : 'userAcct', title : '用户账号', width : 80, align : 'left', sortable : true }, 
-			     { field : 'userName', title : '用户名称', width :80, align : 'left', sortable : true },
-			     { field : 'orgName', title : '组织机构', width : 260, align : 'left', sortable : true ,
+			     { field : 'userAcct', title : '用户账号', width : 80, align : 'left', sortable : false }, 
+			     { field : 'userName', title : '用户名称', width :80, align : 'left', sortable : false },
+			     { field : 'orgName', title : '组织机构', width : 260, align : 'left', sortable : false ,
 			    	  formatter: function(value,row,index){
 			    		  var abValue = value;
 			    		  var abtitle = "";
@@ -267,9 +267,9 @@ define(function(require,exports){
 			    		  }
 		              }	
 			     },  
-			     { field : 'userSex', title : '性别', width : 100, align : 'center', sortable : true ,formatter : formatterSexByCode}, 
-				 { field : 'userMobile', title : '手机号码', width : 120, align : 'center', sortable : true },
-				 { field : 'userTel', title : '办公电话', width : 110, align : 'center', sortable : true },
+			     { field : 'userSex', title : '性别', width : 100, align : 'center', sortable : false ,formatter : formatterSexByCode}, 
+				 { field : 'userMobile', title : '手机号码', width : 120, align : 'center', sortable : false },
+				 { field : 'userTel', title : '办公电话', width : 110, align : 'center', sortable : false },
 			 	 { field : 'opt', title : '操作', width : 140, align : 'center', formatter : getGridOperation } 
 		 		]];
 	}

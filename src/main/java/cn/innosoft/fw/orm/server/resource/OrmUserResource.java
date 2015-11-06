@@ -121,7 +121,7 @@ public class OrmUserResource {
 	@ResponseBody
 	public void deleteAction(@PathVariable String id) {
 		log.info("删除用户");
-		ormUserService.delete(id);
+		ormUserService.deleteUser(id);
 	}
 
 

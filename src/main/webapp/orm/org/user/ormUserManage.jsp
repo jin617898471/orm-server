@@ -11,6 +11,7 @@
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/base.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/widget.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>orm/org/user/css/ormUserManage.css">
+<script type="text/javascript" src="<%=basePath%>orm/userinfo.js"></script>
 <base href="<%=basePath%>">
 </head>
 <body>
