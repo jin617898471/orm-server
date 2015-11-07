@@ -85,6 +85,7 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 			ormSystem.setCreateUserId(LoginUserContext.getUser().getUserId());
 			String[] colums = new String[]{"systemDesc","systemName","updateDt","updateUserId"};
 			updateSome(ormSystem,Arrays.asList(colums));
+			ormResourceService.updateSystemResourecName(ormSystem);
 			//没有出现异常,返回"true"到前端
 			return "true";
 		}catch(Exception e){

@@ -103,6 +103,7 @@ define(function(require, exports, module) {
 	});
 
 	validator.element.on("submit", function(e) {
+		$('#btnSave').attr("disabled", true);
 		e.preventDefault();
 		validator.execute(function(err) {
 			if (checkAll) {
@@ -128,10 +129,12 @@ define(function(require, exports, module) {
 							if(parent.resetutilsearchlist){
 								parent.resetutilsearchlist();
 							}
+							$('#btnSave').attr("disabled", false);
 						},
 						errorFn : function() {
 							showInformation(false);
 							$(".msgText").text(name+"失败");
+							$('#btnSave').attr("disabled", false);
 						},
 					};
 					systemADEForm.saveData(option);

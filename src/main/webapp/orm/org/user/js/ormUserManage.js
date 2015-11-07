@@ -254,7 +254,7 @@ define(function(require,exports){
 		return [[ 
 			     { field : 'userAcct', title : '用户账号', width : 80, align : 'left', sortable : false }, 
 			     { field : 'userName', title : '用户名称', width :80, align : 'left', sortable : false },
-			     { field : 'orgName', title : '组织机构', width : 260, align : 'left', sortable : false ,
+			     { field : 'orgName', title : '组织机构', width : 250, align : 'left', sortable : false ,
 			    	  formatter: function(value,row,index){
 			    		  var abValue = value;
 			    		  var abtitle = "";

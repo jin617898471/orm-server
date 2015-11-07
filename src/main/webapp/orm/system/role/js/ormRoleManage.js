@@ -81,7 +81,7 @@ define(function(require,exports){
 		});
 	};
 
-	setuputil = function(arrvalue,roleids) {
+	setuputil = function(arrvalue) {
 		var s = {
 				"rules" : [],
 				"groups" : [],
@@ -92,16 +92,16 @@ define(function(require,exports){
 				op : "equal",
 				value : arrvalue[0]
 			};
-			if(modeljson.value){
+			if(arrvalue[0]){
 				s["rules"].push(modeljson);
 			}
 			
-			modeljson = {
-				field : "roleId",
-				op : "in",
-				value : roleids
-			};
-			s["rules"].push(modeljson);
+//			modeljson = {
+//				field : "roleId",
+//				op : "in",
+//				value : roleids
+//			};
+//			s["rules"].push(modeljson);
 			modeljson = {
 					field : "roleType",
 					op : "notequal",
@@ -114,26 +114,26 @@ define(function(require,exports){
 	
 	var roleSystem = "";
 	var roleids = "";
-	setupajax = function() {
-		var parameterS = {
-				url : 'role/ormrole/system/roleids',
-				type : "POST",
-				async : false,
-				success : function(data) {
-					roleSystem = data[0];
-					roleids = data[1];
-				},
-				error : function(result) {
-					Confirmbox.alert('获取角色ids数据错误！');
-				}
-		};
-		$.ajax(parameterS);
-	};
+//	setupajax = function() {
+//		var parameterS = {
+//				url : 'role/ormrole/system/roleids',
+//				type : "POST",
+//				async : false,
+//				success : function(data) {
+//					roleSystem = data[0];
+//					roleids = data[1];
+//				},
+//				error : function(result) {
+//					Confirmbox.alert('获取角色ids数据错误！');
+//				}
+//		};
+//		$.ajax(parameterS);
+//	};
 	setuplist = function() {
-		setupajax();
+//		setupajax();
 		var arrvalue = [];
 		arrvalue.push(roleSystem);
-		setuputil(arrvalue,roleids);
+		setuputil(arrvalue);
 	};
 	setuplist();// 初始化表格
 
@@ -146,12 +146,12 @@ define(function(require,exports){
 	});
 	
 	searchlist = function() {
-		setupajax();
+//		setupajax();
 		var arrvalue = [];
 		$.each($(".ui-select-selected"), function(n, datavalue) {
 			arrvalue.push($(datavalue).attr("data-value"));
 		});
-		setuputil(arrvalue,roleids);
+		setuputil(arrvalue);
 	};
 	
 	// 重置
@@ -203,7 +203,7 @@ define(function(require,exports){
 
 				});
 			});
-
+	
 	// 初始化系统下拉框查询列
 	getSystemList = function() {
 		var arr = [];
@@ -213,7 +213,7 @@ define(function(require,exports){
 			type : "POST",
 			async : false,
 			success : function(data) {
-				arr.push({value:null,text:'所有系统'});
+				arr.push({value:'',text:'所有系统'});
 				$.each(data, function(n, systemObj) {
 					modelJSON = {
 						value : systemObj.systemId,
@@ -229,13 +229,13 @@ define(function(require,exports){
 		$.ajax(parameterS);
 		return arr;
 	};
-
+	var systems = getSystemList();
 	// 初始化系统下列列表
 	var systemId = new Select({
 		trigger : '.systemId',
 		width : '190px',
 		name : 'systemId',
-		model : getSystemList(),
+		model : systems,
 	}).render();
 
 	// 重置下列列表方法
@@ -290,10 +290,15 @@ define(function(require,exports){
 	function getGridColumns() {
 		return [[ 
 		         { field : 'roleNameCn', title : '中文名称', width : 250, align : 'center', sortable : true }, 
-		         { field : 'roleNameEn', title : '英文名称', width : 250, align : 'center', sortable : true },  
+		         { field : 'roleNameEn', title : '英文名称', width : 240, align : 'center', sortable : true },  
 			     { field : 'systemId', title : '所属系统', width : 250, align : 'center', sortable : true ,
 			        	  formatter: function(value,row,index){
-			            	  return getSystemName(value);
+			        		  for(var i=0;i<systems.length;i++){
+			        			  if(value==systems[i].value){
+			        				  return systems[i].text;
+			        			  }
+			        		  }
+			            	  
 			              }
 			     }, 
 			 	 { field : 'opt', title : '操作', width : 120, align : 'center', formatter : getGridOperation } 

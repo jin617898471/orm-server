@@ -20,8 +20,12 @@ define(function(require, exports, module) {
 		});
 		$(".ui-textarea").attr("disabled", true);
 		$(".ui-textarea-border").addClass("ui-textarea-disable");
-	} else {
+		$("#roleSystem").hide();
+	} else if(sign == "edit"){
+		$("#roleSystem").hide();
+	}else {
 		$("input[name='roleNameEn']").attr("disabled", true);
+		$("#roleSystem").show();
 	}
 	var roleSystem = $("#systemId").val();
 
@@ -141,10 +145,6 @@ define(function(require, exports, module) {
 	}).render();
 
 	systemId.selectValue(roleSystem);
-	
-	if (sign == "detail") {
-		$("a").unbind();
-	};
 
 	// submit
 	var roleADEForm = new Form({
@@ -154,6 +154,7 @@ define(function(require, exports, module) {
 	});
 
 	validator.element.on("submit", function(e) {
+		$('#btnSave').attr("disabled", true);
 		e.preventDefault();
 		validator.execute(function(err) {
 			if (checkAllSelect()) {
@@ -185,11 +186,12 @@ define(function(require, exports, module) {
 									parent.tableRefresh();
 								}
 							}
+							$('#btnSave').attr("disabled", false);
 						},
 						errorFn : function(result) {
 							showInformation(false);
 							$(".msgText").text(name+"失败");
-							
+							$('#btnSave').attr("disabled", false);
 						},
 					});
 					return false;

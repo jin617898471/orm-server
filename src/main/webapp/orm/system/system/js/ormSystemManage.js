@@ -147,8 +147,8 @@ define(function(require, exports, module) {
 	// 初始化表格列表
 	function getGridColumns() {
 		return [[ 
-			{ field : 'systemName', title : '系统名称', width : 335, align : 'left', sortable : true },
-			{ field : 'systemCode', title : '系统标示符', width : 335, align : 'left', sortable : true },
+			{ field : 'systemName', title : '系统名称', width : 330, align : 'left', sortable : true },
+			{ field : 'systemCode', title : '系统标示符', width : 330, align : 'left', sortable : true },
 			{ field : 'opt', title : '操作', width : 200, align : 'center', formatter : getGridOperation } 
 			]];
 	}

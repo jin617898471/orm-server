@@ -35,8 +35,8 @@
 						<div class="ui-form-explain"></div>
 					</div>
 				</div>
-				<div class="ui-form-item-column clearfix">
-					<div class="ui-form-item-col">
+				<div class="ui-form-item-column clearfix" id="roleSystem" style = "display:none">
+					<div class="ui-form-item-col " >
 						<label class="ui-label">所属系统:</label>
 						<a class="ui-select-trigger systemId" style = "width:188px">
             				<span data-role="trigger-content"></span>          
@@ -44,10 +44,6 @@
         				</a>
 						<span class="ui-form-required">*</span>
 						<div class="ui-form-explain"></div>
-					</div>
-					<div class="ui-form-item-col">
-						<label class="ui-label">角色类型:</label>
-						<input class="ui-input ui-input-w190" name="roleType"	value="${OrmRole.roleType}" style = "width:188px">
 					</div>
 					<!-- <div class="ui-form-item-col"  style="display: none">
 						<label class="ui-label">角色类型:</label>

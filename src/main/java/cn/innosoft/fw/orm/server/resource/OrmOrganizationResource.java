@@ -110,9 +110,9 @@ public class OrmOrganizationResource {
 	}
 	@RequestMapping("/user/add")
 	@ResponseBody
-	public void addUserToPost(String userId,String orgId){
+	public String addUserToPost(String userId,String orgId){
 		log.info("新增岗位下的用户");
-		ormOrganizationService.addUserToOrg(userId, orgId);
+		return ormOrganizationService.addUserToOrg(userId, orgId);
 	}
 	@RequestMapping("/user/delete")
 	@ResponseBody

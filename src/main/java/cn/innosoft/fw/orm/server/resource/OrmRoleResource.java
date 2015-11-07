@@ -19,9 +19,7 @@ import cn.innosoft.fw.biz.log.FwLog;
 import cn.innosoft.fw.biz.log.FwLogFactory;
 import cn.innosoft.fw.orm.server.model.OrmRole;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
-import cn.innosoft.fw.orm.server.model.SelectTreeBean;
 import cn.innosoft.fw.orm.server.model.ZtreeBean;
-import cn.innosoft.fw.orm.server.service.OrmOrganizationService;
 import cn.innosoft.fw.orm.server.service.OrmResourceService;
 import cn.innosoft.fw.orm.server.service.OrmRoleService;
 import cn.innosoft.fw.orm.server.service.OrmSystemService;
@@ -207,25 +205,25 @@ public class OrmRoleResource {
 		return ormRoleService.findValid(pageRequest);
 	}
 	
-	/**
-	 * 查询system第一条记录的id和系统关联的角色ids
-	 * 
-	 * @return
-	 */
-	@RequestMapping("/system/roleids")
-	@ResponseBody
-	public List<String> getRoleIdsBySystemIdAction() {
-		List<OrmSystem> orms = ormSystemService.findOrmSystemAll();
-		List<String> map = new ArrayList<String>();
-		if (orms != null && orms.size() > 0) {
-			map.add(orms.get(0).getSystemId());
-			//LoginUserContext.getUserAllSystemRoles()
-			//OrmUser user = new OrmUserService().findByUserId(LoginUserContext.getUserId());
-			//map.add(Util.convertListToString(ormRoleService.findRoleBySystemId(user.get), false));
-			map.add(OrmResourceService.convertListToString(ormRoleService.findValidRoleIdList(), false));
-		}
-		return map;
-	}
+//	/**
+//	 * 查询system第一条记录的id和系统关联的角色ids
+//	 * 
+//	 * @return
+//	 */
+//	@RequestMapping("/system/roleids")
+//	@ResponseBody
+//	public List<String> getRoleIdsBySystemIdAction() {
+//		List<OrmSystem> orms = ormSystemService.findOrmSystemAll();
+//		List<String> map = new ArrayList<String>();
+//		if (orms != null && orms.size() > 0) {
+//			map.add(orms.get(0).getSystemId());
+//			//LoginUserContext.getUserAllSystemRoles()
+//			//OrmUser user = new OrmUserService().findByUserId(LoginUserContext.getUserId());
+//			//map.add(Util.convertListToString(ormRoleService.findRoleBySystemId(user.get), false));
+//			map.add(OrmResourceService.convertListToString(ormRoleService.findValidRoleIdList(), false));
+//		}
+//		return map;
+//	}
 		
 	/**
 	 * 资源授权

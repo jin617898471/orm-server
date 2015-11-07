@@ -183,6 +183,7 @@ define(function(require,exports,module){
 		};
 		
 		validator.element.on("submit", function(e) {
+			$('#btnSave').attr("disabled", true);
 			e.preventDefault();
 	        validator.execute(function(err) {
 	        	if(checkonly()){
@@ -212,6 +213,7 @@ define(function(require,exports,module){
 										parent.tableRefresh($("input[name = parentResId]").val(),arr[0],$("input[name = resourceName]").val(),type,arr[1],arr[2]);
 									}
 								}
+								$('#btnSave').attr("disabled", false);
 							},
 							errorFn :function(result){
 								if(result){
@@ -220,6 +222,7 @@ define(function(require,exports,module){
 									showInformation(false);
 									$(".msgText").text(name+"失败");
 								}
+								$('#btnSave').attr("disabled", false);
 							},
 					});
 						return false;

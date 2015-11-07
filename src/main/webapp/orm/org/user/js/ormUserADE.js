@@ -96,21 +96,21 @@ define(function(require,exports,module){
 	
 	// 验证
 	
-	$("input[name=userTel]").blur(
-			function() {
-				var isPhone=/^((0\d{2,3})-)?(\d{7,8})(-(\d{3,}))?$/;
-				if(!isPhone.test($("input[name=userTel]").val())){
-					message = '电话格式不正确！';
-					$(".msgText").html(message);
-					$(".iconfonthide").hide();
-					$(".iconfonthide2").show();
-					return false;
-		        }
-				$(".iconfonthide").show();
-				$(".msgText").html("");
-				return true;
-			}
-		);
+//	$("input[name=userTel]").blur(
+//			function() {
+//				var isPhone=/^((0\d{2,3})-)?(\d{7,8})(-(\d{3,}))?$/;
+//				if(!isPhone.test($("input[name=userTel]").val())){
+//					message = '电话格式不正确！';
+//					$(".msgText").html(message);
+//					$(".iconfonthide").hide();
+//					$(".iconfonthide2").show();
+//					return false;
+//		        }
+//				$(".iconfonthide").show();
+//				$(".msgText").html("");
+//				return true;
+//			}
+//		);
 	$("input[name=userAcct]").blur(
 			function() {
 				var span = $(this).next();
@@ -231,6 +231,7 @@ define(function(require,exports,module){
 	one.selectValue(oserial);
 	
 	validator.element.on("submit", function(e) {
+		$('#btnSave').attr("disabled", true);
 		e.preventDefault();
         validator.execute(function(err) {
         	if (checkAllSelect()) {
@@ -264,11 +265,13 @@ define(function(require,exports,module){
 								$(".msgText").text("账号重复！请重新输入");
 								$(".iconfonthide").hide();
 							}
+							$('#btnSave').attr("disabled", false);
 						},
 						errorFn :function(result){
 							showInformation(false);
 							$(".msgText").text(name+"失败");
 							$(".iconfonthide").hide();
+							$('#btnSave').attr("disabled", false);
 						},
 				});
 					return false;

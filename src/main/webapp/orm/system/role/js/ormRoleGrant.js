@@ -91,7 +91,7 @@ define(function(require){
 				check: {
 					enable: true,
 					chkStyle: "checkbox",
-					chkboxType: {"Y" : "s", "N" : "ps"} 
+					chkboxType: {"Y" : "", "N" : ""} 
 				}
 		};
 	$.fn.zTree.init($("#fn-tree"), fnTreeSetting, getFnTreeData());	

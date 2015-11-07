@@ -107,15 +107,20 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 	 * @param userId
 	 * @param orgId
 	 */
-	public void addUserToOrg(String userId, String orgId) {
+	public String addUserToOrg(String userId, String orgId) {
+		List<OrmOrgUserMap> maps = ormOrgUserMapDao.findByUserIdAndOrgId(userId, orgId);
+		if(maps.size() > 0 ){
+			return "用户已添加在岗位下";
+		}
 		createOrgUserMap(userId, orgId);
 		List<OrmOrgRoleMap> orms = ormOrgRoleMapDao.findByOrgId(orgId);
 		if (orms.size() == 0) {
-			return;
+			return "新增成功";
 		}
 		for(OrmOrgRoleMap orm : orms){
 			ormUserService.createUserRoleMap(userId, orm.getRoleId(), orgId, orm.getSystemId());
 		}
+		return "新增成功";
 	}
 	public void createOrgRoleMap(String orgId,String roleId,String systemId){
 		OrmOrgRoleMap orm = new OrmOrgRoleMap();
@@ -155,6 +160,11 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 	 * @param orgId
 	 */
 	public void deleteUserFromOrg(String userId, String orgId) {
+		List<OrmOrgUserMap> maps = ormOrgUserMapDao.findByUserId(userId);
+		if(maps.size()==1){
+			ormUserService.deleteUser(userId);
+			return;
+		}
 		ormOrgUserMapDao.deleteByUserIdAndOrgId(userId, orgId);
 		List<OrmOrgRoleMap> orms = ormOrgRoleMapDao.findByOrgId(orgId);
 		if (orms.size() == 0) {

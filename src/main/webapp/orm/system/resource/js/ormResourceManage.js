@@ -367,7 +367,15 @@ define(function(require) {
 			title : '类型',
 			width : 80,
 			align : 'left',
-			sortable : true
+			sortable : true,
+			formatter : function(value,row,index){
+				var resTypes = getResTypeList();
+				for(var i=0;i<resTypes.length;i++){
+					if(value == resTypes[i].resourceType){
+						return resTypes[i].resourceTypeName;
+					}
+				}
+			}
 		},// ,formatter
 		// :
 		// formatterTypeByResource},

@@ -33,8 +33,8 @@
 			<#if userName?? && userName != ''>
 				AND u.USER_NAME LIKE :userName
 			</#if>
-			<#if userEmail?? && userEmail != ''>
-				AND u.USER_MOBILE LIKE :userEmail
+			<#if userMobile?? && userMobile != ''>
+				AND u.USER_MOBILE LIKE :userMobile
 			</#if>
 			<#if orgId??>
 				AND O.ORG_ID IN (SELECT DISTINCT ORG_ID FROM ORM_ORGANIZATION START WITH ORG_ID IN (:orgId) CONNECT BY PRIOR ORG_ID=PARENT_ORG_ID)

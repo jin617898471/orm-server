@@ -121,6 +121,13 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		ormResourceDao.update(ormResource);
 	}
 
+	public void updateSystemResourecName(OrmSystem system){
+		OrmResource res = ormResourceDao.findFirstByResourceTypeAndSystemId("000", system.getSystemId());
+		res.setResourceName(system.getSystemName());
+		res.setUpdateDt(new Date());
+		res.setUpdateUserId(LoginUserContext.getUserId());
+		ormResourceDao.update(res);
+	}
 
 	/**
 	 * 生成ZTREE，权限建模的时候用
@@ -473,7 +480,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		}
 
 		// 是否选中
-		if (grantedResourceIdsList.contains(id) || grantedResourceIdsList.contains(pId)) {
+		if (grantedResourceIdsList.contains(id)) {
 			treebean.setChecked(true);
 		}
 		Map<String, Object> attributes = new HashMap<String, Object>();
