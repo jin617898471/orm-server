@@ -362,16 +362,35 @@ define(function(require){
 		var attrs = {};
 		var data ={};
 		var enforceUpdateField="";
+		var isbreak = false;
 		var input = $(this).parent().parent().parent().find("input").each(function(){
 			var value = $(this).val();
 			var name = $(this).attr("name");
 			if( value ){
 				data[ name ] = value;
 			}else{
+				if("userId"==name){//如果用户id不存在，说明用户关联时没有选择，不能保存
+					isbreak = true;
+					return false;
+				}
 				enforceUpdateField+=","+name;
 			}
 			attrs[ name ] = value;
 		});
+		if(isbreak){
+			return ;
+		}else{
+			if(data.userId){ //解决用户联想搜索选中用户后又删除的场景
+				var tarr = data.userId.split("_split_");
+				var tid = tarr[0];
+				var tname = tarr[1];
+				if(tname!=data.userName){
+					return ;
+				}else{
+					data.userId = tid;
+				}
+			}
+		}
 		var input = $(this).parent().parent().parent().find("textarea").each(function(){
 			var value = $(this).val();
 			var name = $(this).attr("name");
@@ -524,7 +543,7 @@ define(function(require){
 				var newlist = $.extend(true,[],list);
 				if("ry-add" ==nr ){ //新增人员的面板只显示姓名
 					var url = urlCfg["ry_add"];
-					newlist = [ {en:"userName",cn:"人员姓名"},{en:"userId",cn:"userId",hide:true},{en:"orgId",cn:"orgId",hide:true,text:getSelectNode().value}  ];
+					newlist = [ {en:"userName",cn:"人员姓名"},{en:"userId",cn:"userId",hide:true,required:true},{en:"orgId",cn:"orgId",hide:true,text:getSelectNode().value}  ];
 				}else{
 					var url = urlCfg["org_add"];
 					$.each(newlist,function(index,node){
@@ -581,7 +600,7 @@ define(function(require){
 			classPrefix:"ui-select",
 			html:"<i style='color:red'> {{userName}}</i>&nbsp;&nbsp;&nbsp;{{userAcct}}"
 		}).on('itemSelected', function(data, item){
-			$(".userId").val( data.userId ); //联想搜索选中时把userId存在userName的input中
+			$(".userId").val( data.userId+"_split_"+data.userName ); //联想搜索选中时把userId存在userName的input中
 		}).render();
 		$(".ui-select").css("zIndex",999);
 	}
