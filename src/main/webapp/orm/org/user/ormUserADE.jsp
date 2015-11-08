@@ -41,18 +41,18 @@
 						<span class="ui-form-required">*</span>
 						<div class="ui-form-explain"></div>
 					</div>
-					<div class="ui-form-item-col userPwd">
+				</div>
+				<div class="ui-form-item-col userPwd">
 					<label class="ui-label">用户登录密码:</label>
-					<input class="ui-input ui-input-w190 userPassword" id = "userAcctPwd" name="userPwd" type = "password" value="${OrmUser.userPwd}" >
+					<input class="ui-input ui-input-w190 " id = "userAcctPwd" name="userPwd" type = "password" value="${OrmUser.userPwd}" >
 					<span class="ui-form-required">*</span>
 					<div class="ui-form-explain"></div>
 				</div>
 				<div class="ui-form-item-col userPwd">
 					<label class="ui-label">重复登录密码:</label>
-					<input class="ui-input ui-input-w190 userPassword"  type = "password"  name ="password-confirmation" value="${OrmUser.userPwd}">
+					<input class="ui-input ui-input-w190 "  type = "password"  name ="password-confirmation" value="${OrmUser.userPwd}">
 					<span class="ui-form-required">*</span>
 					<div class="ui-form-explain"></div>
-				</div>
 				</div>
 				<div class="ui-form-item-have2col">
 					<label class="ui-label">组织机构:</label>
