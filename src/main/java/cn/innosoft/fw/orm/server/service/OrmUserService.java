@@ -230,7 +230,13 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	 */
 	public List<OrmUser> userAssociate(String userAcct) {
 		userAcct = "%" + userAcct + "%";
-		List<OrmUser> list = ormUserDao.findFirst10ByUserAcctLikeOrUserNameLikeOrderByCreateDt(userAcct,userAcct);
+		List<OrmUser> list = ormUserDao.findFirst10ByUserAcctLikeOrUserNameLikeAndValidSignOrderByCreateDt(userAcct,userAcct,"Y");
+		for(int i=list.size()-1;i>=0;i--){
+			OrmUser user = list.get(i);
+			if("N".equals( user.getValidSign() )){
+				list.remove(i);
+			}
+		}
 		return list;
 	}
 

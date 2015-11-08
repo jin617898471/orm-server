@@ -353,7 +353,7 @@ define(function(require){
 	//右侧面板-组织机构、用户的新增、编辑、删除时保持按钮事件注册
 	
 	$(".iorgjr").live("click",function(){
-		window.open("org/forward/manage?orgId="+getSelectNode().value);
+		window.open(basePath+"org/forward/manage?orgId="+getSelectNode().value);
 	});
 		
 	$(".orgORuserSave").live("click",function(){
@@ -380,7 +380,7 @@ define(function(require){
 		if(isbreak){
 			return ;
 		}else{
-			if(data.userId){ //解决用户联想搜索选中用户后又删除的场景
+			if("ry-add"==opttype && data.userId){ //解决用户联想搜索选中用户后又删除的场景
 				var tarr = data.userId.split("_split_");
 				var tid = tarr[0];
 				var tname = tarr[1];
@@ -510,6 +510,14 @@ define(function(require){
 		return text;
 	}
 	
+	function getSelectRootNode( node ){
+		var pnode = node.getParentNode();
+		if( pnode && pnode.value ){
+			return getSelectRootNode(pnode);
+		}
+		return node.value;
+	}
+	
 	$(".ui-button").bind("click",function(){
 		var nr = $(this).attr("opttype");
 		if( titleCfg[nr] ){ //人员或组织机构的增删改
@@ -550,7 +558,7 @@ define(function(require){
 						node.text="";
 					});
 					newlist.push({en:"parentOrgId",cn:"parentOrgId",hide:true,text:getSelectNode().value});
-					var rid = (getSelectNode().getParentNode() && getSelectNode().getParentNode().value) || getSelectNode().value;
+					var rid = getSelectRootNode(getSelectNode());
 					newlist.push({en:"rootOrgId",cn:"rootOrgId",hide:true,text:rid});
 					newlist.push({en:"orgType",cn:"orgType",hide:true,text:orgtype.toUpperCase()});
 				}
