@@ -152,17 +152,17 @@ define(function(require,exports,module){
 		return true;
 	};
 	
-	var type = new Select({
-    	trigger: '.userAcctType',
-    	width:'190px',
-    	name:'userAcctType',
-    	model: [
-        	{value:'NORMAL', text:'普通用户',selected:true},
-        	{value:'SYSTEM', text:'系统用户',selected:true},
-        	{value:'ADMIN', text:'管理员', selected: true},
-        	{value:'ROOT', text:'超级管理员', selected: true}
-    	]
-	}).render();
+//	var type = new Select({
+//    	trigger: '.userAcctType',
+//    	width:'190px',
+//    	name:'userAcctType',
+//    	model: [
+//        	{value:'NORMAL', text:'普通用户',selected:true},
+//        	{value:'SYSTEM', text:'系统用户',selected:true},
+//        	{value:'ADMIN', text:'管理员', selected: true},
+//        	{value:'ROOT', text:'超级管理员', selected: true}
+//    	]
+//	}).render();
 	
 	var sex = new Select({
     	trigger: '.userSex',
@@ -231,13 +231,13 @@ define(function(require,exports,module){
 	one.selectValue(oserial);
 	
 	validator.element.on("submit", function(e) {
-		$('#btnSave').attr("disabled", true);
 		e.preventDefault();
         validator.execute(function(err) {
         	if (checkAllSelect()) {
 				if(err){
 					!err && validator.get("autoSubmit") && validator.element.get(0).submit(); 
 				}else{
+					$('#btnSave').attr("disabled", true);
 					var type ;
 					var name;
 					if(sign == 'edit'){
@@ -290,34 +290,34 @@ define(function(require,exports,module){
 	});
 	
 	//新增联想搜索事件
-	var addAotoEvent = function (){
-		var uid = $("input[name=userId]").val();
-		if(uid){//若果是编辑或查看则没有联想搜索
-			return ;
-		}
-		var complete =  new AutoComplete({
-	 	        trigger: ".userAcctCn",
-	 	        dataSource: _path+'/getuserlist?userAcctCn={{query}}',
-	 	        width: 150
-	 	    }).on('itemSelected', function(data, item){
-	 	    	console.info(data);
-		 	      initInput(data);
-	 	    }).render();
-	};
-	addAotoEvent();
+//	var addAotoEvent = function (){
+//		var uid = $("input[name=userId]").val();
+//		if(uid){//若果是编辑或查看则没有联想搜索
+//			return ;
+//		}
+//		var complete =  new AutoComplete({
+//	 	        trigger: ".userAcctCn",
+//	 	        dataSource: _path+'/getuserlist?userAcctCn={{query}}',
+//	 	        width: 150
+//	 	    }).on('itemSelected', function(data, item){
+//	 	    	console.info(data);
+//		 	      initInput(data);
+//	 	    }).render();
+//	};
+//	addAotoEvent();
 	
-	var initInput = function(data){
-		for(var i in data){
-			var input = $("input[name="+i+"]");
-			if(input.length>0){
-				input.val(data[i]);
-			}
-		}
-		$("input[name=password-confirmation]").val( data.userAcctPwd );
-		$("textarea[name=userAcctDesc]").html( data.userAcctDesc );
-		sex.selectValue( data.userSex);
-		one.selectValue( data.orgIds );
-	};
+//	var initInput = function(data){
+//		for(var i in data){
+//			var input = $("input[name="+i+"]");
+//			if(input.length>0){
+//				input.val(data[i]);
+//			}
+//		}
+//		$("input[name=password-confirmation]").val( data.userAcctPwd );
+//		$("textarea[name=userAcctDesc]").html( data.userAcctDesc );
+//		sex.selectValue( data.userSex);
+//		one.selectValue( data.orgIds );
+//	};
 	
 	var showInformation = function(type){
 		if(type){
