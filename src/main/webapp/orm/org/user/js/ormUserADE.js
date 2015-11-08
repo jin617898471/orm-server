@@ -38,7 +38,7 @@ define(function(require,exports,module){
 		
 	}else if(sign == "edit"){
 		$(".userAcct").attr("disabled", true);
-		$(".userPwd").hide();
+		$(".userPwd").remove();
 		$("#btnSave").show();
 		$("#btnCancel").show();
 		$(".userPassword").remove();
