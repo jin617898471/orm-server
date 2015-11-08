@@ -167,6 +167,15 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 			return "false";
 		}
 	}
+	
+	public String changePassword(String userId, String oldPwd, String newPwd) {
+		OrmUser user = findOne(userId);
+		String pwd = user.getUserPwd();
+		if( pwd.equals( EnCryptUtil.desMd5Encrypt(oldPwd) )){
+			user.setUserPwd(  EnCryptUtil.desMd5Encrypt(newPwd) );
+		}
+		return ChangePwd(user);
+	}
 	/**
 	 * 查询单个账户
 	 * @param userId
