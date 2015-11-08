@@ -173,8 +173,10 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		String pwd = user.getUserPwd();
 		if( pwd.equals( EnCryptUtil.desMd5Encrypt(oldPwd) )){
 			user.setUserPwd(  EnCryptUtil.desMd5Encrypt(newPwd) );
+			updateSome(user);
+			return "true";
 		}
-		return ChangePwd(user);
+		return "false";
 	}
 	/**
 	 * 查询单个账户
