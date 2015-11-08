@@ -40,7 +40,7 @@
 									</div>
 									<div class="search-form-2item">
 										<div class="search-form-item-col">
-											<label class="ui-label">电话号码:</label>
+											<label class="ui-label">手机号码:</label>
 											<input class="ui-input ui-input-w190" name="userMobile" data-rule-op="like">
 										</div>
 										<div class="search-form-item-col">
