@@ -73,7 +73,7 @@ define(function(require){
 	function getTreeUrl(){
 		if(IOrgId){
 			$(".ui-button-add[opttype=i-add").hide();
-			$(".ui-button-add[opttype=i-delete").hide();
+			$(".ui-button-delete[opttype=i-delete").hide();
 			return urlCfg["org_tree"]+"/"+IOrgId;
 		}else{
 			$(".ui-button-add[opttype=o-add").hide();
