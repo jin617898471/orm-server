@@ -35,14 +35,14 @@
 						<div class="ui-form-explain"></div>
 					</div>
 				</div>
-				<div class="ui-form-item-have2col">
-					<label class="ui-label">系统描述:</label>
-					<div class="ui-textarea-container">
-					    <div class="ui-textarea-border" style="height:80px;">
-						    <textarea class="ui-textarea" name="systemDesc" id="systemDesc">${OrmSystem.systemDesc}</textarea>
-						</div>
-					</div>
-				</div>
+<!-- 				<div class="ui-form-item-have2col"> -->
+<!-- 					<label class="ui-label">系统描述:</label> -->
+<!-- 					<div class="ui-textarea-container"> -->
+<!-- 					    <div class="ui-textarea-border" style="height:80px;"> -->
+<%-- 						    <textarea class="ui-textarea" name="systemDesc" id="systemDesc">${OrmSystem.systemDesc}</textarea> --%>
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
 			</div>
 		</div>
 		<div class="ui-form-fixed">

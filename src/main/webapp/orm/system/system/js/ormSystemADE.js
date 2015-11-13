@@ -87,7 +87,7 @@ define(function(require, exports, module) {
 		$(":text").each(function() {
 			this.disabled = true;
 		});
-		$("#systemDesc").attr("disabled", true);
+//		$("#systemDesc").attr("disabled", true);
 		$(".ui-textarea-border").addClass("ui-textarea-disable");
 	} else if (sign == "edit") {
 		$("#systemCode").attr("disabled", true);

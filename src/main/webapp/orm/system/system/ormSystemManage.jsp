@@ -6,23 +6,30 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>系统管理主页</title>
-<link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/base.css">
-<link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/widget.css">
-<link rel="stylesheet" type="text/css" href="<%=basePath%>orm/system/system/css/ormSystemManage.css">
-<base href="<%=basePath%>">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>系统管理</title>
+	<link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/base.css" />
+	<link rel="stylesheet" type="text/css" href="<%=basePath%>resources/commons/css/widget.css" />
+	<link rel="stylesheet" type="text/css" href="<%=basePath%>orm/manager.css" />
+	<link rel="stylesheet" type="text/css" href="<%=basePath%>orm/system/system/css/ormSystemManage.css" />
+	<base href="<%=basePath%>">
+	<style>
+		.main {
+		    width: 990px;
+		}
+	</style>
 </head>
 <body>
 <div class="main">
 		<div class="ui-grid-row">
-            <div class="ui-grid-24">
+            <div class="ui-grid-25">
             	<div class="ui-box">
             		<div class="ui-box-head">
                         <div class="ui-box-head-container">
                             <h3 class="ui-box-head-title">系统管理</h3>
                         </div>
                     </div>
+                    
                     <div class="ui-box-container">
                     	<div class="ui-box-content ui-box-no-padding">
                     		<div class="search-box">
@@ -69,7 +76,7 @@
             	</div>
            	</div>
         </div>
-	</div>
+</div>
 	<script type="text/javascript" src="resources/commons/js/seajs/sea-debug.js" ></script>
     <script type="text/javascript" src="resources/commons/js/seajs/sea-config-debug.js"></script>
 	<script>

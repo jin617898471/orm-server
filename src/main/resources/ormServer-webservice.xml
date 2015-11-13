@@ -6,7 +6,7 @@
                    http://www.springframework.org/schema/beans/spring-beans.xsd
                    http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
-   <jaxws:server id="ormServer" serviceClass="cn.innosoft.fw.orm.server.webservice.UserService" address="innosoft/sso">
+   <jaxws:server id="ormServer" serviceClass="cn.innosoft.fw.orm.server.webservice.UserService" address="innosoft/orm">
         <jaxws:serviceBean>
             <bean class="cn.innosoft.fw.orm.server.webservice.UserServiceImpl"></bean>
         </jaxws:serviceBean>

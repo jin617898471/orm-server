@@ -51,14 +51,14 @@
 					</div>
 					
 				</div>
-				<div class="ui-form-item-have2col">
-					<label class="ui-label">资源描述:</label>
-					<div class="ui-textarea-container">
-					    <div class="ui-textarea-border" style="width:92.5%;height:80px;">
-						    <textarea class="ui-textarea" name="resourceDesc">${OrmResource.resourceDesc}</textarea>
-						</div>
-					</div>
-				</div>
+<!-- 				<div class="ui-form-item-have2col"> -->
+<!-- 					<label class="ui-label">资源描述:</label> -->
+<!-- 					<div class="ui-textarea-container"> -->
+<!-- 					    <div class="ui-textarea-border" style="width:92.5%;height:80px;"> -->
+<%-- 						    <textarea class="ui-textarea" name="resourceDesc">${OrmResource.resourceDesc}</textarea> --%>
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
 				<div class="ui-form-item-column clearfix" style = "display:none">
 					<div class="ui-form-item-col">
 						<label class="ui-label">parentResId:</label>

@@ -26,6 +26,7 @@ import cn.innosoft.fw.orm.server.persistent.OrmRoleResourceRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmSystemDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
 import cn.innosoft.fw.orm.server.resource.OrmSystemResource;
+import cn.innosoft.fw.orm.server.util.StringUtil;
 
 @Service
 public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
@@ -68,6 +69,8 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 
 	public String addSystem(OrmSystem ormSystem){
 		try {
+			String id = ormSystem.getSystemCode();
+			ormSystem.setSystemId(id);
 			ormSystem.setValidSign("Y");
 			ormSystem.setCreateDt(new Date());
 			ormSystem.setCreateUserId(LoginUserContext.getUser().getUpdateUserId());
