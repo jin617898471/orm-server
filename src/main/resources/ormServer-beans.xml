@@ -23,5 +23,6 @@
 	</context:component-scan>
 	
 	<import resource="ormServer-ds.xml"/>
+	<import resource="ormServer-webservice.xml"/>
 	
 </beans>

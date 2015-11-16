@@ -73,7 +73,7 @@ define(function(require){
 	function getTreeUrl(){
 		if(IOrgId){
 			$(".ui-button-add[opttype=i-add").hide();
-			$(".ui-button-add[opttype=i-delete").hide();
+			$(".ui-button-delete[opttype=i-delete").hide();
 			return urlCfg["org_tree"]+"/"+IOrgId;
 		}else{
 			$(".ui-button-add[opttype=o-add").hide();
@@ -353,7 +353,7 @@ define(function(require){
 	//右侧面板-组织机构、用户的新增、编辑、删除时保持按钮事件注册
 	
 	$(".iorgjr").live("click",function(){
-		window.open("org/forward/manage?orgId="+getSelectNode().value);
+		window.open(basePath+"org/forward/manage?orgId="+getSelectNode().value);
 	});
 		
 	$(".orgORuserSave").live("click",function(){
@@ -362,16 +362,35 @@ define(function(require){
 		var attrs = {};
 		var data ={};
 		var enforceUpdateField="";
+		var isbreak = false;
 		var input = $(this).parent().parent().parent().find("input").each(function(){
 			var value = $(this).val();
 			var name = $(this).attr("name");
 			if( value ){
 				data[ name ] = value;
 			}else{
+				if("userId"==name){//如果用户id不存在，说明用户关联时没有选择，不能保存
+					isbreak = true;
+					return false;
+				}
 				enforceUpdateField+=","+name;
 			}
 			attrs[ name ] = value;
 		});
+		if(isbreak){
+			return ;
+		}else{
+			if("ry-add"==opttype && data.userId){ //解决用户联想搜索选中用户后又删除的场景
+				var tarr = data.userId.split("_split_");
+				var tid = tarr[0];
+				var tname = tarr[1];
+				if(tname!=data.userName){
+					return ;
+				}else{
+					data.userId = tid;
+				}
+			}
+		}
 		var input = $(this).parent().parent().parent().find("textarea").each(function(){
 			var value = $(this).val();
 			var name = $(this).attr("name");
@@ -491,6 +510,14 @@ define(function(require){
 		return text;
 	}
 	
+	function getSelectRootNode( node ){
+		var pnode = node.getParentNode();
+		if( pnode && pnode.value ){
+			return getSelectRootNode(pnode);
+		}
+		return node.value;
+	}
+	
 	$(".ui-button").bind("click",function(){
 		var nr = $(this).attr("opttype");
 		if( titleCfg[nr] ){ //人员或组织机构的增删改
@@ -524,14 +551,14 @@ define(function(require){
 				var newlist = $.extend(true,[],list);
 				if("ry-add" ==nr ){ //新增人员的面板只显示姓名
 					var url = urlCfg["ry_add"];
-					newlist = [ {en:"userName",cn:"人员姓名"},{en:"userId",cn:"userId",hide:true},{en:"orgId",cn:"orgId",hide:true,text:getSelectNode().value}  ];
+					newlist = [ {en:"userName",cn:"人员姓名"},{en:"userId",cn:"userId",hide:true,required:true},{en:"orgId",cn:"orgId",hide:true,text:getSelectNode().value}  ];
 				}else{
 					var url = urlCfg["org_add"];
 					$.each(newlist,function(index,node){
 						node.text="";
 					});
 					newlist.push({en:"parentOrgId",cn:"parentOrgId",hide:true,text:getSelectNode().value});
-					var rid = (getSelectNode().getParentNode() && getSelectNode().getParentNode().value) || getSelectNode().value;
+					var rid = getSelectRootNode(getSelectNode());
 					newlist.push({en:"rootOrgId",cn:"rootOrgId",hide:true,text:rid});
 					newlist.push({en:"orgType",cn:"orgType",hide:true,text:orgtype.toUpperCase()});
 				}
@@ -581,7 +608,7 @@ define(function(require){
 			classPrefix:"ui-select",
 			html:"<i style='color:red'> {{userName}}</i>&nbsp;&nbsp;&nbsp;{{userAcct}}"
 		}).on('itemSelected', function(data, item){
-			$(".userId").val( data.userId ); //联想搜索选中时把userId存在userName的input中
+			$(".userId").val( data.userId+"_split_"+data.userName ); //联想搜索选中时把userId存在userName的input中
 		}).render();
 		$(".ui-select").css("zIndex",999);
 	}

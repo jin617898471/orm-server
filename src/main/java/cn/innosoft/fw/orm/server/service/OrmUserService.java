@@ -167,6 +167,17 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 			return "false";
 		}
 	}
+	
+	public String changePassword(String userId, String oldPwd, String newPwd) {
+		OrmUser user = findOne(userId);
+		String pwd = user.getUserPwd();
+		if( pwd.equals( EnCryptUtil.desMd5Encrypt(oldPwd) )){
+			user.setUserPwd(  EnCryptUtil.desMd5Encrypt(newPwd) );
+			updateSome(user);
+			return "true";
+		}
+		return "false";
+	}
 	/**
 	 * 查询单个账户
 	 * @param userId
@@ -221,7 +232,13 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	 */
 	public List<OrmUser> userAssociate(String userAcct) {
 		userAcct = "%" + userAcct + "%";
-		List<OrmUser> list = ormUserDao.findFirst10ByUserAcctLikeOrUserNameLikeOrderByCreateDt(userAcct,userAcct);
+		List<OrmUser> list = ormUserDao.findFirst10ByUserAcctLikeOrUserNameLikeAndValidSignOrderByCreateDt(userAcct,userAcct,"Y");
+		for(int i=list.size()-1;i>=0;i--){
+			OrmUser user = list.get(i);
+			if("N".equals( user.getValidSign() )){
+				list.remove(i);
+			}
+		}
 		return list;
 	}
 

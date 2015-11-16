@@ -63,6 +63,7 @@ public class EnCryptUtil {
 		String pwd2 = EnCryptUtil.encrypt("123456");
 		System.out.println(pwd);
 		System.out.println(pwd2);
+		System.out.println(EnCryptUtil.desMd5Encrypt("12345678"));
 	}
 
 	/**
