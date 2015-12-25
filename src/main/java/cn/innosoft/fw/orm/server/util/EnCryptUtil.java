@@ -46,7 +46,7 @@ public class EnCryptUtil {
         byte[] md5Bytes = md5.digest(byteArray);  
         StringBuffer hexValue = new StringBuffer();  
         for (int i = 0; i < md5Bytes.length; i++){  
-            int val = ((int) md5Bytes[i]) & 0xff;  
+            int val = (md5Bytes[i]) & 0xff;  
             if (val < 16)  
                 hexValue.append("0");  
             hexValue.append(Integer.toHexString(val));  
@@ -59,7 +59,7 @@ public class EnCryptUtil {
 			InvalidKeyException, NoSuchPaddingException,
 			InvalidKeySpecException, IllegalBlockSizeException,
 			BadPaddingException, UnsupportedEncodingException {
-		String pwd = EnCryptUtil.decrypt("427A9EED3D693ACE14193F5EE5F7C954");
+		String pwd = EnCryptUtil.decrypt("2FA1FD23F3C23710");
 		String pwd2 = EnCryptUtil.encrypt("123456");
 		System.out.println(pwd);
 		System.out.println(pwd2);
