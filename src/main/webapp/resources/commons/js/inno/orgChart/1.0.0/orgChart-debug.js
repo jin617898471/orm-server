@@ -68,7 +68,9 @@ define("inno/orgChart/1.0.0/orgChart-debug",["$","./jquery-ui-debug","./orgChart
                     }
                     // Draw the node
                     // Get the contents - any markup except li and ul allowed
+
                     var $nodeContent = "<h3 class='node-title'>" + $node.nodeContent + "</h3><div class='node-tool-bar'>";
+
                     if($node.editStatus){
                         $nodeContent += "<a class='iconfont node-edit' title='编辑'>&#xf0032;</a>";
                     }

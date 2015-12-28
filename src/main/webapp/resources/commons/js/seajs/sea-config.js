@@ -1,7 +1,7 @@
 seajs.config({
       alias: {
-        '$': 'jquery/jquery/1.10.1/jquery',
-        'jquery': 'jquery/jquery/1.10.1/jquery',
+        '$': 'jquery/jquery/1.7.2/jquery',
+        'jquery': 'jquery/jquery/1.7.2/jquery',
         'widget': 'arale/widget/1.1.1/widget',
         'class' : 'arale/class/1.1.0/class',
         'events' : 'arale/events/1.1.0/events',
@@ -47,5 +47,5 @@ seajs.config({
       },
       preload: ["jquery"],
       debug:2,
-      base: '/MyWeb/resources/js'
+      base: 'resources/js'
     });

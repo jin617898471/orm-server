@@ -77,6 +77,7 @@ define("form",["$","base","inno/dialog/1.0.0/confirmbox-debug"],function(require
 			
 			this.set("data",data);
 			this.set("json",this.toDataJson(data)); 
+		
 		},
 		toDataJson:function(data){
 			var json="",
@@ -90,13 +91,13 @@ define("form",["$","base","inno/dialog/1.0.0/confirmbox-debug"],function(require
 						"\"" + data[index].value + "\"" : 
 						(data[index].value ? 
 						(data[index].value.length>15 ? "\"" + data[index].value + "\"" : data[index].value) :null ); //对值先做是否长度超过15位，如果超过15位自动转string 是否string判断 然后判断是否为null “ ”
-					if( null==value || "\"\""==value || "\"null\""==value ){
-						continue;
+					if(value){
+						value = "'" + value +"'";
 					}
-					if(json.length==0){
-						json += name + ":" + value;
+					if(index==0){
+						json += "'" + name + "':" + value ;
 					}else{
-						json += "," + name + ":" + value;
+						json += ",'" + name + "':" + value ;
 					}					
       			}
       			json = "{"+ json +"}";
@@ -108,6 +109,7 @@ define("form",["$","base","inno/dialog/1.0.0/confirmbox-debug"],function(require
          			json='"'+data+'"';
       			}
    			}  	
+   			console.log(json);
    			return eval("(" + json + ")");
 		},
 		saveData:function(options){ //表单提交方法 option: type  新增还是编辑，successfn 执行成功callback，errorfn 执行成功callback

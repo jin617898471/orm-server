@@ -119,7 +119,7 @@ define("inno/dialog/1.0.0/dialog-debug.handlebars", [ "handlebars-runtime" ], fu
             stack1 = depth0.classPrefix;
             stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1;
         }
-        buffer += escapeExpression(stack1) + '">\n <div class="';
+        buffer += escapeExpression(stack1) + '" data-dnd=true>\n <div class="';
         if (stack1 = helpers.classPrefix) {
             stack1 = stack1.call(depth0, {
                 hash: {},

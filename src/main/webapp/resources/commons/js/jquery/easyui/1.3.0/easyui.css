@@ -212,16 +212,19 @@
 	background:url('images/datagrid_row_expand.gif') no-repeat center center;
 }
 .datagrid-row-alt{
-	background:#f8fafb;
+	/*background:#f8fafb*/;
+	background: #f2f5f7;
 }
 .datagrid-row-over{
-		background:#daeaff;
+	/*	background:#daeaff;*/
+	background: #e5f3ff;
 /*		color:#FFFFFF;*/
 /* 	background:#D0E5F5; */
 /* 	cursor:default; */
 }
 .datagrid-row-selected{
-	background:#daeaff;
+	/*background:#daeaff;*/
+	background: #e5f3ff;
 /*	color:#FFFFFF;*/
 }
 .datagrid-resize-proxy{
@@ -289,13 +292,15 @@
 
 .pagination .iconfont{
 	font-size: 12px;
-	color: #333333;
+	/*color: #333333;*/
+	color: #9ca1a6;
 	margin: 0 8px;
 }
 
 .pagination .refresh{
 	font-size: 16px;
 	line-height:15px;
+	display: none;
 }
 
 .tree{

@@ -6,6 +6,13 @@ define("inno/select-tree/1.0.0/select-tree-debug",[ "overlay", "$", "position", 
 
     require("./select-tree-debug.css");
 
+    var keyTimeout;
+    var lastFilter = '';
+    var timeout;
+    if (timeout === undefined) {
+        timeout = 200;
+    } 
+
 	var SelectTree=Overlay.extend({
 		Implements: Templatable,
 		attrs:{
@@ -34,6 +41,7 @@ define("inno/select-tree/1.0.0/select-tree-debug",[ "overlay", "$", "position", 
             // TODO
             disabled: false,
             maxHeight: null,
+            textSelected:false,
             checkSelect:function(target,mult){
                 return true;
             },
@@ -53,6 +61,25 @@ define("inno/select-tree/1.0.0/select-tree-debug",[ "overlay", "$", "position", 
                     // this.select(target);
                 }
                	e.stopPropagation();
+            },
+            "click [data-role=text]":function(e){
+                var checkTrigger;
+                if(this.get('textSelected')){
+                    var element =this.element,
+                        targetCheck=$(e.currentTarget).prev();
+                    
+                    checkTrigger =element.find(".ui-select-tree-check");
+                    if(targetCheck.is(".ui-select-tree-checked")){  
+                        checkTrigger.removeClass("ui-select-tree-checked");
+                    }else{
+                        checkTrigger.removeClass("ui-select-tree-checked");
+                        targetCheck.addClass("ui-select-tree-checked");
+                    }
+
+                    this.get("checkAfter").call(this,checkTrigger);
+                    this.multSelect();
+                    e.stopPropagation();                
+                }
             },
             "click [data-role=check]":function(e){
 				var target =$(e.currentTarget).parent(),
@@ -175,6 +202,7 @@ define("inno/select-tree/1.0.0/select-tree-debug",[ "overlay", "$", "position", 
             }
         },
         setup:function(){
+            
 			this._bindEvents();
             this._initOptions();
             this._initHeight();
@@ -183,6 +211,7 @@ define("inno/select-tree/1.0.0/select-tree-debug",[ "overlay", "$", "position", 
             // this._blurHide(this.get("trigger"));
             this.hide();
             SelectTree.superclass.setup.call(this);
+            this._filter();
         },
         hide:function(){
 			this.element["hide"]();
@@ -221,6 +250,7 @@ define("inno/select-tree/1.0.0/select-tree-debug",[ "overlay", "$", "position", 
             this.set("value",value);
 			triggerValue.val(value);
 			triggerContent.html(text);
+            this.trigger("change");
         },
         selectValue:function(str){
 			var array=str.split(","),
@@ -330,6 +360,25 @@ define("inno/select-tree/1.0.0/select-tree-debug",[ "overlay", "$", "position", 
                     ul.scrollTop(0);
                 }
             });
+        },
+        _filter:function(){
+            this.element.find(".ui-select-tree-filter input").change(function() {
+                var filterValue = $(this).val().toLowerCase(),
+                    list = $(this).parent().next(".ui-select-tree-content");
+                
+                filter(list, filterValue);
+
+                return false;
+            }).keydown(function() {
+
+                clearTimeout(keyTimeout);
+                var that =this;
+                keyTimeout = setTimeout(function() {
+                    if( $(that).val() === lastFilter ) return;
+                    lastFilter = $(that).val();
+                    $(that).change();
+                }, timeout);
+            });
         }
 	})	
 	module.exports=SelectTree;
@@ -421,6 +470,36 @@ define("inno/select-tree/1.0.0/select-tree-debug",[ "overlay", "$", "position", 
         });
         return height;
     }
+    // 关键字筛选 item
+    function filter(ulObject,filterValue){
+        if(!ulObject.is('ul') && !ulObject('ol')){
+            return false;
+        }
+        var children = ulObject.children("li"),
+            result = false;
+        for(var i=0,len=children.length;i<len;i++){
+            var liObject = $(children[i]);
+            if (liObject.is('li')) {
+                var display = false;
+                if(liObject.children("ul").length > 0){
+                    for(var j = 0,cLen = liObject.children("ul").length;j < cLen;j++){
+                        var subDisplay = filter($(liObject.children("ul")[j]),filterValue);
+                        display = display || subDisplay;
+                    }
+                }
+                if(!display){
+                    var text = liObject.text();
+                    display = text.toLowerCase().indexOf(filterValue) >= 0;
+                }
+                liObject.css('display', display ? '' : 'none');
+
+                result = result || display;
+            };
+        }
+        return result;
+    }
+
+
 });
 
 
@@ -527,6 +606,7 @@ define("inno/select-tree/1.0.0/select-debug.handlebars", [ "handlebars-runtime" 
             buffer += escapeExpression((stack1 = depth2.classPrefix, typeof stack1 === functionType ? stack1.apply(depth0) : stack1)) + "-item-disabled";
             return buffer;
         }
+
         buffer += '<div class="';
         if (stack1 = helpers.classPrefix) {
             stack1 = stack1.call(depth0, {
@@ -537,7 +617,11 @@ define("inno/select-tree/1.0.0/select-debug.handlebars", [ "handlebars-runtime" 
             stack1 = depth0.classPrefix;
             stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1;
         }
-        buffer += escapeExpression(stack1) + '">\n    <ul class="';
+        buffer += escapeExpression(stack1) + '">\n  ';
+        buffer += '  <div class="' + escapeExpression(stack1) + '-filter"> \n ';
+        buffer += '     <input type="text"  />\n'
+        buffer += '  </div>';
+        buffer += '  <ul class="';
         if (stack1 = helpers.classPrefix) {
             stack1 = stack1.call(depth0, {
                 hash: {},

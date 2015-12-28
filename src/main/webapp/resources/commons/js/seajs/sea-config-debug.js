@@ -2,10 +2,10 @@ seajs.config({
       alias: {
         '$': 'jquery/jquery/1.7.2/jquery-debug',
         'jquery': 'jquery/jquery/1.7.2/jquery-debug',
-        'widget': 'arale/widget/1.1.1/widget-debug',
-        'class' : 'arale/class/1.1.0/class-debug',
-        'events' : 'arale/events/1.1.0/events-debug',
-        'base' : 'arale/base/1.1.1/base-debug',
+        'widget': 'arale/widget/1.2.0/widget-debug',
+        'class' : 'arale/class/1.2.0/class-debug',
+        'events' : 'arale/events/1.2.0/events-debug',
+        'base' : 'arale/base/1.2.0/base-debug',
         'autocomplete':'arale/autocomplete/1.3.0/autocomplete-debug',
         'textarea':'arale/autocomplete/1.3.0/textarea-complete-debug',
         'calendar':'arale/calendar/0.9.0/calendar-debug',
@@ -19,7 +19,7 @@ seajs.config({
         'overlay':'arale/overlay/1.1.2/overlay-debug',
         'mask':'arale/overlay/1.1.2/mask-debug',
         'placeholder':'arale/placeholder/1.1.0/placeholder-debug',
-        'popup':'arale/popup/1.1.3/popup-debug',
+        'popup':'arale/popup/1.1.5/popup-debug',
         'position':'arale/position/1.0.1/position-debug',
         'select':'arale/select/0.9.6/select-debug',
         'sticky':'arale/sticky/1.2.1/sticky-debug',
@@ -29,10 +29,10 @@ seajs.config({
         'slide':'arale/switchable/1.0.0/slide-debug',
         'tabs':'arale/switchable/1.0.0/tabs-debug',
         'templatable':'arale/templatable/0.9.2/templatable-debug',
-        'tip':'arale/tip/1.1.4/tip-debug',
+        'tip':'arale/tip/1.2.0/tip-debug',
         'atip':'arale/tip/1.1.4/atip-debug',
         'upload':'arale/upload/1.0.1/upload-debug',
-        'validator':'arale/validator/0.9.5/validator-debug',
+        'validator':'arale/validator/0.9.7/validator-debug',
         'validator-core':'arale/validator/0.9.5/core-debug',
         'dnd':'arale/dnd/1.0.0/dnd-debug.js',
 
@@ -50,12 +50,13 @@ seajs.config({
         'appmenu':'gallery/appmenu/1.0.0/appmenu-debug',
         'range':'gallery/range/1.0.1/range-debug',
         'menu':'inno/menu/1.0.0/menu-debug',
-        'qrcode':'jquery/qrcode/1.0.0/qrcode-debug',
+        'qrcode':'jquery/qrcode/0.0.1/qrcode-debug',
         'easyui':'jquery/easyui/1.3.0/jquery.easyui.min',
         'fileupload':'jquery/upload/1.0.0/upload-debug',
         'highchart':'gallery/highchart/2.3.2/highcharts-debug',
-        'form':'inno/form/0.0.1/form-debug'
-       
+        'form':'inno/form/0.0.1/form-debug',
+        'echarts':'gallery/echarts/2.1.8/echarts-all'
+        
       },
       preload: ["jquery"],
       debug:2

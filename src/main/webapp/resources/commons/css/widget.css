@@ -1272,3 +1272,252 @@ a.ui-button:hover{
     border:none;
     outline:none;
 }
+
+.ui-paging, .ui-paging input {
+    color:#808080;
+    margin: 0;
+    padding: 0;
+    zoom: 1;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.ui-paging:after {
+    clear: both;
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+.ui-paging a{
+    text-decoration:none;
+    color:#fff;
+    margin:0 3px;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    vertical-align: middle;
+    height:20px;
+    line-height:20px;
+    border-radius: 3px;
+}
+
+.ui-paging-prev,
+.ui-paging-next,
+.ui-paging-goto {
+    background: #464c55;
+    padding:0 5.5px;
+    color:#fff;
+}
+
+.ui-paging .ui-paging-prev {
+    margin: 0 3px 0 0;
+}
+
+.ui-paging a.ui-paging-item {
+    background-color:#464c55;
+    font-weight:bold;
+    padding:0 6px;
+    border:none; 
+    color: #fff;   
+}
+
+.ui-paging a.ui-paging-current,
+.ui-paging-prev:hover,
+.ui-paging-next:hover,
+.ui-paging-goto:hover,
+.ui-paging a.ui-paging-item:hover {
+    color:#fff;
+    background:#5d9cec;
+}
+
+a.ui-paging-prev:hover,
+a.ui-paging-next:hover {    
+    text-decoration:none;
+    color:#fff;
+}
+
+
+.ui-paging-ellipsis {
+    margin:0 5px;
+    line-height: 16px;
+    font-weight:bold;
+}
+
+.ui-paging-info {
+    line-height:24px;
+    margin-right:5px;
+    height:24px;
+}
+
+.ui-paging-which input {
+    height: 20px;
+    line-height: 20px;
+    padding: 0 6px;
+    width:48px;
+    border:1px solid #e3e5e8;
+    margin: 0 2px;
+    border-radius: 3px;
+}
+
+.ui-paging-which input:hover {
+    border-color:#999;
+    color:#666;
+}
+
+.ui-paging-bold {
+    font-weight:bold;
+    padding:0 8px;
+}
+
+.ui-paging span.ui-paging-prev,
+.ui-paging span.ui-paging-next,
+.ui-paging span.ui-paging-prev .iconfont,
+.ui-paging span.ui-paging-next .iconfont {    
+    color:#fff;
+    box-shadow:none;
+    background: #d4d4d4;
+    border-color: #d4d4d4;
+    filter: none;
+}
+/*------ä¸å¸¦å…·ä½“ç¿»é¡µæ•°å­—paging start------*/
+.ui-paging-nonum .ui-paging-which,.ui-paging-nonum .ui-paging-total{
+    color: #333333;
+}
+
+
+.ui-paging-nonum .ui-paging-which input {    
+    color: #333333;
+}
+
+.ui-paging-nonum .ui-paging-which input:hover {
+    border-color:#999;
+    color:#666;
+}
+
+.ui-paging-nonum .ui-paging-prev,.ui-paging-nonum .ui-paging-next{
+    line-height: 16px;
+    background: none;
+    color: #464c55;
+}
+
+.ui-paging-nonum .ui-paging-prev:hover,.ui-paging-nonum .ui-paging-next:hover{
+    color: #464c55;
+    background: #fff;
+}
+
+.ui-paging-prev i.iconfont,.ui-paging-next i.iconfont{
+    font-size: 10px;
+}
+/*------ä¸å¸¦å…·ä½“ç¿»é¡µæ•°å­—paging end------*/
+
+.ui-paging-large a,
+.ui-paging-large-gray a{
+    color:#fff;
+    margin:0 3px;
+    height:30px;
+    line-height:32px;
+    border-radius: 3px;
+    background: #a4aeb9;
+    box-shadow: 0px 2px 1px #92969b;
+}
+
+.ui-paging-large-gray a{
+    color: #333333;
+    background: #d7dade;
+    height: 32px;
+    box-shadow: none;
+}
+
+.ui-paging-large a.ui-paging-item,
+.ui-paging-large-gray a.ui-paging-item{
+    padding: 0 12px;
+    background: #a4aeb9;
+}
+
+.ui-paging-large-gray a.ui-paging-item{
+    background: #d7dade;
+    color: #333333;
+}
+
+.ui-paging-large a.ui-paging-current,.ui-paging-large a:hover,
+.ui-paging-large-gray a.ui-paging-current,.ui-paging-large-gray a:hover{
+    background: #5d9cec;
+    box-shadow: 0px 2px 1px #4c89dc;
+}
+
+.ui-paging-large-gray a.ui-paging-current,.ui-paging-large-gray a:hover{
+    color: #fff;
+    background: #5d9cec;
+    box-shadow: none;
+}
+
+.ui-paging-large .ui-paging-prev,
+.ui-paging-large .ui-paging-next,
+.ui-paging-large-gray .ui-paging-prev,
+.ui-paging-large-gray .ui-paging-next {
+    padding:0 11px;
+}
+
+.ui-paging-large .ui-paging-goto,
+.ui-paging-large-gray .ui-paging-goto{
+    padding: 0 8px;
+}
+
+.ui-paging-large .ui-paging-prev,.ui-paging-large .ui-paging-next,
+.ui-paging-large-gray .ui-paging-prev,.ui-paging-large-gray .ui-paging-next{
+    line-height: 28px;
+}
+
+.ui-paging-large .ui-paging-which input,
+.ui-paging-large-gray .ui-paging-which input {    
+    color: #464c55;
+    height: 30px;
+    line-height:30px;
+}
+/* scroll start */
+.ui-scroll{
+  overflow: hidden;
+  position: relative;
+}
+.ui-scroll-container{
+  position: absolute;
+  top: 0px;
+  width: 100%;
+}
+.ui-scroll-bar{
+  display: block;
+  position: absolute; 
+  right: 3px; 
+  width: 8px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  opacity: 0;
+  filter: alpha(opacity = 0);
+  -o-transition: background-color .2s linear, opacity .2s linear;
+  -webkit-transition: background-color .2s linear, opacity .2s linear;
+  -moz-transition: background-color .2s linear, opacity .2s linear;
+  transition: background-color .2s linear, opacity .2s linear;
+}
+.ui-scroll-bar-y{
+  position: absolute; 
+  right: 0;
+  width: 8px;
+  background-color: #aaa;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -o-transition: background-color .2s linear;
+  -webkit-transition: background-color.2s linear;
+  -moz-transition: background-color .2s linear;
+  transition: background-color .2s linear;
+}
+.in-scrolling{
+  opacity: 1;
+  filter: alpha(opacity = 1);
+}
+
+/* scroll start */

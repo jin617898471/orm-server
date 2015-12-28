@@ -9,7 +9,7 @@
 }
 
 .ui-select-tree-content{
-	padding: 10px 0;
+	padding-bottom: 10px;
 }
 
 .ui-select-tree-content li{
@@ -82,4 +82,12 @@
 	height: 13px;
 	line-height: 0;
 	vertical-align: middle;
+}
+
+.ui-select-tree-filter{
+	padding: 10px 10px  0px;
+}
+
+.ui-select-tree-filter input{
+	
 }

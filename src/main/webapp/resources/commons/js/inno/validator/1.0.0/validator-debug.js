@@ -5,7 +5,7 @@ define("inno/validator/1.0.0/validator-debug",["$","validator"],function(require
 	var Validator =AraleValidator.extend({
 		attrs:{
 				showMessage:function(message,element){
-					message = '<i class="ui-tiptext-icon iconfont">&#xf009f;</i>\
+					message = '<i class="ui-tiptext-icon iconfont">&#xe67d;</i>\
                                <span class="ui-form-explain-text">' + message + '</span>';
                     this.getExplain(element)
                         .addClass('ui-tiptext ui-tiptext-error')
