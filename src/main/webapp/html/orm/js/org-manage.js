@@ -122,14 +122,15 @@ define(function(require){
 	});
 
 	validator.addItem({
-		element:'#org-name',
+		element:'input[name=\'orgName\']',
 		display: "组织机构名称",
 		required: true,
 		rule: 'minlength{"min":-1}',
 	}).addItem({
-		element:'#org-code',
+		element:'input[name=\'orgCode\']',
 		display: "组织机构名称",
 		required: true,
+		rule: 'minlength{"min":-1}',
 		rule: 'minlength{"min":-1}',
 	});
 	/*
