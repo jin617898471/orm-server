@@ -1,20 +1,9 @@
 package cn.innosoft.fw.orm.server.model;
 
 import java.io.Serializable;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
 
 
 /**
@@ -38,9 +27,6 @@ public class OrmResource implements Serializable {
 	@Column(name="CREATE_USER_ID")
 	private String createUserId;
 
-	@Column(name="IS_LEAF")
-	private String isLeaf;
-
 	@Column(name="ORDER_NUMBER")
 	private BigDecimal orderNumber;
 
@@ -55,6 +41,9 @@ public class OrmResource implements Serializable {
 
 	@Column(name="RESOURCE_NAME")
 	private String resourceName;
+
+	@Column(name="RESOURCE_OPEN_TYPE")
+	private String resourceOpenType;
 
 	@Column(name="RESOURCE_TYPE")
 	private String resourceType;
@@ -105,14 +94,6 @@ public class OrmResource implements Serializable {
 		this.createUserId = createUserId;
 	}
 
-	public String getIsLeaf() {
-		return this.isLeaf;
-	}
-
-	public void setIsLeaf(String isLeaf) {
-		this.isLeaf = isLeaf;
-	}
-
 	public BigDecimal getOrderNumber() {
 		return this.orderNumber;
 	}
@@ -151,6 +132,14 @@ public class OrmResource implements Serializable {
 
 	public void setResourceName(String resourceName) {
 		this.resourceName = resourceName;
+	}
+
+	public String getResourceOpenType() {
+		return this.resourceOpenType;
+	}
+
+	public void setResourceOpenType(String resourceOpenType) {
+		this.resourceOpenType = resourceOpenType;
 	}
 
 	public String getResourceType() {
@@ -208,4 +197,5 @@ public class OrmResource implements Serializable {
 	public void setValidSign(String validSign) {
 		this.validSign = validSign;
 	}
+
 }

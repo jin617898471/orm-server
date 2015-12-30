@@ -1,15 +1,8 @@
 package cn.innosoft.fw.orm.server.model;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * The persistent class for the ORM_ROLE_RESOURCE_RIGHT database table.
@@ -22,12 +15,7 @@ public class OrmRoleResourceRight implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	private String id;
-
-	@Column(name="HALF_SELECT")
-	private String halfSelect;
 
 	@Column(name="RESOURCE_ID")
 	private String resourceId;
@@ -47,14 +35,6 @@ public class OrmRoleResourceRight implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getHalfSelect() {
-		return this.halfSelect;
-	}
-
-	public void setHalfSelect(String halfSelect) {
-		this.halfSelect = halfSelect;
 	}
 
 	public String getResourceId() {

@@ -1,19 +1,8 @@
 package cn.innosoft.fw.orm.server.model;
 
 import java.io.Serializable;
+import javax.persistence.*;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
 
 
 /**
@@ -27,8 +16,6 @@ public class OrmRole implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	@Column(name="ROLE_ID")
 	private String roleId;
 
@@ -48,9 +35,6 @@ public class OrmRole implements Serializable {
 	@Column(name="ROLE_NAME_EN")
 	private String roleNameEn;
 
-	@Column(name="ROLE_ORG_ID")
-	private String roleOrgId;
-
 	@Column(name="ROLE_TYPE")
 	private String roleType;
 
@@ -67,8 +51,6 @@ public class OrmRole implements Serializable {
 	@Column(name="VALID_SIGN")
 	private String validSign;
 
-	@Transient
-	private String mapType;
 	public OrmRole() {
 	}
 
@@ -120,14 +102,6 @@ public class OrmRole implements Serializable {
 		this.roleNameEn = roleNameEn;
 	}
 
-	public String getRoleOrgId() {
-		return this.roleOrgId;
-	}
-
-	public void setRoleOrgId(String roleOrgId) {
-		this.roleOrgId = roleOrgId;
-	}
-
 	public String getRoleType() {
 		return this.roleType;
 	}
@@ -166,14 +140,6 @@ public class OrmRole implements Serializable {
 
 	public void setValidSign(String validSign) {
 		this.validSign = validSign;
-	}
-
-	public String getMapType() {
-		return mapType;
-	}
-
-	public void setMapType(String mapType) {
-		this.mapType = mapType;
 	}
 
 }

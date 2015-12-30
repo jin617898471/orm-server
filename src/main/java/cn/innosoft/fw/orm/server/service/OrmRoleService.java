@@ -1,8 +1,8 @@
 package cn.innosoft.fw.orm.server.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,7 +78,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 		ormRoleDao.delete(roleId);
 		ormOrgRoleMapDao.deleteByRoleId(roleId);
 		ormRoleResourceRightDao.deleteByRoleId(roleId);
-		ormUserRoleMapDao.deleteByRoleId(roleId);
+		// ormUserRoleMapDao.deleteByRoleId(roleId);
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 			OrmRoleResourceRight ormAuthRole = new OrmRoleResourceRight();
 			ormAuthRole.setResourceId(parentResId);
 			ormAuthRole.setRoleId(roleId);
-			ormAuthRole.setHalfSelect(halfSelect);
+			// ormAuthRole.setHalfSelect(halfSelect);
 			ormAuthRole.setSystemId(ormResourceService.findByReosurceId(parentResId).getSystemId());
 			ormRoleResourceRightDao.add(ormAuthRole);
 		}
@@ -263,7 +263,7 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 			String id = resourceIdList.get(i);
 			ormAuthRole.setResourceId(id);
 			ormAuthRole.setRoleId(roleId);
-			ormAuthRole.setHalfSelect("N");
+			// ormAuthRole.setHalfSelect("N");
 			ormAuthRole.setSystemId(ormResourceService.findByReosurceId(id).getSystemId());
 			ormRoleResourceRightDao.add(ormAuthRole);
 		}
@@ -306,9 +306,9 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	 * @param userId
 	 * @return List<map_type,role>
 	 */
-	public List<Object[]> findRoleInfoByUserId(String userId) {
-		return ormUserRoleMapDao.findMapeTypeAndRole(userId);
-	}
+	// public List<Object[]> findRoleInfoByUserId(String userId) {
+	// return ormUserRoleMapDao.findMapeTypeAndRole(userId);
+	// }
 
 	/**
 	 * 通过组织机构Id查找所有角色

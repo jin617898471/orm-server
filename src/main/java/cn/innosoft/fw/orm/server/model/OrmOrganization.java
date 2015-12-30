@@ -1,19 +1,9 @@
 package cn.innosoft.fw.orm.server.model;
 
 import java.io.Serializable;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.GenericGenerator;
 
 
 /**
@@ -30,14 +20,12 @@ public class OrmOrganization implements Serializable {
 	@Column(name="ORG_ID")
 	private String orgId;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name="CREATE_DT")
 	private Date createDt;
 
 	@Column(name="CREATE_USER_ID")
 	private String createUserId;
-
-	@Column(name="IS_LEAF")
-	private String isLeaf;
 
 	@Column(name="ORDER_NUMBER")
 	private BigDecimal orderNumber;
@@ -45,14 +33,26 @@ public class OrmOrganization implements Serializable {
 	@Column(name="ORG_ADDRESS")
 	private String orgAddress;
 
+	@Column(name="ORG_AREA")
+	private String orgArea;
+
 	@Column(name="ORG_CODE")
 	private String orgCode;
+
+	@Column(name="ORG_DEGREE")
+	private String orgDegree;
 
 	@Column(name="ORG_DESC")
 	private String orgDesc;
 
 	@Column(name="ORG_EMAIL")
 	private String orgEmail;
+
+	@Column(name="ORG_LEVEL")
+	private String orgLevel;
+
+	@Column(name="ORG_LINKMAN")
+	private String orgLinkman;
 
 	@Column(name="ORG_NAME")
 	private String orgName;
@@ -68,6 +68,9 @@ public class OrmOrganization implements Serializable {
 
 	@Column(name="ORG_TYPE")
 	private String orgType;
+
+	@Column(name="ORG_WEBURL")
+	private String orgWeburl;
 
 	@Column(name="PARENT_ORG_ID")
 	private String parentOrgId;
@@ -112,14 +115,6 @@ public class OrmOrganization implements Serializable {
 		this.createUserId = createUserId;
 	}
 
-	public String getIsLeaf() {
-		return this.isLeaf;
-	}
-
-	public void setIsLeaf(String isLeaf) {
-		this.isLeaf = isLeaf;
-	}
-
 	public BigDecimal getOrderNumber() {
 		return this.orderNumber;
 	}
@@ -136,12 +131,28 @@ public class OrmOrganization implements Serializable {
 		this.orgAddress = orgAddress;
 	}
 
+	public String getOrgArea() {
+		return this.orgArea;
+	}
+
+	public void setOrgArea(String orgArea) {
+		this.orgArea = orgArea;
+	}
+
 	public String getOrgCode() {
 		return this.orgCode;
 	}
 
 	public void setOrgCode(String orgCode) {
 		this.orgCode = orgCode;
+	}
+
+	public String getOrgDegree() {
+		return this.orgDegree;
+	}
+
+	public void setOrgDegree(String orgDegree) {
+		this.orgDegree = orgDegree;
 	}
 
 	public String getOrgDesc() {
@@ -158,6 +169,22 @@ public class OrmOrganization implements Serializable {
 
 	public void setOrgEmail(String orgEmail) {
 		this.orgEmail = orgEmail;
+	}
+
+	public String getOrgLevel() {
+		return this.orgLevel;
+	}
+
+	public void setOrgLevel(String orgLevel) {
+		this.orgLevel = orgLevel;
+	}
+
+	public String getOrgLinkman() {
+		return this.orgLinkman;
+	}
+
+	public void setOrgLinkman(String orgLinkman) {
+		this.orgLinkman = orgLinkman;
 	}
 
 	public String getOrgName() {
@@ -198,6 +225,14 @@ public class OrmOrganization implements Serializable {
 
 	public void setOrgType(String orgType) {
 		this.orgType = orgType;
+	}
+
+	public String getOrgWeburl() {
+		return this.orgWeburl;
+	}
+
+	public void setOrgWeburl(String orgWeburl) {
+		this.orgWeburl = orgWeburl;
 	}
 
 	public String getParentOrgId() {

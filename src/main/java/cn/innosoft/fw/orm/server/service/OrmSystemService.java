@@ -18,10 +18,7 @@ import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
 import cn.innosoft.fw.orm.client.service.LoginUserContext;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
-import cn.innosoft.fw.orm.server.persistent.OrmCodeDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
-import cn.innosoft.fw.orm.server.persistent.OrmResourceDao;
-import cn.innosoft.fw.orm.server.persistent.OrmRoleDao;
 import cn.innosoft.fw.orm.server.persistent.OrmRoleResourceRightDao;
 import cn.innosoft.fw.orm.server.persistent.OrmSystemDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
@@ -107,7 +104,7 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 		ormResourceService.deleteBySystemId(systemId);
 		ormRoleService.deleteBySystemId(systemId);
 		ormRoleResourceRightDao.deleteBySystemId(systemId);
-		ormUserRoleMapDao.deleteBySystemId(systemId);
+		// ormUserRoleMapDao.deleteBySystemId(systemId);
 	}
 	
 	/**

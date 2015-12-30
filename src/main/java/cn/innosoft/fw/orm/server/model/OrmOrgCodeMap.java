@@ -20,17 +20,11 @@ public class OrmOrgCodeMap implements Serializable {
 	@Column(name="CODE_ID")
 	private String codeId;
 
-	@Column(name="HALF_SELECT")
-	private String halfSelect;
+	@Column(name="ORG_ID")
+	private String orgId;
 
-	@Column(name="MAP_TYPE")
-	private String mapType;
-
-	@Column(name="ORG_O_ID")
-	private String orgOId;
-
-	@Column(name="ORG_P_ID")
-	private String orgPId;
+	@Column(name="RELATE_TYPE")
+	private String relateType;
 
 	@Column(name="SYSTEM_ID")
 	private String systemId;
@@ -54,36 +48,20 @@ public class OrmOrgCodeMap implements Serializable {
 		this.codeId = codeId;
 	}
 
-	public String getHalfSelect() {
-		return this.halfSelect;
+	public String getOrgId() {
+		return this.orgId;
 	}
 
-	public void setHalfSelect(String halfSelect) {
-		this.halfSelect = halfSelect;
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
 	}
 
-	public String getMapType() {
-		return this.mapType;
+	public String getRelateType() {
+		return this.relateType;
 	}
 
-	public void setMapType(String mapType) {
-		this.mapType = mapType;
-	}
-
-	public String getOrgOId() {
-		return this.orgOId;
-	}
-
-	public void setOrgOId(String orgOId) {
-		this.orgOId = orgOId;
-	}
-
-	public String getOrgPId() {
-		return this.orgPId;
-	}
-
-	public void setOrgPId(String orgPId) {
-		this.orgPId = orgPId;
+	public void setRelateType(String relateType) {
+		this.relateType = relateType;
 	}
 
 	public String getSystemId() {

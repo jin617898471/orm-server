@@ -1,19 +1,9 @@
 package cn.innosoft.fw.orm.server.model;
 
 import java.io.Serializable;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.GenericGenerator;
 
 
 /**
@@ -27,8 +17,6 @@ public class OrmCode implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	@Column(name="CODE_ID")
 	private String codeId;
 
@@ -41,14 +29,15 @@ public class OrmCode implements Serializable {
 	@Column(name="CODE_VALUE")
 	private String codeValue;
 
+	@Temporal(TemporalType.DATE)
 	@Column(name="CREATE_DT")
 	private Date createDt;
 
 	@Column(name="CREATE_USER_ID")
 	private String createUserId;
 
-	@Column(name="IS_LEAF")
-	private String isLeaf;
+	@Column(name="IS_RIGHT")
+	private String isRight;
 
 	@Column(name="ORDER_NUMBER")
 	private BigDecimal orderNumber;
@@ -123,12 +112,12 @@ public class OrmCode implements Serializable {
 		this.createUserId = createUserId;
 	}
 
-	public String getIsLeaf() {
-		return this.isLeaf;
+	public String getIsRight() {
+		return this.isRight;
 	}
 
-	public void setIsLeaf(String isLeaf) {
-		this.isLeaf = isLeaf;
+	public void setIsRight(String isRight) {
+		this.isRight = isRight;
 	}
 
 	public BigDecimal getOrderNumber() {

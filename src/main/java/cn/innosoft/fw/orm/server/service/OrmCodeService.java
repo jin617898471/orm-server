@@ -81,9 +81,9 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 		//父节点名称
 		node.setName(code.getCodeName());
 		//是否是父节点
-		boolean isParent = "Y".equals(code.getIsLeaf()) ? false : true;
+		// boolean isParent = "Y".equals(code.getIsLeaf()) ? false : true;
 		//是否为打开状态
-		node.setOpen(isParent);
+		// node.setOpen(isParent);
 		//前端可能需要用到的信息属性
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		attributes.put("rootCodeId", code.getRootCodeId());

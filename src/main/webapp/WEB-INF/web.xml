@@ -29,7 +29,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			classpath*:biz-beans.xml
-			classpath*:security-config.xml
+<!-- 			classpath*:security-config.xml -->
 			classpath:ormServer-beans.xml
 			classpath*:ormClient-beans.xml
 			classpath*:log-beans.xml
@@ -51,14 +51,14 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
-	<filter>
-		<filter-name>sitemesh</filter-name>
-		<filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>sitemesh</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+<!-- 	<filter> -->
+<!-- 		<filter-name>sitemesh</filter-name> -->
+<!-- 		<filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class> -->
+<!-- 	</filter> -->
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>sitemesh</filter-name> -->
+<!-- 		<url-pattern>/*</url-pattern> -->
+<!-- 	</filter-mapping> -->
 
 	<servlet>
 		<servlet-name>cxf</servlet-name>
@@ -70,18 +70,18 @@
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
 
-	<filter>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-		<init-param>
-			<param-name>init</param-name>
-			<param-value>lazy</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+<!-- 	<filter> -->
+<!-- 		<filter-name>springSecurityFilterChain</filter-name> -->
+<!-- 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class> -->
+<!-- 		<init-param> -->
+<!-- 			<param-name>init</param-name> -->
+<!-- 			<param-value>lazy</param-value> -->
+<!-- 		</init-param> -->
+<!-- 	</filter> -->
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>springSecurityFilterChain</filter-name> -->
+<!-- 		<url-pattern>/*</url-pattern> -->
+<!-- 	</filter-mapping> -->
 
 
 	<welcome-file-list>

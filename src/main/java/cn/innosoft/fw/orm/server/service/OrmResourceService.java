@@ -59,7 +59,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 			return msg;
 		}
 		ormResource.setValidSign("Y");
-		ormResource.setIsLeaf("Y");
+		// ormResource.setIsLeaf("Y");
 		ormResource.setCreateDt(new Date());
 		ormResource.setCreateUserId(LoginUserContext.getUser().getUserId());
 		// ormResource.setCreateUserId(LoginUserContext.getUserId());
@@ -82,9 +82,9 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	 */
 	private void updateIfParentIsLeaf(String parentId) {
 		OrmResource res = ormResourceDao.findByResourceId(parentId);
-		if (res != null && "Y".equals((res.getIsLeaf()))) {
-			ormResourceDao.updateIsLeafByResourceId("N", res.getResourceId());
-		}
+		// if (res != null && "Y".equals((res.getIsLeaf()))) {
+		// ormResourceDao.updateIsLeafByResourceId("N", res.getResourceId());
+		// }
 	}
 
 	/**
@@ -142,11 +142,12 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		for (OrmResource res : resources) {
 			ZtreeBean node = resToTreeNode(res);
 			String resId = res.getResourceId();
-			for (OrmRoleResourceRight rrr : rights) {
-				if (resId.equals(rrr.getResourceId()) && "N".equals(rrr.getHalfSelect())) {
-					node.setChecked(true);
-				}
-			}
+			// for (OrmRoleResourceRight rrr : rights) {
+			// if (resId.equals(rrr.getResourceId()) &&
+			// "N".equals(rrr.getHalfSelect())) {
+			// node.setChecked(true);
+			// }
+			// }
 			result.add(node);
 		}
 		return result;
@@ -158,7 +159,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		res.setResourceId(id);
 		res.setCreateDt(new Date());
 		res.setCreateUserId(LoginUserContext.getUser().getUserId());
-		res.setIsLeaf("Y");
+		// res.setIsLeaf("Y");
 		res.setParentResId("ROOT");
 		res.setValidSign("Y");
 		res.setRootResId(id);
@@ -179,8 +180,8 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		node.setId(res.getResourceId());
 		node.setpId(res.getParentResId());
 		node.setName(res.getResourceName());
-		boolean isParent = res.getIsLeaf() == "Y" ? false : true;
-		node.setOpen(isParent);
+		// boolean isParent = res.getIsLeaf() == "Y" ? false : true;
+		// node.setOpen(isParent);
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		attributes.put("resType", res.getResourceType());
 		node.setAttributes(attributes);
@@ -357,10 +358,11 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		List<OrmRoleResourceRight> grantedResourceList = ormRoleResourceRightDao.findByRoleId(roleId);
 		List<String> grantedResourceIdsList = new ArrayList<String>();
 
-		for (OrmRoleResourceRight ormRoleResourceRight : grantedResourceList) {
-			if ("N".equals(ormRoleResourceRight.getHalfSelect()))
-				grantedResourceIdsList.add(ormRoleResourceRight.getResourceId());
-		}
+		// for (OrmRoleResourceRight ormRoleResourceRight : grantedResourceList)
+		// {
+		// if ("N".equals(ormRoleResourceRight.getHalfSelect()))
+		// grantedResourceIdsList.add(ormRoleResourceRight.getResourceId());
+		// }
 		// 有权限分配的资源id列表
 		// List<String> enableGrantResourceIds =
 		// LoginUserContext.getUserResources(systemId);
@@ -466,12 +468,12 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		String id = resource.getResourceId();
 		String name = resource.getResourceName();
 		String pId = resource.getParentResId();
-		Boolean isLeaf = ("Y" == resource.getIsLeaf()) ? true : false;
+		// Boolean isLeaf = ("Y" == resource.getIsLeaf()) ? true : false;
 		treebean.setId(id);
 		treebean.setName(name);
 		treebean.setpId(pId);
-		treebean.setOpen(!(isLeaf));
-		treebean.setIsParent(isLeaf);
+		// treebean.setOpen(!(isLeaf));
+		// treebean.setIsParent(isLeaf);
 		treebean.setChecked(false);
 		if (enableGrantResourceIds.contains(id) && !"000".equals(resource.getResourceType())) {
 			treebean.setNocheck(false);
