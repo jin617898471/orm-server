@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.innosoft.fw.biz.base.web.PageRequest;
+import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.biz.log.FwLog;
 import cn.innosoft.fw.biz.log.FwLogFactory;
 import cn.innosoft.fw.orm.server.common.entity.InfoWrap;
@@ -47,11 +49,24 @@ public class OrmOrganizationResource {
 	@ResponseBody
 	public InfoWrap getOrgInfo(@PathVariable String orgId) {
 		try {
-			OrmOrganization data = ormOrganizationService.getOrgInfo(orgId);
+			OrmOrganization data = ormOrganizationService.findOne(orgId);
 			return Result.generateSuccess("获取组织机构信息成功", data);
 		} catch (Exception e) {
 			logger.info(e.getMessage());
 			return Result.generateFail("500", "获取组织机构信息失败");
+		}
+	}
+
+	@RequestMapping("institution/children")
+	@ResponseBody
+	public PageResponse<OrmOrganization> getInstChildren(PageRequest pageRequest) {
+		try {
+			PageResponse<OrmOrganization> data = ormOrganizationService.findAll(pageRequest);
+			System.out.println(data);
+			return data;
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return null;
 		}
 	}
 	// @RequestMapping("/forward/manage")

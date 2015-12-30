@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>机构管理</title>
+	<link rel="stylesheet" type="text/css" href="../../../resources/commons/css/base.css">
+    <link rel="stylesheet" type="text/css" href="../../../resources/commons/css/widget.css">
+    <link rel="stylesheet" type="text/css" href="../css/org-manage.css" />
+	<style>
+		.ztree span{
+			font:14px/1.5 "Microsoft Yahei",tahoma,arial,"Hiragino Sans GB",\5b8b\4f53;
+		}
+	</style>
+</head>
+<body>
+	<div class="main-repeat layout-left-center">
+		<div class="col-main">
+			<div class="col-sub">
+				<div class="org-title">
+					<img src="../css/imgs/org-title.png" alt="" class="org-title-img" />
+					<span>机构组织关系</span>
+				</div>
+				<ul id="tree" class="ztree" style="width:287px;overflow-y:auto;overflow-x:auto"></ul>
+			</div>
+			<div class="main-wrap">
+				<div class="wrap-title">
+					<img src="../css/imgs/org.png" alt="" class="wrap-title-img" />
+					<span>浙江久拓科技有限公司</span>
+				</div>
+				<div class="org-tabs">
+					<ul class="org-tabs-nav">
+						<li>基本信息</li>
+						<li>下属机构</li>
+					</ul>
+					<div class="org-tabs-content">
+						<div class="hidden content-panel">
+							<div class="basic">
+								<form id="org-info">
+									<ul class="basic-list">
+										<li class="basic-list-items">
+											<label class="list-items-label">机构名称：</label>
+											<input type="text" id="org-name" class="list-items-inp" value="浙江久拓科技有限公司" />
+										</li>
+										<span class="ui-form-required">*</span>
+										<li class="basic-list-items">
+											<label class="list-items-label">机构简称：</label>
+											<input type="text" id="org-name-short" class="list-items-inp" value="久拓科技" />
+										</li>
+										<li class="basic-list-items">
+											<label class="list-items-label">机构代码：</label>
+											<input type="text" id="org-code" class="list-items-inp" value="330000" />
+										</li>
+										<span class="ui-form-required">*</span>
+										<li class="basic-list-items">
+											<label class="list-items-label">所属地域：</label>
+											<input type="text" id="org-region" class="list-items-inp" value="浙江省" />
+										</li>
+										<li class="basic-list-items">
+											<label class="list-items-label">联系电话：</label>
+											<input type="text" id="org-phone" class="list-items-inp" value="0571-88974587" />
+										</li>
+										<li class="basic-list-items">
+											<label class="list-items-label">联系人：</label>
+											<input type="text" id="org-contact-people" class="list-items-inp" value="张辉" />
+										</li>
+										<li class="basic-list-items">
+											<label class="list-items-label">机构邮箱：</label>
+											<input type="text" id="org-email" class="list-items-inp" value="jt@9tuo.com" />
+										</li>
+										<li class="basic-list-items">
+											<label class="list-items-label">机构网站：</label>
+											<input type="text" id="org-web" class="list-items-inp" value="www.9tuo.com" />
+										</li>
+										<li class="basic-list-items fullw">
+											<label class="list-items-label">机构邮编：</label>
+											<input type="text" id="org-postcode" class="list-items-inp" value="330000" />
+										</li>
+										<li class="basic-list-items fullw">
+											<label class="list-items-label">机构地址：</label>
+											<input type="text" id="org-address" class="list-items-inp inp-address" value="浙江省杭州市滨江区秋溢路 288 号东冠高新科技园 1 幢 501" />
+										</li>
+									</ul>
+									<div class="basic-other"></div>
+									<div class="basic-operate">
+										<div class="operate-btns">
+											<input type="button" class="operate-btns-items" value="保存" />
+											<input type="button" class="operate-btns-items" value="取消" />
+										</div>
+										<div class="operate-status">
+											<i class="iconfont">&#xf00a0;</i>
+											<span>保存成功！</span>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+						<div class="hidden content-panel">
+							<div class="subordinate">
+								<div class="sub-title">
+									<span class="sub-operate">
+										<i class="iconfont">&#xe641;</i>
+										<span>新增</span>
+									</span>
+									<span class="sub-title-text">下属机构列表</span>
+								</div>
+								<div class="sub-grid">
+									<table id="grid-table"></table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="../../../resources/commons/js/seajs/sea-debug.js" ></script>
+    <script src="../../../resources/commons/js/seajs/sea-config-debug.js"></script>
+    <script>
+    	seajs.use("../js/org-manage.js");
+    </script>
+	
+</body>
+</html>

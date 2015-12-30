@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>新增下属机构dialog</title>
+	<link rel="stylesheet" type="text/css" href="../../../resources/commons/css/base.css">
+    <link rel="stylesheet" type="text/css" href="../../../resources/commons/css/widget.css">
+    <link rel="stylesheet" type="text/css" href="../css/dialog-subadd.css" />
+</head>
+<body>
+	<div class="subadd-container">
+		<ul>
+			<li class="subadd-items subadd-items-required">
+				<label class="subadd-items-label">机构名称：</label>
+				<input type="text" class="subadd-items-inp" />
+				<span class="subadd-items-star">*</span>
+				<span class="items-error-text">请输入机构名称！</span>
+			</li>
+			<li class="subadd-items">
+				<label class="subadd-items-label">机构简称：</label>
+				<input type="text" class="subadd-items-inp" />
+			</li>
+			<li class="subadd-items subadd-items-required">
+				<label class="subadd-items-label">机构代码：</label>
+				<input type="text" class="subadd-items-inp" />
+				<span class="subadd-items-star">*</span>
+				<span class="items-error-text">请输入机构代码！</span>
+			</li>
+			<li class="subadd-items">
+				<label class="subadd-items-label">所属地域：</label>
+				<input type="text" class="subadd-items-inp" />
+			</li>
+			<li class="subadd-items">
+				<label class="subadd-items-label">联系电话：</label>
+				<input type="text" class="subadd-items-inp" />
+			</li>
+			<li class="subadd-items">
+				<label class="subadd-items-label">联系人：</label>
+				<input type="text" class="subadd-items-inp" />
+			</li>
+			<li class="subadd-items">
+				<label class="subadd-items-label">机构邮箱：</label>
+				<input type="text" class="subadd-items-inp" />
+			</li>
+			<li class="subadd-items">
+				<label class="subadd-items-label">机构网站：</label>
+				<input type="text" class="subadd-items-inp" />
+			</li>
+			<li class="subadd-items fullw">
+				<label class="subadd-items-label">机构邮编：</label>
+				<input type="text" class="subadd-items-inp" />
+			</li>
+			<li class="subadd-items fullw">
+				<label class="subadd-items-label">机构地址：</label>
+				<input type="text" class="subadd-items-inp inp-address" />
+			</li>
+		</ul>
+		<div class="subadd-bottom">
+			<div class="subadd-bottom-operate">
+				<input type="button" class="operate-items items-save" value="保存" />
+				<input type="button" class="operate-items" value="取消" />
+			</div>
+			<div class="subadd-bottom-status">
+				<i class="iconfont">&#xf00a0;</i>
+				<span>保存成功！</span>
+			</div>
+		</div>
+	</div>
+
+	<script src="../../../resources/commons/js/seajs/sea-debug.js" ></script>
+    <script src="../../../resources/commons/js/seajs/sea-config-debug.js"></script>
+    <script>
+    	seajs.use("../js/dialog-subadd.js");
+    </script>
+	
+</body>
+</html>

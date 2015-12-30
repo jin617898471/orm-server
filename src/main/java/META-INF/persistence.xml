@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="orm-server">
+		<class>cn.innosoft.fw.orm.server.model.OrmCode</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmOrganization</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmOrgCodeMap</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmOrgCodeRight</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmOrgOrgRight</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmOrgRoleMap</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmOrgUserMap</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmOrgUserMapView</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmResource</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmRole</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmRoleResourceRight</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmSystem</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmUser</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmUserCodeRightView</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmUserOrgRightView</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmUserRoleMap</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmUserRoleMapView</class>
+	</persistence-unit>
+</persistence>
