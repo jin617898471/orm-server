@@ -3,6 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p" 
 	xsi:schemaLocation="
             http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -19,23 +20,20 @@
             ">
 
 
-    <mvc:annotation-driven conversion-service="conversionService" >
+
+ <mvc:annotation-driven conversion-service="conversionService" >
         <mvc:message-converters register-defaults="true">
-			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
 			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
 				<constructor-arg value="UTF-8" />
 			</bean>
-			<!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
-			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-				<property name="prettyPrint" value="true" />
-				<property name="objectMapper" >
-					<bean id="customObjectMapper" class="cn.innosoft.fw.biz.util.CustomerObjectMapper" >
-				    	<constructor-arg value="yyyy/MM/dd hh" />  
-				    </bean> 
-				</property>  
-			</bean>
+		    <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="objectMapper" />
+                <property name="prettyPrint" value="true"/>
+            </bean> 
 		</mvc:message-converters>
     </mvc:annotation-driven>
+    <bean id="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean"
+      p:indentOutput="false" p:simpleDateFormat="yyyy-MM-dd" p:modulesToInstall="com.fasterxml.jackson.module.paramnames.ParameterNamesModule" />
     	<!-- 配置视图组件ViewResolver -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- 该组件可以自动给页面追加前缀 -->
@@ -48,10 +46,10 @@
 	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
 		<property name="converters">
 			<list>
-				<bean class="cn.innosoft.fw.biz.util.converter.StringToSqlTimeConverter"></bean>
-				<bean class="cn.innosoft.fw.biz.util.converter.StringToSqlDateConverter"></bean>
-				<bean class="cn.innosoft.fw.biz.util.converter.StringToSqlTimestampConverter"></bean>
-				<bean class="cn.innosoft.fw.biz.util.converter.StringToUtilDateConverter"></bean>
+				<bean class="cn.innosoft.fw.biz.utils.converter.StringToSqlTimeConverter"></bean>
+				<bean class="cn.innosoft.fw.biz.utils.converter.StringToSqlDateConverter"></bean>
+				<bean class="cn.innosoft.fw.biz.utils.converter.StringToSqlTimestampConverter"></bean>
+				<bean class="cn.innosoft.fw.biz.utils.converter.StringToUtilDateConverter"></bean>
 			</list>
 		</property>
 	</bean>
@@ -67,7 +65,7 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<bean class="cn.innosoft.fw.biz.log.LogInterceptor">
-				<property name="level" value="3" />	 <!-- 0：不记录日志到数据库；1：只记录业务日志；2：记录技术日志：3：记录详情日志  -->
+				<property name="level" value="0" />	 <!-- 0：不记录日志到数据库；1：只记录业务日志；2：记录技术日志：3：记录详情日志  -->
 				<property name="operateUserHelperClass" value="cn.innosoft.fw.orm.client.service.LoginUserContext" />	
 				<property name="operateUserGetMethod" value="getUserId" />	
 			</bean>

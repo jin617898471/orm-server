@@ -32,8 +32,8 @@
 <!-- 			classpath*:security-config.xml -->
 			classpath:ormServer-beans.xml
 			classpath*:ormClient-beans.xml
-			classpath*:log-beans.xml
-			classpath*:log-ds.xml
+<!-- 			classpath*:log-beans.xml -->
+<!-- 			classpath*:log-ds.xml -->
 <!-- 			classpath:ormServer-webservice.xml -->
 		</param-value>
 	</context-param>

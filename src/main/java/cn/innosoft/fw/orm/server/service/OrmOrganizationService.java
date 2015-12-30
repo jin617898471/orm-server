@@ -61,6 +61,10 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		node.setName(org.getOrgName());
 		return node;
 	}
+
+	public OrmOrganization getOrgInfo(String orgId) {
+		return ormOrganizationDao.findOne(orgId);
+	}
 	// /**
 	// * 添加组织机构
 	// *

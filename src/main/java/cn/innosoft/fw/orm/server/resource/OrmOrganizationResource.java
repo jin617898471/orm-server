@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -11,6 +12,7 @@ import cn.innosoft.fw.biz.log.FwLog;
 import cn.innosoft.fw.biz.log.FwLogFactory;
 import cn.innosoft.fw.orm.server.common.entity.InfoWrap;
 import cn.innosoft.fw.orm.server.common.result.Result;
+import cn.innosoft.fw.orm.server.model.OrmOrganization;
 import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.service.OrmOrganizationService;
 import cn.innosoft.fw.orm.server.service.OrmRoleService;
@@ -38,6 +40,18 @@ public class OrmOrganizationResource {
 		} catch (Exception e) {
 			logger.info(e.getMessage());
 			return Result.generateFail("500", "获取组织机构树失败");
+		}
+	}
+
+	@RequestMapping("info/{orgId}")
+	@ResponseBody
+	public InfoWrap getOrgInfo(@PathVariable String orgId) {
+		try {
+			OrmOrganization data = ormOrganizationService.getOrgInfo(orgId);
+			return Result.generateSuccess("获取组织机构信息成功", data);
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return Result.generateFail("500", "获取组织机构信息失败");
 		}
 	}
 	// @RequestMapping("/forward/manage")
