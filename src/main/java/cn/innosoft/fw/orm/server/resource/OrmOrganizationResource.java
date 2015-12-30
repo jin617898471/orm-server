@@ -69,6 +69,9 @@ public class OrmOrganizationResource {
 			return null;
 		}
 	}
+
+	// public InfoWrap updateOrg(OrmOrganization org) {
+	// }
 	// @RequestMapping("/forward/manage")
 	// public String forwardManage(Model model, String orgId) {
 	// model.addAttribute("orgId", orgId);
