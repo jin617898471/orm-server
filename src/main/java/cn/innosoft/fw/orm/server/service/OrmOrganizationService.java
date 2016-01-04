@@ -20,7 +20,7 @@ import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
 @Service
 public class OrmOrganizationService extends AbstractBaseService<OrmOrganization, String> {
 
-	private static final Logger logger = LogManager.getLogger(OrmUserService.class);
+	private static final Logger logger = LogManager.getLogger(OrmOrganizationService.class);
 	@Autowired
 	private OrmOrganizationDao ormOrganizationDao;
 
@@ -41,7 +41,7 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		return ormOrganizationDao;
 	}
 	
-	public List<ZtreeBean> getInstitutionTee() {
+	public List<ZtreeBean> getInstitutionTree() {
 		List<ZtreeBean> list = new ArrayList<ZtreeBean>();
 		ZtreeBean root = new ZtreeBean();
 		root.setId("ROOT");
@@ -62,7 +62,29 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		return node;
 	}
 
+	public List<ZtreeBean> getNodeChildren(String orgId) {
+		List<ZtreeBean> list = new ArrayList<ZtreeBean>();
+		List<OrmOrganization> insts = ormOrganizationDao.findByOrgTypeAndParentOrgId("I", orgId);
+		for (OrmOrganization i : insts) {
+			list.add(createZtreeNode(i));
+		}
+		return list;
+	}
 
+	/**
+	 * 删除组织机构
+	 *
+	 * @param orgId
+	 */
+	 public void deleteOrganization(String orgId) {
+		List<OrmOrganization> orgs = ormOrganizationDao.getOrgByParentOrg(orgId);
+		for (OrmOrganization org : orgs) {
+			String oId = org.getOrgId();
+			ormOrganizationDao.delete(oId);
+			ormOrgUserMapDao.deleteByOrgId(oId);
+			ormOrgRoleMapDao.deleteByOrgId(oId);
+		}
+	}
 	// /**
 	// * 添加组织机构
 	// *

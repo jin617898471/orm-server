@@ -1,9 +1,13 @@
 package cn.innosoft.fw.orm.server.resource;
 
+import java.util.Arrays;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,7 +41,7 @@ public class OrmOrganizationResource {
 	@ResponseBody
 	public InfoWrap getInstitutionTree() {
 		try {
-			List<ZtreeBean> data = ormOrganizationService.getInstitutionTee();
+			List<ZtreeBean> data = ormOrganizationService.getInstitutionTree();
 			return Result.generateSuccess("获取机构树成功", data);
 		} catch (Exception e) {
 			logger.info(e.getMessage());
@@ -70,8 +74,68 @@ public class OrmOrganizationResource {
 		}
 	}
 
-	// public InfoWrap updateOrg(OrmOrganization org) {
-	// }
+	@RequestMapping("update")
+	@ResponseBody
+	public InfoWrap updateOrg(OrmOrganization org, HttpServletRequest request) {
+		try {
+			String[] fields = new String[]{"orgName","orgNameShort","orgCode","orgArea",
+					"orgPhone","orgLinkman","orgEmail","orgWeburl","orgPostcode","orgAddress"};
+			ormOrganizationService.updateSome(org, Arrays.asList(fields));
+			return Result.generateSuccessWithoutData("保存成功");
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return Result.generateFail("500", "保存失败");
+		}
+	}
+
+	@RequestMapping("delete/{orgId}")
+	@ResponseBody
+	public InfoWrap deleteOrg(@PathVariable String orgId) {
+		try {
+			return Result.generateSuccessWithoutData("删除成功");
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return Result.generateFail("500", "删除失败");
+		}
+	}
+
+	@RequestMapping("institution/children/{orgId}")
+	@ResponseBody
+	public InfoWrap getNodeChildren(@PathVariable String orgId) {
+		try {
+			List<ZtreeBean> data = ormOrganizationService.getNodeChildren(orgId);
+			return Result.generateSuccess("获取子节点成功", data);
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return Result.generateFail("500", "获取子节点失败");
+		}
+	}
+
+	@RequestMapping("institution/forward/add/{pId}")
+	public String instAddForward(Model model, @PathVariable String pId) {
+		model.addAttribute("parentOrgId", pId);
+		model.addAttribute("sign", "add");
+		return "orm/frame/dialog-subadd";
+	}
+	@RequestMapping("add")
+	@ResponseBody
+	public InfoWrap addOrg(OrmOrganization org, HttpServletRequest request) {
+		try {
+			ormOrganizationService.add(org);
+			return Result.generateSuccessWithoutData("保存成功");
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			return Result.generateFail("500", "保存失败");
+		}
+	}
+
+	@RequestMapping("institution/forward/edit/{id}")
+	public String instEditForward(Model model, @PathVariable String id) {
+		OrmOrganization org = ormOrganizationService.findOne(id);
+		model.addAttribute("org", org);
+		model.addAttribute("sign", "edit");
+		return "orm/frame/dialog-subadd";
+	}
 	// @RequestMapping("/forward/manage")
 	// public String forwardManage(Model model, String orgId) {
 	// model.addAttribute("orgId", orgId);

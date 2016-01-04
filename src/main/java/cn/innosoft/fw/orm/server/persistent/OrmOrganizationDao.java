@@ -2,6 +2,8 @@ package cn.innosoft.fw.orm.server.persistent;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
+
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.orm.server.model.OrmOrganization;
 
@@ -16,9 +18,11 @@ public interface OrmOrganizationDao extends BaseDao<OrmOrganization, String> {
 	// o.orgId=m.orgId and m.userId=?1")
 	// List<OrmOrganization> getOrgByUserId(String userId);
 	//
-	// @Query(value="SELECT DISTINCT * FROM ORM_ORGANIZATION START WITH ORG_ID
-	// =?1 CONNECT BY PRIOR ORG_ID=PARENT_ORG_ID", nativeQuery=true)
-	// List<OrmOrganization> getOrgByParentOrg(String orgId);
+	@Query(value = "SELECT DISTINCT * FROM ORM_ORGANIZATION START WITH ORG_ID"
+			+ "=?1 CONNECT BY PRIOR ORG_ID=PARENT_ORG_ID", nativeQuery = true)
+	 List<OrmOrganization> getOrgByParentOrg(String orgId);
 
 	List<OrmOrganization> findByOrgType(String orgType);
+
+	List<OrmOrganization> findByOrgTypeAndParentOrgId(String orgType, String parentOrgId);
 }
