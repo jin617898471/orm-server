@@ -1,4 +1,4 @@
-package cn.innosoft.fw.orm.server.service;
+package cn.innosoft.fw.orm.server.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
