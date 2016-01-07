@@ -1,6 +1,7 @@
 package cn.innosoft.fw.orm.server.resource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,121 +18,77 @@ import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.service.OrmCodeService;
 
 @Controller
-@RequestMapping(value = "ormCode")
+@RequestMapping(value = "system/code")
 public class OrmCodeResource {
 	
 	@Autowired
 	private OrmCodeService ormCodeService;
 
-	public void setOrmCodeService(OrmCodeService ormCodeService) {
-		this.ormCodeService = ormCodeService;
-	}
-
 	
-	/**
-	 * 跳转到详情界面
-	 * @param model
-	 * @param codeId
-	 * @return
-	 */
-	@RequestMapping("/forward/details/{codeId}")
-	public String forwardDetailAction(Model model,@PathVariable String codeId){
+	@RequestMapping("/forward/manage")
+	public String forwardManage(Model model){
+		return "/orm/system/code/codeManage";
+	}
+	
+	@RequestMapping("/forward/detail/{codeId}")
+	public String forwardDetail(Model model,@PathVariable String codeId){
 		OrmCode ormCode = ormCodeService.findOne(codeId);
 		model.addAttribute("OrmCode",ormCode);
-		model.addAttribute("sign","details");
-		return "/orm/system/code/ormCodeADE.jsp";
+		model.addAttribute("sign","detail");
+		return "/orm/system/code/codeADE";
 	}
 	
-	/**
-	 * 跳转到添加页面
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping("/forward/addCode")
-	public String forwardAddAction(Model model){
+	@RequestMapping("/forward/add")
+	public String forwardAdd(Model model,String parentId,String parentType){
+		OrmCode ormCode = ormCodeService.findParentNode(parentId,parentType);
+		model.addAttribute("OrmCode",ormCode);
 		model.addAttribute("sign","add");
-		return "/orm/system/code/ormCodeADE.jsp";
+		model.addAttribute("parentType",parentType);
+		return "/orm/system/code/codeADE";
 	}
 	
-	/**
-	 * 跳转到编辑页面
-	 * @param model
-	 * @param codeId
-	 * @return
-	 */
-	@RequestMapping("/forward/editCode/{codeId}")
-	public String forwardEditAction(Model model,@PathVariable String codeId){
+	@RequestMapping("/forward/edit/{codeId}")
+	public String forwardEdit(Model model,@PathVariable String codeId){
 		OrmCode ormCode = ormCodeService.findOne(codeId);
 		model.addAttribute("ormCode",ormCode);
 		model.addAttribute("sign","edit");
-		return "/orm/system/code/ormCodeADE.jsp";
+		return "/orm/system/code/codeADE";
 	}
 
-	/**
-	 * 获取代码树
-	 * @return
-	 */
-	@RequestMapping("/getCodeTree")
+	@RequestMapping("/tree")
 	@ResponseBody
 	public List<ZtreeBean> getCodeTree(){
-		return ormCodeService.getAllCodeTreeNodes();
+		return ormCodeService.findAllTrees();
 	}
 	
-	/**
-	 * 添加OrmCode数据
-	 * @param ormCode
-	 * @return
-	 */
-	@RequestMapping("/addCode")
+	@RequestMapping("/add")
 	@ResponseBody
-	public String addCodeAction(OrmCode ormCode){
-		
+	public void addCode(OrmCode ormCode){
 		ormCodeService.addCode(ormCode);
-		return "true";
 	}
 	
-	/**
-	 * 修改OrmCode数据
-	 * @param ormCode
-	 * @return
-	 */
-	@RequestMapping("/editCode")
+	@RequestMapping("/edit")
 	@ResponseBody
-	public String editCodeAction(OrmCode ormCode){
-		ormCodeService.updateCode(ormCode);
-		return "true";
+	public void editCode(OrmCode ormCode,String[] updateField){
+		ormCodeService.updateCode(ormCode,Arrays.asList(updateField));
 	}
 	
-	/**
-	 * 通过ormCodeId删除OrmCode数据
-	 * @param ormCodeId
-	 */
-	@RequestMapping("/deleteCode/{codeId}")
+	@RequestMapping("/delete/{codeId}")
 	@ResponseBody
-	public void deleteCodeAction(@PathVariable String codeId){
-		ormCodeService.delete(codeId);
+	public void delete(@PathVariable String codeId){
+		ormCodeService.deleteCode(codeId);
 	}
 	
-	/**
-	 * 批量删除OrmCode数据
-	 * @param idArray
-	 */
-	@RequestMapping("/deleteBatchCode/{idArray}")
+	@RequestMapping("/deletes/{idArray}")
 	@ResponseBody
-	public void deleteBatchCodeAction(@PathVariable ArrayList<String> idArray){
-		ormCodeService.deleteBatchCode(idArray);
+	public void deletes(@PathVariable ArrayList<String> idArray){
+		ormCodeService.deleteCode(idArray);
 	}
 	
-	@RequestMapping("/findCodeByPage")
+	@RequestMapping("/list")
 	@ResponseBody
-	public PageResponse<OrmCode> findOrmCodeByPage(PageRequest pageRequest){
-		return ormCodeService.find(pageRequest);
-	}
-	
-	@RequestMapping("/findCode/{parentCodeId}")
-	@ResponseBody
-	public List<OrmCode> findCode(@PathVariable String parentCodeId){
-		return ormCodeService.findOrmCodesByParentCodeId(parentCodeId);
+	public PageResponse<OrmCode> list(PageRequest pageRequest){
+		return ormCodeService.findAll(pageRequest);
 	}
 	
 }

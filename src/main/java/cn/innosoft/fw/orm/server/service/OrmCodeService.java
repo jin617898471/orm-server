@@ -8,172 +8,175 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cn.innosoft.fw.biz.base.querycondition.FilterGroup;
-import cn.innosoft.fw.biz.base.querycondition.QueryConditionHelper;
-import cn.innosoft.fw.biz.base.web.PageRequest;
-import cn.innosoft.fw.biz.base.web.PageResponse;
+import cn.innosoft.fw.biz.base.exception.ObjectMessageException;
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
+import cn.innosoft.fw.biz.utils.Identities;
 import cn.innosoft.fw.orm.server.model.OrmCode;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
 import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.persistent.OrmCodeDao;
-import cn.innosoft.fw.orm.server.persistent.OrmSystemDao;
+import cn.innosoft.fw.orm.server.persistent.OrmOrgCodeRightDao;
 
 @Service
 public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 
 	@Autowired
 	private OrmCodeDao ormCodeDao;
-	
+
 	@Autowired
-	private OrmSystemDao ormSystemDao;
+	private OrmOrgCodeRightDao ormOrgCodeRightDao;
+
+	@Autowired
+	private OrmSystemService ormSystemService;
 
 	@Override
 	public BaseDao<OrmCode, String> getBaseDao() {
 		return ormCodeDao;
 	}
 
-	/**
-	 * 代码查询
-	 * 
-	 * @param pageRequest
-	 * @return
-	 */
-	public PageResponse<OrmCode> find(PageRequest pageRequest) {
-		FilterGroup group = QueryConditionHelper.add(pageRequest.getFilterGroup(), new String[] { "validSign" },
-				new String[] { "Y" }, new String[] { "equal" });
-		PageResponse<OrmCode> page = findAll(group, pageRequest);
-		return page;
+	public List<ZtreeBean> findAllTrees() {
+		List<OrmSystem> ormSystems = ormSystemService.getHasRight();
+		List<ZtreeBean> systemtree = transferSystemTreeNode(ormSystems);
+		List<String> rightsytem = getSystemId(systemtree);
+		List<OrmCode> codes = ormCodeDao.findAllBySystemId(rightsytem);
+		List<ZtreeBean> codetrees = transferCodeTreeNode(codes);
+		systemtree.addAll(codetrees);
+		return systemtree;
+	}
+
+	public List<ZtreeBean> findHasRightTrees() {
+		List<OrmSystem> ormSystems = ormSystemService.getAll();
+		List<ZtreeBean> systemtree = transferSystemTreeNode(ormSystems);
+		List<String> rightsytem = getSystemId(systemtree);
+		List<OrmCode> codes = ormCodeDao.findHasRightBySystemId(rightsytem);
+		List<ZtreeBean> codetrees = transferCodeTreeNode(codes);
+		systemtree.addAll(codetrees);
+		return systemtree;
+	}
+
+	private List<ZtreeBean> transferCodeTreeNode(List<OrmCode> codes) {
+		List<ZtreeBean> list = new ArrayList<ZtreeBean>();
+		for (OrmCode code : codes) {
+			ZtreeBean node = createCodeTreeNode(code);
+			list.add(node);
+		}
+		return list;
+	}
+
+	private List<String> getSystemId(List<ZtreeBean> ormSystems) {
+		List<String> list = new ArrayList<String>();
+		for (ZtreeBean sys : ormSystems) {
+			list.add(sys.getId());
+		}
+		return list;
+	}
+
+	private List<ZtreeBean> transferSystemTreeNode(List<OrmSystem> ormSystems) {
+		List<ZtreeBean> list = new ArrayList<ZtreeBean>();
+		for (OrmSystem sys : ormSystems) {
+			ZtreeBean node = createSytemTreeNode(sys);
+			list.add(node);
+		}
+		ZtreeBean node = new ZtreeBean();
+		node.setId("GLOBAL");
+		node.setpId("ROOT");
+		node.setName("公共代码");
+		Map<String, Object> attributes = new HashMap<String, Object>();
+		attributes.put("nodeType", "SYSTEM");
+		node.setAttributes(attributes);
+		list.add(node);
+		return list;
+	}
+
+	private ZtreeBean createSytemTreeNode(OrmSystem sys) {
+		ZtreeBean node = new ZtreeBean();
+		node.setId(sys.getSystemId());
+		node.setpId("ROOT");
+		node.setName(sys.getSystemName());
+		Map<String, Object> attributes = new HashMap<String, Object>();
+		attributes.put("nodeType", "SYSTEM");
+		node.setAttributes(attributes);
+		return node;
+	}
+
+	private ZtreeBean createCodeTreeNode(OrmCode code) {
+		ZtreeBean node = new ZtreeBean();
+		node.setId(code.getCodeId());
+		String pId = code.getParentCodeId();
+		Map<String, Object> attributes = new HashMap<String, Object>();
+		if ("ROOT".equals(pId)) {
+			attributes.put("nodeType", "CODEINDEX");
+			node.setpId(code.getSystemId());
+		} else {
+			attributes.put("nodeType", "CODE");
+			node.setpId(pId);
+		}
+		node.setName(code.getCodeName());
+		node.setAttributes(attributes);
+		return node;
+	}
+
+	public void deleteCode(String id) {
+		delete(id);
+		ormOrgCodeRightDao.deleteByCodeId(id);
+	}
+
+	public void deleteCode(ArrayList<String> idArray) {
+		delete(idArray);
+		ormOrgCodeRightDao.deleteByCodeIdIn(idArray);
+	}
+
+	public void deleteBySystemId(String systemId) {
+		ormCodeDao.deleteBySystemId(systemId);
+		ormOrgCodeRightDao.deleteBySystemId(systemId);
+	}
+
+	public OrmCode findParentNode(String parentId, String parentType) {
+		OrmCode code = new OrmCode();
+		if ("SYSTEM" == parentType) {
+			code.setParentCodeId("ROOT");
+			code.setSystemId(parentId);
+		} else {
+			code.setParentCodeId(parentId);
+		}
+		return code;
 	}
 
 	public void addCode(OrmCode ormCode) {
-		ormCodeDao.save(ormCode);
-	}
-
-	public void updateCode(OrmCode ormCode) {
-		ormCodeDao.update(ormCode);
-	}
-
-	public void deleteCode(String codeId) {
-		ormCodeDao.delete(codeId);
-	}
-
-	public void deleteBatchCode(ArrayList<String> idArray){
-		for (int i = 0; i < idArray.size(); i++) {
-		 	ormCodeDao.delete(idArray.get(i));
+		ormCode.setCodeId(Identities.uuid2());
+		if ("ROOT" == ormCode.getParentCodeId()) {
+			checkCodeIndexValue(ormCode.getCodeValue(),ormCode.getCodeId());
+			ormCode.setRootCodeId(ormCode.getCodeId());
+		}else{
+			OrmCode parent = findOne(ormCode.getParentCodeId());
+			ormCode.setRootCodeId(parent.getRootCodeId());
+			ormCode.setSystemId(parent.getSystemId());
+			checkCodeValue(ormCode.getRootCodeId(),ormCode.getCodeValue(),ormCode.getCodeId());
 		}
-	}
-
-
-	/**
-	 * 将OrmCode生成代码ztree节点，建模时用
-	 * 
-	 * @param res
-	 * @return
-	 */
-	public ZtreeBean codeToTreeNode(OrmCode code) {
-		ZtreeBean node = new ZtreeBean();
-		//节点ID
-		node.setId(code.getCodeId());
-		//父节点ID
-		node.setpId(code.getParentCodeId());
-		//父节点名称
-		node.setName(code.getCodeName());
-		//是否是父节点
-		// boolean isParent = "Y".equals(code.getIsLeaf()) ? false : true;
-		//是否为打开状态
-		// node.setOpen(isParent);
-		//前端可能需要用到的信息属性
-		Map<String, Object> attributes = new HashMap<String, Object>();
-		attributes.put("rootCodeId", code.getRootCodeId());
-		node.setAttributes(attributes);
-		//是否隐藏单复选框
-		node.setNocheck(false);
-		//是否选中
-		node.setChecked(false);
-		
-		return node;
-	}
-	public void deleteBySystemId(String systemId){
-		ormCodeDao.deleteBySystemId(systemId);
-	}
-	/**
-	 * 获取整个代码树
-	 * @return
-	 */
-	public List<ZtreeBean> getAllCodeTreeNodes(){
-		
-		List<ZtreeBean> ztree = new ArrayList<ZtreeBean>();
-		
-		ZtreeBean grobalRootNode = new ZtreeBean();
-		grobalRootNode.setId("ROOT1");
-		grobalRootNode.setName("全局系统代码");
-		grobalRootNode.setIsParent(true);
-		grobalRootNode.setNocheck(false);
-		grobalRootNode.setOpen(true);
-		grobalRootNode.setpId(null);
-		grobalRootNode.setChecked(false);
-		
-		ztree.add(grobalRootNode);
-		
-		List<OrmCode> globalAllCodes = new ArrayList<OrmCode>();
-		
-		//获取全局代码根节点
-		//获取全局根节点代码,即系统Id为"grobal"且父节点id为"ROOT"的Code
-		List<OrmCode> globalRootCodes = ormCodeDao.findBySystemIdAndParentCodeId("GLOBAL","ROOT");
-		
-		//获取所有系统,并递归调用获取节点代码
-		for(int i=0;i<globalRootCodes.size();i++){
-			OrmCode globalRootCode = globalRootCodes.get(i);
-			globalRootCode.setParentCodeId("ROOT1"); 
-			globalAllCodes.add(globalRootCode);
-			List<OrmCode> globalNormalCodes = ormCodeDao.findByParentCodeId(globalRootCode.getCodeId());
-			globalAllCodes.addAll(globalNormalCodes);
-		}
-		
-		//获取所有的系统
-		List<OrmSystem> ormSystems = ormSystemDao.findByValidSign("Y");
-		
-		for(int i=0;i<ormSystems.size();i++){
-			OrmSystem ormSystem = ormSystems.get(i);
-			String systemId = ormSystem.getSystemId();
-			String systemName = ormSystem.getSystemName();
-			
-			//创建显示的树系统节点
-			ZtreeBean systemNode = new ZtreeBean();
-			systemNode.setId("ROOT2");
-			systemNode.setName(systemName);
-			systemNode.setIsParent(true);
-			systemNode.setOpen(true);
-			systemNode.setpId(null);
-			systemNode.setNocheck(true);
-			
-			ztree.add(systemNode);
-			
-			//根据系统查找属于该系统的代码
-			List<OrmCode> systemRootCodes = ormCodeDao.getRootCodeBySystemId(systemId); 
-			for(int j=0;j<systemRootCodes.size();j++){
-				
-				OrmCode systemRootCode = systemRootCodes.get(j);
-				systemRootCode.setParentCodeId("ROOT2");
-				globalAllCodes.add(systemRootCode);
-				List<OrmCode> systemNormalCodes = ormCodeDao.findByParentCodeId(systemRootCode.getCodeId());
-				globalAllCodes.addAll(systemNormalCodes);
-			}
-		}
-		
-		for(int i=0;i<globalAllCodes.size();i++){
-			ZtreeBean treeNode = codeToTreeNode(globalAllCodes.get(i));
-			ztree.add(treeNode);
-		}
-		
-		return ztree;
+		add(ormCode);
 	}
 	
-	
-	
-	public List<OrmCode> findOrmCodesByParentCodeId(String parentCodeId){
-		return ormCodeDao.findByParentCodeId(parentCodeId);
+	public void updateCode(OrmCode ormCode, List<String> updateField) {
+		if ("ROOT" == ormCode.getParentCodeId()) {
+			checkCodeIndexValue(ormCode.getCodeValue(),ormCode.getCodeId());
+		}else{
+			checkCodeValue(ormCode.getRootCodeId(),ormCode.getCodeValue(),ormCode.getCodeId());
+		}
+		updateSome(ormCode,updateField);
+	}
+
+	private void checkCodeValue(String rootCodeId, String codeValue,String codeId) {
+		Integer cout = ormCodeDao.countByRootCodeIdAndCodeValueAndCodeIdNot(rootCodeId,codeValue,codeId);
+		if(cout>0){
+			throw new ObjectMessageException("存在值为"+codeValue+"的代码");
+		}
+	}
+
+	private void checkCodeIndexValue(String codeValue,String codeId){
+		Integer cout = ormCodeDao.countByParentCodeIdAndCodeValueAndCodeIdNot("ROOT",codeValue,codeId);
+		if(cout>0){
+			throw new ObjectMessageException("存在值为"+codeValue+"的代码集");
+		}
 	}
 }

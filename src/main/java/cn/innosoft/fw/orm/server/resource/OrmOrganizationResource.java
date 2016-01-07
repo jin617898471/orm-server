@@ -52,6 +52,7 @@ public class OrmOrganizationResource {
 			OrmOrganization data = ormOrganizationService.findOne(orgId);
 			return Result.generateSuccess("获取组织机构信息成功", data);
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.info(e.getMessage());
 			return Result.generateFail("500", "获取组织机构信息失败");
 		}

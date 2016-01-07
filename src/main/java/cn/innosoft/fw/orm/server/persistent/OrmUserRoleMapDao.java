@@ -1,9 +1,13 @@
 package cn.innosoft.fw.orm.server.persistent;
 
+import java.util.ArrayList;
+
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.orm.server.model.OrmUserRoleMap;
 
 public interface OrmUserRoleMapDao extends BaseDao<OrmUserRoleMap, String> {
+
+	void deleteByRoleId(String id);
 	// public List<OrmUserRoleMap> findByUserIdAndRoleId(String userId, String
 	// roleId);
 	//
@@ -46,4 +50,8 @@ public interface OrmUserRoleMapDao extends BaseDao<OrmUserRoleMap, String> {
 	// @Query("select m.mapType,o from OrmUserRoleMap m,OrmRole o where m.roleId
 	// = o.roleId and m.userId=?1")
 	// public List<Object[]> findMapeTypeAndRole(String userId);
+
+	void deleteByRoleIdIn(ArrayList<String> idArray);
+
+	void deleteBySystemId(String systemId);
 }
