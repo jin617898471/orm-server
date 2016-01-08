@@ -88,10 +88,10 @@
 				r.ROLE_NAME_CN as "roleNameCn",
 				r.SYSTEM_ID as "systemId",
 				s.SYSTEM_NAME as "systemName",
-				m.MAP_TYPE as "mapType"
+				m.RELATE_TYPE as "realateType"
 			FROM
 				ORM_ROLE r,
-				ORM_USER_ROLE_MAP m,
+				ORM_USER_ROLE_MAP_VIEW m,
 				ORM_SYSTEM s
 			WHERE
 				r.ROLE_ID=m.ROLE_ID

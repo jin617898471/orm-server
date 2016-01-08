@@ -1,7 +1,9 @@
 package cn.innosoft.fw.orm.server.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -10,10 +12,14 @@ import org.springframework.stereotype.Service;
 
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
+import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
+import cn.innosoft.fw.orm.server.model.OrmOrgUserMapView;
 import cn.innosoft.fw.orm.server.model.OrmOrganization;
+import cn.innosoft.fw.orm.server.model.OrmUser;
 import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgUserMapDao;
+import cn.innosoft.fw.orm.server.persistent.OrmOrgUserMapViewDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrganizationDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserRoleMapDao;
 
@@ -26,6 +32,9 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 
 	@Autowired
 	private OrmOrgUserMapDao ormOrgUserMapDao;
+
+	@Autowired
+	private OrmOrgUserMapViewDao ormOrgUserMapViewDao;
 
 	@Autowired
 	private OrmOrgRoleMapDao ormOrgRoleMapDao;
@@ -49,24 +58,30 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		List<OrmOrganization> insts = ormOrganizationDao.findByOrgType("I");
 		list.add(root);
 		for (OrmOrganization i : insts) {
-			list.add(createZtreeNode(i));
+			list.add(createZtreeNode(i, false));
 		}
 		return list;
 	}
 
-	private ZtreeBean createZtreeNode(OrmOrganization org) {
+	private ZtreeBean createZtreeNode(OrmOrganization org, boolean isParent) {
 		ZtreeBean node = new ZtreeBean();
 		node.setId(org.getOrgId());
 		node.setpId(org.getParentOrgId());
 		node.setName(org.getOrgName());
+		Map<String, Object> attrs = new HashMap<String, Object>();
+		attrs.put("type", org.getOrgType());
+		node.setAttributes(attrs);
+		if (isParent) {
+			node.setIsParent(true);
+		}
 		return node;
 	}
 
-	public List<ZtreeBean> getNodeChildren(String orgId) {
+	public List<ZtreeBean> getInstNodeChildren(String type, String orgId) {
 		List<ZtreeBean> list = new ArrayList<ZtreeBean>();
-		List<OrmOrganization> insts = ormOrganizationDao.findByOrgTypeAndParentOrgId("I", orgId);
+		List<OrmOrganization> insts = ormOrganizationDao.findByOrgTypeAndParentOrgId(type, orgId);
 		for (OrmOrganization i : insts) {
-			list.add(createZtreeNode(i));
+			list.add(createZtreeNode(i, false));
 		}
 		return list;
 	}
@@ -81,9 +96,53 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		for (OrmOrganization org : orgs) {
 			String oId = org.getOrgId();
 			ormOrganizationDao.delete(oId);
+			List<OrmOrgUserMap> maps = ormOrgUserMapDao.findByUserId(oId);
+			for (OrmOrgUserMap map : maps) {
+				String userId = map.getUserId();
+				List<OrmOrgUserMap> oou = ormOrgUserMapDao.findByUserId(userId);
+				if (oou.size() == 1) {
+					ormUserService.delete(userId);
+				}
+			}
 			ormOrgUserMapDao.deleteByOrgId(oId);
 			ormOrgRoleMapDao.deleteByOrgId(oId);
 		}
+	}
+
+	public List<ZtreeBean> getDepTree(String orgId, boolean isNeedRoot) {
+		List<ZtreeBean> nodes = new ArrayList<ZtreeBean>();
+		if (isNeedRoot) {
+			OrmOrganization root = ormOrganizationDao.findOne(orgId);
+			nodes.add(createZtreeNode(root, true));
+		}
+		List<OrmOrganization> orgs = ormOrganizationDao.findByParentOrgId(orgId);
+		List<OrmOrgUserMapView> maps = ormOrgUserMapViewDao.findByOrgId(orgId);
+		List<String> userIds = new ArrayList<String>();
+		for (OrmOrgUserMapView oou : maps) {
+			String userId = oou.getUserId();
+			if (userId != null) {
+				userIds.add(oou.getUserId());
+			}
+		}
+		List<OrmUser> users = ormUserService.getUserByIds(userIds);
+		for (OrmUser user : users) {
+			nodes.add(createEmpZtreeNode(user, orgId));
+		}
+		for (OrmOrganization org : orgs) {
+			nodes.add(createZtreeNode(org, true));
+		}
+		return nodes;
+	}
+
+	private ZtreeBean createEmpZtreeNode(OrmUser user, String orgId) {
+		ZtreeBean node = new ZtreeBean();
+		node.setId(user.getUserId());
+		node.setpId(orgId);
+		node.setName(user.getUserName());
+		Map<String, Object> attrs = new HashMap<String, Object>();
+		attrs.put("type", "E");
+		node.setAttributes(attrs);
+		return node;
 	}
 	// /**
 	// * 添加组织机构

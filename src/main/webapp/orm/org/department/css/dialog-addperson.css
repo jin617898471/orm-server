@@ -1,0 +1,229 @@
+.add-container{
+	padding: 0 20px;
+}
+
+/*重写tabs css start*/
+.add-tabs-nav.ui-tabs-nav{
+	top: 0;
+}
+
+.add-tabs-nav.ui-tabs-nav li{
+	height: 47px;
+	line-height: 47px;
+	border: 0;
+	margin-right: 0;
+	padding: 0 16px;
+	color: #444444;
+	font-size: 14px;
+}
+
+.add-tabs-nav.ui-tabs-nav .ui-tabs-active{
+	height: 46px;
+	color: #298cef;
+	border-bottom: 2px solid #298cef;
+}
+
+.add-tabs{
+	padding-top: 47px;
+}
+
+.add-tabs-content.ui-tabs-content{
+	border: 0;
+	border-top: 1px solid #e1e3e5;
+}
+/*重写tabs css end*/
+
+.info-container{
+	padding-top: 20px;
+}
+
+.info-items{
+	width: 50%;
+	float: left;
+	color: #444444;
+	font-size: 13px;
+	margin-bottom: 20px;
+	height: 32px;
+}
+
+.info-label{
+	float: left;
+	width: 75px;
+	text-align: right;
+	padding-right: 10px;
+	line-height: 32px;
+}
+
+.info-inps{
+	width: 208px;
+	padding-left: 10px;
+	height: 30px;
+	border: 1px solid #e1e3e5;
+	border-radius: 2px;
+	line-height: 30px;
+}
+
+.info-inps:focus{
+	border-color: #71b7fd;
+	box-shadow: 0px 0px 7px rgba(41,140,239,0.3);
+}
+
+.info-password{
+	display: inline-block;
+	position: relative;
+}
+
+.password-ico{
+	display: inline-block;
+	width: 25px;
+	height: 30px;
+	background: url(imgs/password-1.png) 0 0 no-repeat;
+	cursor: pointer;
+	position: absolute;
+	right: 1px;
+	top: 1px;
+}
+
+.password-show .password-ico{
+	background-image: url(imgs/password-2.png);
+}
+
+/*重写autocomplete css start*/
+.ui-autocomplete-content{
+	padding: 10px 0;
+	background: #ffffff;
+	border: 1px solid #e1e3e5;
+	box-shadow: 0px 4px 10px #c2c8ce;
+}
+
+.ui-autocomplete-item{
+	line-height: 32px;
+	color: #444444;
+	font-size: 13px;
+	padding-left: 10px;
+}
+
+.ui-autocomplete-item:hover{
+	color: #ffffff;
+	background: #298cef;
+}
+/*重写 autocomplete css end*/
+
+.info-items-sexes{
+	display: inline-block;
+	line-height: 32px;
+	margin-right: 25px;
+}
+
+.sexes-radio{
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.w218{
+	width: 218px;
+}
+
+.trigger-ico{
+	background: url(imgs/select-arrow.png) -3px -14px no-repeat;
+}
+
+.info-items-times{
+	display: inline-block;
+	position: relative;
+}
+
+.info-items-times .iconfont{
+	color: #97a5b3;
+	font-size: 20px;
+	position: absolute;
+	right: 8px;
+	top: 0px;
+	cursor: pointer;
+}
+
+.org-delete{
+	margin-left: 217px;
+	width: 86px;
+	height: 30px;
+	border: 1px solid #e1e3e5;
+	border-radius: 2px;
+	line-height: 30px;
+	background: #f5f7fa;
+	color: #e54d4d;
+	font-size: 13px;
+}
+
+.org-delete:hover{
+	background: #edeff2;
+	cursor: pointer;
+}
+
+.info-organize{
+	border-bottom: 1px solid #e1e3e5;
+}
+
+.organize-add{
+	margin-top: 20px;
+	width: 93px;
+	height: 30px;
+	text-align: center;
+	line-height: 30px;
+	border: 1px solid #e1e3e5;
+	border-radius: 2px;
+	color: #298cef;
+	font-size: 13px;
+	background: #f5f7fa;
+	cursor: pointer;
+}
+
+.organize-add .iconfont{
+	color: #298cef;
+	margin-right: 5px;
+	font-size: 14px;
+	position: relative;
+	top: -1px;
+}
+
+.organize-add:hover{
+	background: #edeff2;
+}
+
+.dialog-operate{
+	width: 100%;
+	height: 49px;
+	border-top: 1px solid #e1e3e5;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	background: #f5f7fa;
+}
+
+.operate-btns{
+	float: right;
+	padding-right: 10px;
+	margin-top: 8px;
+}
+
+.btns-items{
+	width: 80px;
+	height: 32px;
+	margin-right: 10px;
+	border: 0;
+	border-radius: 2px;
+	background: #298cef;
+	color: #ffffff;
+	font-size: 14px;
+}
+
+.btns-items:hover{
+	background: #2782de;
+	cursor: pointer;
+}
+
+.org-delete:active,
+.organize-add:active,
+.btns-items:active{
+	position: relative;
+	top: 1px;
+}

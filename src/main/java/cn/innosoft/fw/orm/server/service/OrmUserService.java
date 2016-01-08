@@ -57,6 +57,10 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		return ormUserDao;
 	}
 
+	public List<OrmUser> getUserByIds(List<String> userIds) {
+		return ormUserDao.findByUserIdIn(userIds);
+	}
+
 	/**
 	 * 查询用户
 	 * 

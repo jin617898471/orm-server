@@ -24,5 +24,7 @@ public interface OrmOrganizationDao extends BaseDao<OrmOrganization, String> {
 
 	List<OrmOrganization> findByOrgType(String orgType);
 
+	List<OrmOrganization> findByParentOrgId(String parentOrgId);
+
 	List<OrmOrganization> findByOrgTypeAndParentOrgId(String orgType, String parentOrgId);
 }

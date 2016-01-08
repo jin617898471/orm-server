@@ -1,12 +1,21 @@
 package cn.innosoft.fw.orm.server.resource;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.innosoft.fw.biz.log.FwLog;
 import cn.innosoft.fw.biz.log.FwLogFactory;
+import cn.innosoft.fw.orm.server.common.entity.InfoWrap;
+import cn.innosoft.fw.orm.server.common.result.Result;
 import cn.innosoft.fw.orm.server.service.OrmOrganizationService;
+import cn.innosoft.fw.orm.server.service.OrmRoleService;
 import cn.innosoft.fw.orm.server.service.OrmUserService;
 
 @Controller
@@ -15,10 +24,37 @@ public class OrmUserResource {
 	@Autowired
 	private OrmUserService ormUserService;
 	@Autowired
+	private OrmRoleService ormRoleService;
+	@Autowired
 	private OrmOrganizationService ormOrganizationService;
 	
 	private FwLog log = FwLogFactory.getLog(this.getClass());
 	
+	private static final Logger logger = LogManager.getLogger(OrmUserResource.class);
+
+	@RequestMapping("/role/assign")
+	@ResponseBody
+	public InfoWrap getOrgAssignRole(String orgId, String roleName, String systemId) {
+		try {
+			List<Map<String, Object>> data = ormRoleService.getUserAssignRole(orgId, roleName, systemId);
+			return Result.generateSuccess("获取用户已分配角色成功", data);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return Result.generateFail("500", "获取用户已分配角色失败");
+		}
+	}
+
+	@RequestMapping("/role/notassign")
+	@ResponseBody
+	public InfoWrap getOrgNotAssignRole(String orgId, String roleName, String systemId) {
+		try {
+			List<Map<String, Object>> data = ormRoleService.getUserNotAssignRole(orgId, roleName, systemId);
+			return Result.generateSuccess("获取用户可分配角色成功", data);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return Result.generateFail("500", "获取用户可分配角色失败");
+		}
+	}
 	// /**
 	// * 跳转到用户管理界面
 	// * @return
