@@ -1,5 +1,6 @@
 package cn.innosoft.fw.orm.server.persistent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +26,6 @@ public interface OrmOrgRoleMapDao extends BaseDao<OrmOrgRoleMap, String> {
 
 	@Query(value="select r.* from ORM_ORG_ROLE_MAP m,ORM_ROLE r where m.ORG_ID=?1 and m.ROLE_ID = r.ROLE_ID",nativeQuery=true)
 	public List<OrmRole> findRoleByOrgId(String orgId);
+
+	public void deleteByRoleIdIn(ArrayList<String> idArray);
 }
