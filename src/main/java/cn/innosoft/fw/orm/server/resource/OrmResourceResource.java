@@ -18,7 +18,7 @@ import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.service.OrmResourceService;
 
 @Controller
-@RequestMapping(value = "system/resource")
+@RequestMapping(value = "authority/resource")
 public class OrmResourceResource {
 
 	@Autowired
@@ -27,23 +27,23 @@ public class OrmResourceResource {
 	
 	@RequestMapping("/forward/manage")
 	public String forwardManage(Model model){
-		return "/orm/system/resource/resourceManage";
+		return "/orm/authority/resource/resourceManage";
 	}
 	
 	@RequestMapping("/forward/detail/{resourceId}")
 	public String forwardDetail(Model model,@PathVariable String resourceId){
 		OrmResource ormResource = ormResourceService.findOne(resourceId);
-		model.addAttribute("OrmResource",ormResource);
+		model.addAttribute("ormResource",ormResource);
 		model.addAttribute("sign","detail");
-		return "/orm/system/resource/resourceADE";
+		return "/orm/authority/resource/resourceADE";
 	}
 	
 	@RequestMapping("/forward/add")
 	public String forwardAdd(Model model,String parentId,String parentType){
 		OrmResource ormResource = ormResourceService.findParentNode(parentId,parentType);
-		model.addAttribute("OrmResource",ormResource);
+		model.addAttribute("ormResource",ormResource);
 		model.addAttribute("sign","add");
-		return "/orm/system/resource/resourceADE";
+		return "/orm/authority/resource/resourceADE";
 	}
 	
 	@RequestMapping("/forward/edit/{resourceId}")
@@ -51,7 +51,7 @@ public class OrmResourceResource {
 		OrmResource ormResource = ormResourceService.findOne(resourceId);
 		model.addAttribute("ormResource",ormResource);
 		model.addAttribute("sign","edit");
-		return "/orm/system/resource/resourceADE";
+		return "/orm/authority/resource/resourceADE";
 	}
 
 	@RequestMapping("/tree")

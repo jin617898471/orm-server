@@ -16,7 +16,7 @@ import cn.innosoft.fw.orm.server.model.OrmRole;
 import cn.innosoft.fw.orm.server.service.OrmRoleService;
 
 @Controller
-@RequestMapping(value = "system/role")
+@RequestMapping(value = "authority/role")
 public class OrmRoleResource {
 	
 	@Autowired
@@ -25,21 +25,21 @@ public class OrmRoleResource {
 
 	@RequestMapping("/forward/manage")
 	public String forwardManage(Model model){
-		return "/orm/system/role/roleManage";
+		return "/orm/authority/role/roleManage";
 	}
 	
 	@RequestMapping("/forward/detail/{roleId}")
 	public String forwardDetail(Model model,@PathVariable String roleId){
 		OrmRole ormRole = ormRoleService.findOne(roleId);
-		model.addAttribute("OrmRole",ormRole);
+		model.addAttribute("ormRole",ormRole);
 		model.addAttribute("sign","detail");
-		return "/orm/system/role/roleADE";
+		return "/orm/authority/role/roleADE";
 	}
 	
 	@RequestMapping("/forward/add")
 	public String forwardAdd(Model model){
 		model.addAttribute("sign","add");
-		return "/orm/system/role/roleADE";
+		return "/orm/authority/role/roleADE";
 	}
 	
 	@RequestMapping("/forward/edit/{roleId}")
@@ -47,7 +47,7 @@ public class OrmRoleResource {
 		OrmRole ormRole = ormRoleService.findOne(roleId);
 		model.addAttribute("ormRole",ormRole);
 		model.addAttribute("sign","edit");
-		return "/orm/system/role/roleADE";
+		return "/orm/authority/role/roleADE";
 	}
 
 	

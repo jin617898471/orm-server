@@ -215,15 +215,15 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		//
 		// }
 		map.put("org",orgsinfo);
-		List<OrmRole> list = ormRoleService.getRoleByuserId(userId);
-		List<Map<String, Object>> roles = new ArrayList<Map<String, Object>>();
-		for(OrmRole role : list){
-			Map<String, Object> roleinfo = new HashMap<String,Object>();
-			roleinfo.put("roleName", role.getRoleNameCn());
-			roleinfo.put("systemName", ormSystemService.getSystemName(role.getSystemId()));
-			roles.add(roleinfo);
-		}
-		map.put("role", roles);
+//		List<OrmRole> list = ormRoleService.getRoleByuserId(userId);
+//		List<Map<String, Object>> roles = new ArrayList<Map<String, Object>>();
+//		for(OrmRole role : list){
+//			Map<String, Object> roleinfo = new HashMap<String,Object>();
+//			roleinfo.put("roleName", role.getRoleNameCn());
+//			roleinfo.put("systemName", ormSystemService.getSystemName(role.getSystemId()));
+//			roles.add(roleinfo);
+//		}
+//		map.put("role", roles);
 		return map;
 	}
 	/**

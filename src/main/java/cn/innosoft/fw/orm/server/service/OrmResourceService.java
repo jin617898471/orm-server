@@ -13,6 +13,7 @@ import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
 import cn.innosoft.fw.biz.utils.Identities;
 import cn.innosoft.fw.orm.server.model.OrmResource;
+import cn.innosoft.fw.orm.server.model.OrmRoleResourceRight;
 import cn.innosoft.fw.orm.server.model.OrmSystem;
 import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.persistent.OrmResourceDao;
@@ -32,7 +33,20 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	public BaseDao<OrmResource, String> getBaseDao() {
 		return ormResourceDao;
 	}
-	
+
+	public List<ZtreeBean> findRoleResourceTrees(String roleId, String systemId) {
+		List<OrmResource> resources = ormResourceDao.findAllBySystemId(Arrays.asList(new String[] { systemId }));
+		List<ZtreeBean> codetrees = transferResourceTreeNode(resources);
+		List<OrmRoleResourceRight> roleright = ormRoleResourceRightDao.findByRoleId(roleId);
+		for (ZtreeBean bean : codetrees) {
+			String id = bean.getId();
+			if (roleright.contains(id)) {
+				bean.setChecked(true);
+			}
+		}
+		return codetrees;
+	}
+
 	public List<ZtreeBean> findUserResourceTrees(String userId) {
 		List<OrmSystem> ormSystems = ormSystemService.getAll();
 		List<ZtreeBean> systemtree = transferSystemTreeNode(ormSystems);
@@ -42,7 +56,6 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		return systemtree;
 	}
 
-
 	public List<ZtreeBean> findOrgResourceTrees(String orgId) {
 		List<OrmSystem> ormSystems = ormSystemService.getAll();
 		List<ZtreeBean> systemtree = transferSystemTreeNode(ormSystems);
@@ -51,7 +64,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		systemtree.addAll(codetrees);
 		return systemtree;
 	}
-	
+
 	public List<ZtreeBean> findAllTrees() {
 		List<OrmSystem> ormSystems = ormSystemService.getHasRight();
 		List<ZtreeBean> systemtree = transferSystemTreeNode(ormSystems);
@@ -61,14 +74,14 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		systemtree.addAll(codetrees);
 		return systemtree;
 	}
-	
+
 	public List<ZtreeBean> findAllTreesBySystem(String systemId) {
-		List<String> rightsytem = Arrays.asList( new String[]{systemId} );
+		List<String> rightsytem = Arrays.asList(new String[] { systemId });
 		List<OrmResource> resources = ormResourceDao.findAllBySystemId(rightsytem);
 		List<ZtreeBean> codetrees = transferResourceTreeNode(resources);
 		return codetrees;
 	}
-	
+
 	private List<ZtreeBean> transferResourceTreeNode(List<OrmResource> resources) {
 		List<ZtreeBean> list = new ArrayList<ZtreeBean>();
 		for (OrmResource res : resources) {
@@ -77,7 +90,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		}
 		return list;
 	}
-	
+
 	private ZtreeBean createResourceTreeNode(OrmResource res) {
 		ZtreeBean node = new ZtreeBean();
 		node.setId(res.getResourceId());
@@ -89,7 +102,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		node.setAttributes(attributes);
 		return node;
 	}
-	
+
 	private List<ZtreeBean> transferSystemTreeNode(List<OrmSystem> ormSystems) {
 		List<ZtreeBean> list = new ArrayList<ZtreeBean>();
 		for (OrmSystem sys : ormSystems) {
@@ -98,7 +111,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		}
 		return list;
 	}
-	
+
 	private ZtreeBean createSytemTreeNode(OrmSystem sys) {
 		ZtreeBean node = new ZtreeBean();
 		node.setId(sys.getSystemId());
@@ -109,7 +122,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		node.setAttributes(attributes);
 		return node;
 	}
-	
+
 	private List<String> getSystemId(List<ZtreeBean> ormSystems) {
 		List<String> list = new ArrayList<String>();
 		for (ZtreeBean sys : ormSystems) {
@@ -117,24 +130,23 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		}
 		return list;
 	}
-	
-	
+
 	public void addResource(OrmResource ormResource) {
 		ormResource.setResourceId(Identities.uuid2());
 		if ("ROOT" == ormResource.getParentResId()) {
 			ormResource.setRootResId(ormResource.getResourceId());
-		}else{
+		} else {
 			OrmResource parent = findOne(ormResource.getParentResId());
 			ormResource.setRootResId(parent.getRootResId());
 			ormResource.setSystemId(parent.getSystemId());
 		}
 		add(ormResource);
 	}
-	
+
 	public void updateResource(OrmResource ormResource, List<String> updateField) {
-		updateSome(ormResource,updateField);
+		updateSome(ormResource, updateField);
 	}
-	
+
 	public void deleteResource(String id) {
 		delete(id);
 		ormRoleResourceRightDao.deleteByResourceId(id);
@@ -144,12 +156,12 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		delete(idArray);
 		ormRoleResourceRightDao.deleteByResourceIdIn(idArray);
 	}
-	
+
 	public void deleteBySystemId(String systemId) {
 		ormResourceDao.deleteBySystemId(systemId);
 		ormRoleResourceRightDao.deleteBySystemId(systemId);
 	}
-	
+
 	public OrmResource findParentNode(String parentId, String parentType) {
 		OrmResource res = new OrmResource();
 		if ("SYSTEM" == parentType) {
@@ -160,6 +172,5 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		}
 		return res;
 	}
-
 
 }

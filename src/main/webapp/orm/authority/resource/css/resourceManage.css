@@ -1,0 +1,184 @@
+html,body{
+	height: 100%;
+}
+
+.main-repeat.layout-left-center{
+	width: 100%;
+	height: 100%;
+}
+
+.col-main{
+	height: 100%;
+}
+
+.layout-left-center .col-sub{
+	width: 287px;
+	height: 100%;
+	margin-right: 0;
+	margin-bottom: 0;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	padding: 12px 0;
+}
+
+.layout-left-center .main-wrap{
+	margin-left: 288px;
+	margin-bottom: 0;
+	height: 100%;
+}
+
+.colsub-container{
+	height: 100%;
+	border-right: 1px solid #e1e3e5;
+}
+
+.code-title{
+	height: 40px;
+	line-height: 39px;
+	color: #444444;
+	font-size: 16px;
+}
+
+.code-title-img{
+	margin-left: 10px;
+	margin-right: 5px;
+	position: relative;
+	top: 2px;
+}
+
+.main-container{
+	height: 100%;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	padding: 12px 0 12px 20px;
+}
+
+.main-container .ui-scroll{
+	height: 100%;
+}
+
+.main-container .ui-scroll-container{
+	box-sizing:border-box;
+	padding-right: 20px;
+}
+
+.code-cond{
+	margin-top: 20px;
+}
+
+.code-cond li{
+	width: 50%;
+	float: left;
+}
+
+.code-label{
+	width: 100px;
+	padding-right: 5px;
+	line-height: 32px;
+	text-align: right;
+	color: #444444;
+	font-size: 13px;
+}
+
+.code-inps{
+	width: 198px;
+}
+
+.code-operate{
+	height: 32px;
+	padding: 20px 0;
+}
+
+.operate-btns{
+	float: right;
+}
+
+.btns-items{
+	color: #e1e3e5;
+}
+
+.btns-items-check{
+	margin-right: 10px;
+}
+
+.manage-tab{
+	margin-bottom: 30px;
+}
+
+.tab-title{
+	height: 38px;
+	line-height: 37px;
+	border: 1px solid #dde5f0;
+	border-bottom: 0;
+	color: #444444;
+}
+
+.tab-operate{
+	font-size: 13px;
+	float: right;
+	padding-right: 10px;
+	cursor: pointer;
+}
+
+.operate-spans{
+	padding-right: 15px;
+}
+
+.operate-spans .operate-spans-ico{
+	vertical-align: text-bottom;
+	margin-right: 6px;
+}
+
+.tab-title-text{
+	font-size: 14px;
+	padding-left: 10px;
+}
+
+.tab-grid{
+	border: 1px solid #e1e3e5;
+}
+
+.id_number{
+	display: inline-block;
+	width: 25px;
+	text-align: center;
+	margin-left: -11px;
+}
+
+.id_checkbox{
+	position: relative;
+	top: 2px;
+}
+
+/*重写datagrid样式start*/
+
+td[field="id"]{
+	width: 49px;
+}
+
+td[field="system"]{
+	width:180px;
+}
+
+td[field="operate"]{
+	width: 163px;
+}
+
+.datagrid-htable .datagrid-header-row td[field="operate"],
+.datagrid-body td[field="operate"]{
+	border-right: 0;
+}
+
+/*重写datagrid样式end*/
+
+.datagrid-cell a.operate-items{
+	color: #298cef;
+}
+
+.datagrid-cell a.operate-items:hover{
+	color: #2782de;
+}
+
+.operate-items-edit, .operate-items-see{
+	margin-right: 15px;
+}

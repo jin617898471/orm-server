@@ -18,7 +18,7 @@ import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.service.OrmCodeService;
 
 @Controller
-@RequestMapping(value = "system/code")
+@RequestMapping(value = "authority/code")
 public class OrmCodeResource {
 	
 	@Autowired
@@ -27,24 +27,24 @@ public class OrmCodeResource {
 	
 	@RequestMapping("/forward/manage")
 	public String forwardManage(Model model){
-		return "/orm/system/code/codeManage";
+		return "/orm/authority/code/codeManage";
 	}
 	
 	@RequestMapping("/forward/detail/{codeId}")
 	public String forwardDetail(Model model,@PathVariable String codeId){
 		OrmCode ormCode = ormCodeService.findOne(codeId);
-		model.addAttribute("OrmCode",ormCode);
+		model.addAttribute("ormCode",ormCode);
 		model.addAttribute("sign","detail");
-		return "/orm/system/code/codeADE";
+		return "/orm/authority/code/codeADE";
 	}
 	
 	@RequestMapping("/forward/add")
 	public String forwardAdd(Model model,String parentId,String parentType){
 		OrmCode ormCode = ormCodeService.findParentNode(parentId,parentType);
-		model.addAttribute("OrmCode",ormCode);
+		model.addAttribute("ormCode",ormCode);
 		model.addAttribute("sign","add");
 		model.addAttribute("parentType",parentType);
-		return "/orm/system/code/codeADE";
+		return "/orm/authority/code/codeADE";
 	}
 	
 	@RequestMapping("/forward/edit/{codeId}")
@@ -52,7 +52,7 @@ public class OrmCodeResource {
 		OrmCode ormCode = ormCodeService.findOne(codeId);
 		model.addAttribute("ormCode",ormCode);
 		model.addAttribute("sign","edit");
-		return "/orm/system/code/codeADE";
+		return "/orm/authority/code/codeADE";
 	}
 
 	@RequestMapping("/tree")

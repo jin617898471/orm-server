@@ -16,7 +16,7 @@ import cn.innosoft.fw.orm.server.model.OrmSystem;
 import cn.innosoft.fw.orm.server.service.OrmSystemService;
 
 @Controller
-@RequestMapping(value = "system/system")
+@RequestMapping(value = "authority/system")
 public class OrmSystemResource {
 	
 	@Autowired
@@ -25,21 +25,21 @@ public class OrmSystemResource {
 	
 	@RequestMapping("/forward/manage")
 	public String forwardManage(Model model){
-		return "/orm/system/system/systemManage";
+		return "/orm/authority/system/systemManage";
 	}
 	
 	@RequestMapping("/forward/detail/{systemId}")
 	public String forwardDetail(Model model,@PathVariable String systemId){
 		OrmSystem ormSystem = ormSystemService.findOne(systemId);
-		model.addAttribute("OrmSystem",ormSystem);
+		model.addAttribute("ormSystem",ormSystem);
 		model.addAttribute("sign","detail");
-		return "/orm/system/system/systemADE";
+		return "/orm/authority/system/systemADE";
 	}
 	
 	@RequestMapping("/forward/add")
 	public String forwardAdd(Model model){
 		model.addAttribute("sign","add");
-		return "/orm/system/system/systemADE";
+		return "/orm/authority/system/systemADE";
 	}
 	
 	@RequestMapping("/forward/edit/{systemId}")
@@ -47,7 +47,7 @@ public class OrmSystemResource {
 		OrmSystem ormSystem = ormSystemService.findOne(systemId);
 		model.addAttribute("ormSystem",ormSystem);
 		model.addAttribute("sign","edit");
-		return "/orm/system/system/systemADE";
+		return "/orm/authority/system/systemADE";
 	}
 
 	
