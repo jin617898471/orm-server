@@ -7,21 +7,56 @@
 	OrmJsObj.system = {
 		hasRight:[
 					<#list all as sys>
-						{"systemId":"${sys.systemId}","systemName":"${sys.systemName}"}<#if sys_has_next>,</#if>
+						{"value":"${sys.systemId}","text":"${sys.systemName}"}<#if sys_has_next>,</#if>
 					</#list>
 		          ],
-		          all:[
+          	 all:[
 					<#list all as sys>
-						{"systemId":"${sys.systemId}","systemName":"${sys.systemName}"}<#if sys_has_next>,</#if>
+						{"value":"${sys.systemId}","text":"${sys.systemName}"}<#if sys_has_next>,</#if>
 					</#list>
-		               ]
+	              ]
 	};
-	OrmJsObj.getHasRightSystem = function() {
-		return this.system.hasRight;
+	OrmJsObj.selected = function(data,selected) {
+		if(selected){
+			for(var i in data){
+				var obj=data[i];
+				if(selected==obj.value){
+					obj.selected=true;
+				}
+			}
+		}
+		return data;
 	};
-	OrmJsObj.getAllSystem = function() {
-		var all = this.system.all;
-		all.unshift({"systemId":"","systemName":"所有系统"});
-		return all;
+	OrmJsObj.system.getHasRight = function(selected,addAllSystem) {
+		var data=OrmJsObj.copy(OrmJsObj.system.hasRight);
+		if(selected){
+			OrmJsObj.selected(data,selected);
+		}
+		if(addAllSystem){
+			data.unshift({"value":"","text":"所有系统"})
+		}
+		return data;
+	};
+	OrmJsObj.system.getAll = function(selected,addAllSystem) {
+		var data=OrmJsObj.copy(OrmJsObj.system.all);
+		if(selected){
+			OrmJsObj.selected(data,selected);
+		}
+		if(addAllSystem){
+			data.unshift({"value":"","text":"所有系统"})
+		}
+		return data;
+	};
+	OrmJsObj.copy = function( list ) {
+		var data=[];
+		for(var index in list){
+			var obj= list[index];
+			var nobj={};
+			for(var key in obj){
+				nobj[key]=obj[key];
+			}
+			data.push(nobj);
+		}
+		return data;
 	};
 })(window)

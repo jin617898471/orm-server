@@ -7,23 +7,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import cn.innosoft.fw.biz.base.querycondition.FilterGroup;
-import cn.innosoft.fw.biz.base.querycondition.QueryConditionHelper;
-import cn.innosoft.fw.biz.base.web.PageRequest;
-import cn.innosoft.fw.biz.base.web.PageResponse;
-import cn.innosoft.fw.biz.core.persistent.BaseDao;
-import cn.innosoft.fw.biz.core.service.AbstractBaseService;
-import cn.innosoft.fw.orm.client.service.LoginUserContext;
 import cn.innosoft.fw.orm.server.model.OrmOrgRoleMap;
 import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
 import cn.innosoft.fw.orm.server.model.OrmUser;
@@ -242,37 +228,6 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		return user;
 	}
 	
-	// public Map<String, Object> getFullUserInfo(String userId){
-	// Map<String, Object> map = new HashMap<String, Object>();
-	// OrmUser user = ormUserDao.findOne(userId);
-	// map.put("user", user);
-	// List<Map<String, Object>> orgsinfo = new ArrayList<Map<String,
-	// Object>>();
-	// // List<OrmOrganization> orgs =
-	// // ormOrganizationService.getOrgByUserId(userId);
-	// // for(OrmOrganization org : orgs){
-	// // Map<String, Object> orginfo = new HashMap<String,Object>();
-	// // orginfo.put("pname", org.getOrgName());
-	// // orginfo.put("oname",
-	// // ormOrganizationService.findOne(org.getParentOrgId()).getOrgName());
-	// // orginfo.put("Iname",
-	// // ormOrganizationService.findOne(org.getRootOrgId()).getOrgName());
-	// // orgsinfo.add(orginfo);
-	// //
-	// // }
-	// map.put("org",orgsinfo);
-	// List<OrmRole> list = ormRoleService.getRoleByuserId(userId);
-	// List<Map<String, Object>> roles = new ArrayList<Map<String, Object>>();
-	// for(OrmRole role : list){
-	// Map<String, Object> roleinfo = new HashMap<String,Object>();
-	// roleinfo.put("roleName", role.getRoleNameCn());
-	// roleinfo.put("systemName",
-	// ormSystemService.getSystemName(role.getSystemId()));
-	// roles.add(roleinfo);
-	// }
-	// map.put("role", roles);
-	// return map;
-	// }
 	/**
 	 * 联想功能
 	 * @param userAcct
