@@ -100,7 +100,8 @@
 											<i class="iconfont">&#xf00a0;</i>
 											<span class="status-message"></span>
 										</div>
-<!-- 										<input type="hidden" name="orgId"> -->
+										<input type="hidden"  name="orgColumns" value="orgName,orgNameShort,orgCode,orgArea,orgPhone,orgLinkman,orgEmail,orgWeburl,orgPostcode,orgAddress" />
+										<input type="hidden" name="orgId">
 									</div>
 								</form>
 							</div>

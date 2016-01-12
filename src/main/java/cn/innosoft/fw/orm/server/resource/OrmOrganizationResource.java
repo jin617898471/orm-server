@@ -79,9 +79,12 @@ public class OrmOrganizationResource {
 	@ResponseBody
 	public InfoWrap updateOrg(OrmOrganization org, HttpServletRequest request) {
 		try {
-			String[] fields = new String[]{"orgName","orgNameShort","orgCode","orgArea",
-					"orgPhone","orgLinkman","orgEmail","orgWeburl","orgPostcode","orgAddress"};
-			ormOrganizationService.updateSome(org, Arrays.asList(fields));
+			String str = org.getOrgColumns();
+			String[] columns = str.split(",");
+			// String[] fields = new
+			// String[]{"orgName","orgNameShort","orgCode","orgArea",
+			// "orgPhone","orgLinkman","orgEmail","orgWeburl","orgPostcode","orgAddress"};
+			ormOrganizationService.updateSome(org, Arrays.asList(columns));
 			return Result.generateSuccessWithoutData("保存成功");
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -173,8 +176,9 @@ public class OrmOrganizationResource {
 	@ResponseBody
 	public InfoWrap getOrgAssignRole(String orgId, String roleName, String systemId) {
 		try {
-			List<Map<String, Object>> data = ormRoleService.getOrgAssignRole(orgId, roleName, systemId);
-			return Result.generateSuccess("获取组织机构已分配角色成功", data);
+			// List<Map<String, Object>> data =
+			// ormRoleService.getOrgAssignRole(orgId, roleName, systemId);
+			return Result.generateSuccess("获取组织机构已分配角色成功", null);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return Result.generateFail("500", "获取组织机构已分配角色失败");
@@ -185,8 +189,9 @@ public class OrmOrganizationResource {
 	@ResponseBody
 	public InfoWrap getOrgNotAssignRole(String orgId, String roleName, String systemId) {
 		try {
-			List<Map<String, Object>> data = ormRoleService.getOrgNotAssignRole(orgId, roleName, systemId);
-			return Result.generateSuccess("获取组织机构可分配角色成功", data);
+			// List<Map<String, Object>> data =
+			// ormRoleService.getOrgNotAssignRole(orgId, roleName, systemId);
+			return Result.generateSuccess("获取组织机构可分配角色成功", null);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return Result.generateFail("500", "获取组织机构可分配角色失败");
@@ -223,6 +228,99 @@ public class OrmOrganizationResource {
 		model.addAttribute("userId", id);
 		model.addAttribute("user", user);
 		return "orm/org/department/frame/emp-tab";
+	}
+
+	@RequestMapping("emps/{orgId}")
+	@ResponseBody
+	public PageResponse<OrmUser> getOrgUsers(@PathVariable String orgId, PageRequest pageRequest) {
+		try {
+			PageResponse<OrmUser> data = ormUserService.getOrgUsers(orgId, pageRequest);
+			return data;
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return null;
+		}
+	}
+
+	@RequestMapping("dep/forward/add/{pId}")
+	public String depAddForward(Model model, @PathVariable String pId) {
+		model.addAttribute("parentOrgId", pId);
+		model.addAttribute("sign", "add");
+		return "orm/org/department/frame/dep-AE";
+	}
+
+	@RequestMapping("post/forward/add/{pId}")
+	public String postAddForward(Model model, @PathVariable String pId) {
+		model.addAttribute("parentOrgId", pId);
+		model.addAttribute("sign", "add");
+		return "orm/org/department/frame/post-AE";
+	}
+
+	@RequestMapping("emp/forward/add")
+	public String empAddForward(Model model) {
+		// model.addAttribute("orgId", pId);
+		model.addAttribute("sign", "org");
+		return "orm/org/department/frame/dialog-addperson";
+	}
+
+	@RequestMapping("emp/forward/edit/{userId}")
+	public String empEditForward(Model model, @PathVariable String userId) {
+		OrmUser user = ormUserService.findOne(userId);
+		model.addAttribute("user", user);
+		// model.addAttribute("sign", "add");
+		return "orm/org/department/frame/dialog-editperson";
+	}
+
+	@RequestMapping("dep/forward/edit/{id}")
+	public String depEditForward(Model model, @PathVariable String id) {
+		OrmOrganization org = ormOrganizationService.findOne(id);
+		model.addAttribute("org", org);
+		model.addAttribute("sign", "edit");
+		return "orm/org/department/frame/dep-AE";
+	}
+
+	@RequestMapping("post/forward/edit/{id}")
+	public String postEditForward(Model model, @PathVariable String id) {
+		OrmOrganization org = ormOrganizationService.findOne(id);
+		model.addAttribute("org", org);
+		model.addAttribute("sign", "edit");
+		return "orm/org/department/frame/post-AE";
+	}
+
+	@RequestMapping("institution/options")
+	@ResponseBody
+	public InfoWrap getInstOptions() {
+		try {
+			List<Map<String, Object>> data = ormOrganizationService.getInstOptions();
+			return Result.generateSuccess("获取机构下拉选项成功", data);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return Result.generateFail("500", "获取机构下拉选项失败");
+		}
+	}
+
+	@RequestMapping("institution/children/options/{instId}")
+	@ResponseBody
+	public InfoWrap getInstChildrenOptions(@PathVariable String instId) {
+		try {
+			Map<String, Object> data = ormOrganizationService.getInstChildrenOptions(instId);
+			return Result.generateSuccess("获取机构下的部门和岗位的下拉选项成功", data);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return Result.generateFail("500", "获取机构下的部门和岗位的下拉选项失败");
+		}
+	}
+
+	@RequestMapping("post/options/{depId}")
+	@ResponseBody
+	public InfoWrap getPostOptions(@PathVariable String depId) {
+		try {
+			List<Map<String, Object>> data = ormOrganizationService.getPostOptions(depId);
+			return Result.generateSuccess("获取机构下拉选项成功", data);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return Result.generateFail("500", "获取机构下拉选项失败");
+		}
 	}
 	// @RequestMapping("/forward/manage")
 	// public String forwardManage(Model model, String orgId) {

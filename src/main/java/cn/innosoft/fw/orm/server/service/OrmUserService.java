@@ -1,5 +1,6 @@
 package cn.innosoft.fw.orm.server.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -12,6 +13,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import cn.innosoft.fw.biz.base.querycondition.FilterGroup;
 import cn.innosoft.fw.biz.base.querycondition.QueryConditionHelper;
 import cn.innosoft.fw.biz.base.web.PageRequest;
@@ -21,7 +26,6 @@ import cn.innosoft.fw.biz.core.service.AbstractBaseService;
 import cn.innosoft.fw.orm.client.service.LoginUserContext;
 import cn.innosoft.fw.orm.server.model.OrmOrgRoleMap;
 import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
-import cn.innosoft.fw.orm.server.model.OrmRole;
 import cn.innosoft.fw.orm.server.model.OrmUser;
 import cn.innosoft.fw.orm.server.model.OrmUserRoleMap;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
@@ -61,6 +65,43 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		return ormUserDao.findByUserIdIn(userIds);
 	}
 
+	public PageResponse<OrmUser> getOrgUsers(String orgId, PageRequest pageRequest) {
+		Map<String, Object> args = new HashMap<String, Object>();
+		args.put("orgId", orgId);
+		PageResponse<OrmUser> data = ormUserDao.findEntityBySql("org-emps", args, pageRequest);
+		return data;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void addUser(OrmUser user, String orgs) throws JsonParseException, JsonMappingException, IOException {
+		OrmUser u = ormUserDao.add(user);
+		String userId = u.getUserId();
+		ObjectMapper mapper = new ObjectMapper();
+		List<Map<String, Object>> list = mapper.readValue(orgs, List.class);
+		for (Map<String, Object> map : list) {
+			String institutionId = (String) map.get("institution");
+			String departmentId = (String) map.get("department");
+			String postId = (String) map.get("post");
+			String orgId = !"".equals(postId) ? postId : !"".equals(departmentId) ? departmentId : institutionId;
+			OrmOrgUserMap oou = new OrmOrgUserMap();
+			oou.setOrgId(orgId);
+			oou.setUserId(userId);
+			ormOrgUserMapDao.add(oou);
+		}
+	}
+
+	/**
+	 * 删除用户
+	 * 
+	 * @param userId
+	 */
+	public void deleteUser(String userId) {
+		ormUserDao.delete(userId);
+		ormOrgUserMapDao.deleteByUserId(userId);
+		ormUserRoleMapDao.deleteByUserId(userId);
+	}
+
+
 	/**
 	 * 查询用户
 	 * 
@@ -71,6 +112,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		FilterGroup group = QueryConditionHelper.add(pageRequest.getFilterGroup(), new String[] { "validSign" },
 				new String[] { "Y" }, new String[] { "equal" });
 		Map<String, Object> args = pageRequest.getFilterGroup().getMap();
+		args.put("orgId", "113");
 		String arg = (String) args.get("userAcct");
 		if(arg != null){
 			args.put("userAcct", "%"+arg+"%");
@@ -79,44 +121,43 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		if(arg != null){
 			args.put("userName", "%"+arg+"%");
 		}
-		arg = (String) args.get("userMobile");
+		arg = (String) args.get("userStatus");
 		if(arg != null){
-			args.put("userMobile", "%"+arg+"%");
+			args.put("userStatus", arg);
 		}
-		arg = (String) args.get("orgId");
-		if(arg != null && arg.indexOf(",") > 0){
-			String[] orgIds = arg.split(",");
-			List<String> list = new ArrayList<String>();
-			for(String orgId : orgIds){
-				list.add(orgId);
-			}
-			args.put("orgId", list);
-		}
+		// arg = (String) args.get("orgId");
+		// if(arg != null && arg.indexOf(",") > 0){
+		// String[] orgIds = arg.split(",");
+		// List<String> list = new ArrayList<String>();
+		// for(String orgId : orgIds){
+		// list.add(orgId);
+		// }
+		// args.put("orgId", list);
+		// }
 		PageResponse<Map<String, Object>> page = findMapBySql("userService-getUser", args, pageRequest);
 		return page;
 	}
+
+	public void cancelUser(String userId) {
+		OrmUser user = findOne(userId);
+		user.setUserStatus("注销");
+		update(user);
+	}
+
+	public void activeUser(String userId) {
+		OrmUser user = findOne(userId);
+		user.setUserStatus("正常");
+		update(user);
+	}
+
 	public List<OrmUser> getUserByOrgId(String orgId){
 		return ormUserDao.getUserByOrgId(orgId);
 	}
-	/**
-	 * 添加用户
-	 * 
-	 * @param ormUser
-	 * @return
-	 */
-	public String addUser(OrmUser ormUser) {
-		try {
-			ormUser.setCreateDt(new Date());
-			ormUser.setCreateUserId(LoginUserContext.getUser().getUserId());
-			ormUser.setValidSign("Y");
-			ormUser.setUserPwd( EnCryptUtil.desMd5Encrypt( ormUser.getUserPwd() ));
-			ormUser= ormUserDao.save(ormUser);
-			// editOrgUserMap(ormUser.getUserId(), ormUser.getOrgIds());
-			return "true";
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			return "false";
-		}
+
+	public void changePwd(String userId, String userPwd) {
+		OrmUser user = findOne(userId);
+		user.setUserPwd(userPwd);
+		update(user);
 	}
 
 	/**
@@ -201,35 +242,37 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		return user;
 	}
 	
-	public Map<String, Object> getFullUserInfo(String userId){
-		Map<String, Object> map = new HashMap<String, Object>();
-		OrmUser user = ormUserDao.findOne(userId);
-		map.put("user", user);
-		List<Map<String, Object>> orgsinfo = new ArrayList<Map<String, Object>>();
-		// List<OrmOrganization> orgs =
-		// ormOrganizationService.getOrgByUserId(userId);
-		// for(OrmOrganization org : orgs){
-		// Map<String, Object> orginfo = new HashMap<String,Object>();
-		// orginfo.put("pname", org.getOrgName());
-		// orginfo.put("oname",
-		// ormOrganizationService.findOne(org.getParentOrgId()).getOrgName());
-		// orginfo.put("Iname",
-		// ormOrganizationService.findOne(org.getRootOrgId()).getOrgName());
-		// orgsinfo.add(orginfo);
-		//
-		// }
-		map.put("org",orgsinfo);
-		List<OrmRole> list = ormRoleService.getRoleByuserId(userId);
-		List<Map<String, Object>> roles = new ArrayList<Map<String, Object>>();
-		for(OrmRole role : list){
-			Map<String, Object> roleinfo = new HashMap<String,Object>();
-			roleinfo.put("roleName", role.getRoleNameCn());
-			roleinfo.put("systemName", ormSystemService.getSystemName(role.getSystemId()));
-			roles.add(roleinfo);
-		}
-		map.put("role", roles);
-		return map;
-	}
+	// public Map<String, Object> getFullUserInfo(String userId){
+	// Map<String, Object> map = new HashMap<String, Object>();
+	// OrmUser user = ormUserDao.findOne(userId);
+	// map.put("user", user);
+	// List<Map<String, Object>> orgsinfo = new ArrayList<Map<String,
+	// Object>>();
+	// // List<OrmOrganization> orgs =
+	// // ormOrganizationService.getOrgByUserId(userId);
+	// // for(OrmOrganization org : orgs){
+	// // Map<String, Object> orginfo = new HashMap<String,Object>();
+	// // orginfo.put("pname", org.getOrgName());
+	// // orginfo.put("oname",
+	// // ormOrganizationService.findOne(org.getParentOrgId()).getOrgName());
+	// // orginfo.put("Iname",
+	// // ormOrganizationService.findOne(org.getRootOrgId()).getOrgName());
+	// // orgsinfo.add(orginfo);
+	// //
+	// // }
+	// map.put("org",orgsinfo);
+	// List<OrmRole> list = ormRoleService.getRoleByuserId(userId);
+	// List<Map<String, Object>> roles = new ArrayList<Map<String, Object>>();
+	// for(OrmRole role : list){
+	// Map<String, Object> roleinfo = new HashMap<String,Object>();
+	// roleinfo.put("roleName", role.getRoleNameCn());
+	// roleinfo.put("systemName",
+	// ormSystemService.getSystemName(role.getSystemId()));
+	// roles.add(roleinfo);
+	// }
+	// map.put("role", roles);
+	// return map;
+	// }
 	/**
 	 * 联想功能
 	 * @param userAcct
@@ -247,16 +290,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		return list;
 	}
 
-	/**
-	 * 删除用户
-	 * 
-	 * @param userId
-	 */
-	public void deleteUser(String userId) {
-		ormUserDao.delete(userId);
-		ormOrgUserMapDao.deleteByUserId(userId);
-		// ormUserRoleMapDao.deleteByUserId(userId);
-	}
+
 	/**
 	 * 批量删除
 	 * @param userIds

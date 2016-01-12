@@ -4,6 +4,7 @@ define(function(require){
 		Select = require("inno/select/1.0.0/select-debug"),
 		Scroll = require("inno/scroll/1.0.0/scroll-debug");
 		require("easyui");
+		Form = require("form");
 	
 	
 	var depTab = new Tabs({
@@ -96,5 +97,61 @@ define(function(require){
 			addressInput();
 		}
 		
+	});
+	
+	var basePath = "/orm-server/";
+	var urlcfg= {
+		editUser : basePath + "user/edit",
+	}
+	
+	var userForm = new Form({
+		trigger: "#user-info",
+		addUrl: urlcfg.editUser
+	});
+	
+	
+	$("#userSave").click(function(event){
+		userForm.saveData({
+			type: 1,
+			successFn: function(result){
+				if(result.status == 200){
+					console.log(result)
+//					$(".subadd-bottom-status span").text(result.message);
+//					$(".subadd-bottom-status").show();
+				}else{
+//					$(".subadd-bottom-status span").text(result.message);
+//					$(".subadd-bottom-status").show();
+					console.log(result)
+				}
+			},
+			errorFn: function(){
+				console.log(result)
+			}
+		});
+	});
+	var empForm = new Form({
+		trigger: "#emp-info",
+		addUrl: urlcfg.editUser
+	});
+	
+	
+	$("#empSave").click(function(event){
+		empForm.saveData({
+			type: 1,
+			successFn: function(result){
+				if(result.status == 200){
+					console.log(result)
+//					$(".subadd-bottom-status span").text(result.message);
+//					$(".subadd-bottom-status").show();
+				}else{
+//					$(".subadd-bottom-status span").text(result.message);
+//					$(".subadd-bottom-status").show();
+					console.log(result)
+				}
+			},
+			errorFn: function(){
+				console.log(result)
+			}
+		});
 	});
 });

@@ -4,6 +4,7 @@ define(function(require){
 		Select = require("inno/select/1.0.0/select-debug"),
 		Scroll = require("inno/scroll/1.0.0/scroll-debug");
 		require("easyui");
+		Form = require("form");
 	
 	
 	var depTab = new Tabs({
@@ -15,6 +16,8 @@ define(function(require){
         activeIndex:0
 	});
 
+	$(".operate-status").hide();
+	
 	new Select({
 		trigger:'#cond-system',
 		width:'200px',
@@ -67,34 +70,124 @@ define(function(require){
 	});
 
 	
+	var tabInstId = new Array("","");
+	var basePath = "/orm-server/";
+	var urlcfg= {
+		childorg : basePath + "org/children",
+		belongEmp : basePath + "org/emps/",
+		updatePost : basePath + "org/update",
+		forwardEmpAdd : basePath + "org/emp/forward/add",
+		forwardEmpEdit : basePath + "org/emp/forward/edit/"
+	}
+	var orgId = $("#orgId").val();
+	var tabActive = new Array(true,false,false,false)
 	$(".dep-tabs-nav").on('click', 'li', function(event) {
 
 		var thisIndex = $(this).index();
-
-		if(thisIndex == 1){
-			$("#grid-table").datagrid({
-				nowrap : true,
-				autoRowHeight : true,
-				striped : true,
-				collapsible : true,
-//				url : 'datagrid_data.json',
-				columns:[[
-					{field:'id',title:'序号',align:'center'},
-					{field:'name',title:'机构名称',align:'center'},
-					{field:'code',title:'机构代码',align:'center'},
-					{field:'operate',title:'操作',align:'center'}
-				]],
-				pagination : true,
-				rownumbers : false
-			});
-
-			setTimeout(function(){
-				$("#grid-table").datagrid("resize");
-			},500);
-			
-		}else if(thisIndex == 0){
-			addressInput();
+		
+		switch(thisIndex){
+		case 0:
+			break;
+		case 1:
+			if(!tabActive[1]){
+				loadEmpGrid(orgId);
+				
+				tabActive[1] = true;
+			}
+			break;
+		case 2:
+			if(!tabActive[2]){
+				
+				tabActive[2] = true;
+			}
+			break;
+		case 3:
+			if(!tabActive[3]){
+			}
+			break;
 		}
+		var h = document.body.scrollWidth;
+		parent.frameHeight(h);
 		
 	});
+	
+	function loadEmpGrid(orgId){
+//		console.log("loadgrid");
+		$("#emp-table").empty();
+		$("#emp-table").datagrid({
+//			queryParams : {queryCondition : ""},
+			nowrap : true,
+			autoRowHeight : true,
+			striped : true,
+			collapsible : true,
+			url : urlcfg.belongEmp + orgId,
+			columns:[[
+				{field:'id',title:'序号',align:'center',
+					formatter: function(value,row,index){
+						return index + 1;
+					}
+				},
+				{field:'userName',title: '人员名称',align:'center'},
+				{field:'userAcct',title: '人员账号',align:'center'},
+				{field:'operate',title:'操作',align:'center',
+					formatter: function(value,row,index){
+						return '<a href="javascript:void(0)" class="operate-items operate-items-edit" onclick="editInst(\''+row.orgId +'\')">编辑</a>' +
+								'<a href="javascript:void(0)" class="operate-items" onclick="deleteInst(\''+row.orgId +'\')">删除</a>';
+					}
+				}
+			]],
+			pagination : true,
+			rownumbers : false,
+			pageList : [15,25,50,100],
+			onLoadSuccess : function (data) {
+				$(this).datagrid("fixColumnSize");
+			}
+		});
+	}
+	
+	var instForm = new Form({
+		trigger: "#org-info",
+		addUrl: urlcfg.updatePost
+	});
+	$("#save").click(function(){
+		instForm.saveData({
+			type: 1,
+			successFn: function(result){
+				if(result.status == 200){
+//					var selected = $.fn.zTree.getZTreeObj("tree").getSelectedNodes()[0];
+//					ztreeNodeAction(null,null,selectedNode);
+					$(".operate-status .status-message").text(result.message);
+					$(".operate-status").show();
+//					console.log("selected: " + selectedNode);
+//					$(".operate-status .status-message").text(result.message);
+//					$(".operate-status").show();
+				}else{
+					console.log(result.message);
+				}
+			},
+			errorFn: function(result){
+				console.log(result)
+			}
+		});
+	})
+	editUser = function(id){
+		parent.showDialog(urlcfg.forwardEmpEdit + id,"新增下属人员",565,"E");
+	}
+	deleteUser = function(id){
+		var url = urlcfg.deleteUser + id;
+		parent.deleteConfirm(url,"E");
+	}
+	$("#addEmpDiv").on('click', '#addEmp', function(event) {
+		console.log("addEmp")
+		$(".ui-dialog").css('boxShadow', '0px 4px 16px #a8adb2');
+		$(".ui-dialog-content").css('height', 525 - 40);
+//		parent.dialog.show(urlcfg.forwardEmpAdd + orgId,"新增下属人员","525px");
+		parent.showDialog(urlcfg.forwardEmpAdd,"新增下属人员","525px","E");
+		
+	});
+	refreshTreeAndList = function(type){
+		if(type=="E"){
+			loadEmpGrid(orgId)
+		}
+	}
 });

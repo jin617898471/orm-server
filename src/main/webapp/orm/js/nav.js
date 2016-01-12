@@ -81,6 +81,11 @@ define(function(require){
 		case "workgroup":
 			break;
 		case "user":
+			var flag = checkTabExist("用户管理");
+			if(!flag){
+				addUserTab();
+			}
+			break;
 		}
 		console.log();
 		
@@ -174,6 +179,7 @@ define(function(require){
 		tabs.addPanel("机构管理",content,true,index);
 		$("iframe[name=institution]").parent().addClass("content-panel");
 		tabs.switchTo(index);
+		$(".content-panel iframe").css('height', $(".main-wrap").height() - 48);
 		tabIndex = index;
 	}
 	function addDepTab(orgId){
@@ -182,6 +188,16 @@ define(function(require){
 		tabs.addPanel("部门管理",content,true,index);
 		$("iframe[name=department]").parent().addClass("content-panel");
 		tabs.switchTo(index);
+		$(".content-panel iframe").css('height', $(".main-wrap").height() - 48);
+		tabIndex = index;
+	}
+	function addUserTab(){
+		var index = tabs.get("length");
+		var content ="<iframe id='user' name='user' src='/orm-server/user/forward/manage' frameborder='0'></iframe>";
+		tabs.addPanel("用户管理",content,true,index);
+		$("iframe[name=user]").parent().addClass("content-panel");
+		tabs.switchTo(index);
+		$(".content-panel iframe").css('height', $(".main-wrap").height() - 48);
 		tabIndex = index;
 	}
 	

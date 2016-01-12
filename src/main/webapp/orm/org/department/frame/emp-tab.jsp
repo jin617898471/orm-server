@@ -56,8 +56,8 @@
 
 							<li class="basic-list-items">
 								<label class="list-items-label">性别：</label>
-								男 <input type="radio" name="userSex" value="male" />
-								女 <input type="radio" name="userSex" value="female" />
+								男 <input type="radio" name="userSex" value="MALE" ${user.userSex eq 'MALE'?'checked':''}/>
+								女 <input type="radio" name="userSex" value="FEMALE" ${user.userSex eq 'FEMALE'?'checked':''}/>
 							</li>
 							<li class="basic-list-items">
 								<label class="list-items-label">证件类型：</label>
@@ -107,15 +107,16 @@
 						<div class="basic-other"></div>
 						<div class="basic-operate">
 							<div class="operate-btns">
-								<input type="button" class="operate-btns-items" id="save" value="保存" />
+								<input type="button" class="operate-btns-items" id="userSave" value="保存" />
 								<!--<input type="button" class="operate-btns-items" value="取消" />-->
 							</div>
 							<div class="operate-status">
 								<i class="iconfont">&#xf00a0;</i>
 								<span class="status-message"></span>
 							</div>
-							<input type="hidden" id="userId" name="userId" value="${userId}">
+							<input type="hidden" name="userId" value="${user.userId}" />
 						</div>
+						<input type="hidden" name="userColumns" value="userAcct,userName,userNameEng,userSex,userBirth,userCardtype,userCardno,userMobile,userEmail,userEmail,empQq,empWeibo,empHaddress,empHzipcode,empHtel,empParty">
 					</form>
 				</div>
 			</div>
@@ -171,7 +172,7 @@
 						<div class="basic-other"></div>
 						<div class="basic-operate">
 							<div class="operate-btns">
-								<input type="button" class="operate-btns-items" id="save" value="保存" />
+								<input type="button" class="operate-btns-items" id="empSave" value="保存" />
 								<!--<input type="button" class="operate-btns-items" value="取消" />-->
 							</div>
 							<div class="operate-status">
@@ -179,6 +180,8 @@
 								<span class="status-message"></span>
 							</div>
 						</div>
+						<input type="hidden" name="userId" value="${user.userId}" />
+						<input type="hidden" name="userColumns" value="empId,empCode,empStatus,empDegree,empIndate,empOaddress,empOaddress,empOzipcode,empOtel,empFaxno,empOemail">
 					</form>
 				</div>
 			</div>
@@ -402,7 +405,7 @@
 	<script src="<%=basePath%>resources/commons/js/seajs/sea-debug.js" ></script>
     <script src="<%=basePath%>resources/commons/js/seajs/sea-config-debug.js"></script>
     <script>
-    	seajs.use("<%=basePath%>orm/org/department/js/inst-tab.js");
+    	seajs.use("<%=basePath%>orm/org/department/js/emp-tab.js");
     </script>
 	
 </body>

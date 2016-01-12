@@ -71,11 +71,12 @@
 			<input type="hidden" name="orgId" value="${org.orgId}"/>
 			<input type="hidden" name="orgType" value="I"/>
 			<input type="hidden" name="sign" value="${sign}"/>
+			<input type="hidden"  name="orgColumns" value="orgName,orgNameShort,orgCode,orgArea,orgPhone,orgLinkman,orgEmail,orgWeburl,orgPostcode,orgAddress" />
 		</form>
 		<div class="subadd-bottom">
 			<div class="subadd-bottom-operate">
 				<input type="button" class="operate-items items-save" value="保存" />
-				<!--<input type="button" class="operate-items" value="取消" />-->
+				<input type="button" class="operate-items" value="取消" id="btnCancel"/>
 			</div>
 			<div class="subadd-bottom-status">
 				<i class="iconfont">&#xf00a0;</i>

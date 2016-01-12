@@ -115,7 +115,7 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 			OrmOrganization root = ormOrganizationDao.findOne(orgId);
 			nodes.add(createZtreeNode(root, true));
 		}
-		List<OrmOrganization> orgs = ormOrganizationDao.findByParentOrgId(orgId);
+		List<OrmOrganization> orgs = ormOrganizationDao.getChildDeps(orgId, "I");
 		List<OrmOrgUserMapView> maps = ormOrgUserMapViewDao.findByOrgId(orgId);
 		List<String> userIds = new ArrayList<String>();
 		for (OrmOrgUserMapView oou : maps) {
@@ -143,6 +143,65 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 		attrs.put("type", "E");
 		node.setAttributes(attrs);
 		return node;
+	}
+
+	public List<Map<String, Object>> getInstOptions() {
+		List<OrmOrganization> insts = ormOrganizationDao.findByOrgType("I");
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		result.add(orgToOption(null, false));
+		for (OrmOrganization org : insts) {
+			result.add(orgToOption(org, true));
+		}
+		return result;
+	}
+
+	public Map<String, Object> getInstChildrenOptions(String instId) {
+		List<OrmOrganization> deps = ormOrganizationDao.getOrgByParentOrgAndOrgType("O", instId);
+		List<OrmOrganization> posts = ormOrganizationDao.findByOrgTypeAndParentOrgId("P", instId);
+		Map<String, Object> result = new HashMap<String, Object>();
+		List<Map<String, Object>> depOptions = new ArrayList<Map<String, Object>>();
+		if (deps.size() > 1) {
+			depOptions.add(orgToOption(null, false));
+			for (OrmOrganization dep : deps) {
+				depOptions.add(orgToOption(dep, true));
+			}
+		}
+		result.put("depOptions", depOptions);
+		List<Map<String, Object>> postOptions = new ArrayList<Map<String, Object>>();
+		if (posts.size() > 1) {
+			postOptions.add(orgToOption(null, false));
+			for (OrmOrganization post : posts) {
+				postOptions.add(orgToOption(post, true));
+			}
+		}
+
+		result.put("postOptions", postOptions);
+		return result;
+	}
+
+	public List<Map<String, Object>> getPostOptions(String depId) {
+		List<OrmOrganization> posts = ormOrganizationDao.findByOrgTypeAndParentOrgId("P", depId);
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		if (posts.size() > 1) {
+			result.add(orgToOption(null, false));
+			for (OrmOrganization org : posts) {
+				result.add(orgToOption(org, true));
+			}
+		}
+
+		return result;
+	}
+
+	private Map<String, Object> orgToOption(OrmOrganization org, boolean isOrg) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (isOrg) {
+			map.put("value", org.getOrgId());
+			map.put("text", org.getOrgName());
+		} else {
+			map.put("value", null);
+			map.put("text", "请选择");
+		}
+		return map;
 	}
 	// /**
 	// * 添加组织机构

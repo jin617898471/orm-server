@@ -73,50 +73,51 @@
 								<i class="iconfont">&#xf00a0;</i>
 								<span class="status-message"></span>
 							</div>
+							<input type="hidden"  name="orgColumns" value="orgName,orgCode,orgPhone,orgLinkman,orgEmail" />
 							<input type="hidden" id="orgId" name="orgId"  value="${orgId}">
 						</div>
 					</form>
 				</div>
 			</div>
 			<div class="hidden content-panel">
-				<div class="subordinate">
+				<div class="subordinate" id="addDepDiv">
 					<div class="sub-title">
-						<span class="sub-operate">
+						<span class="sub-operate" id="addDep">
 							<i class="iconfont">&#xe641;</i>
 							<span>新增</span>
 						</span>
 						<span class="sub-title-text">下属部门列表</span>
 					</div>
 					<div class="sub-grid">
-						<table id="grid-table"></table>
+						<table id="dep-table"></table>
 					</div>
 				</div>
 			</div>
 			<div class="hidden content-panel">
-				<div class="subordinate">
+				<div class="subordinate" id="addPostDiv">
 					<div class="sub-title">
-						<span class="sub-operate">
+						<span class="sub-operate" id="addPost">
 							<i class="iconfont">&#xe641;</i>
 							<span>新增</span>
 						</span>
 						<span class="sub-title-text">下属岗位列表</span>
 					</div>
 					<div class="sub-grid">
-						<table id="grid-table"></table>
+						<table id="post-table"></table>
 					</div>
 				</div>
 			</div>
 			<div class="hidden content-panel">
-				<div class="subordinate">
+				<div class="subordinate" id="addEmpDiv">
 					<div class="sub-title">
-						<span class="sub-operate">
+						<span class="sub-operate" id="addEmp">
 							<i class="iconfont">&#xe641;</i>
 							<span>新增</span>
 						</span>
 						<span class="sub-title-text">下属人员列表</span>
 					</div>
 					<div class="sub-grid">
-						<table id="grid-table"></table>
+						<table id="emp-table"></table>
 					</div>
 				</div>
 			</div>
@@ -168,7 +169,7 @@
 	<script src="<%=basePath%>resources/commons/js/seajs/sea-debug.js" ></script>
     <script src="<%=basePath%>resources/commons/js/seajs/sea-config-debug.js"></script>
     <script>
-    	seajs.use("<%=basePath%>orm/org/department/js/inst-tab.js");
+    	seajs.use("<%=basePath%>orm/org/department/js/dep-tab.js");
     </script>
 	
 </body>

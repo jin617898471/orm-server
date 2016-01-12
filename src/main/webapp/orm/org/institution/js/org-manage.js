@@ -178,9 +178,9 @@ define(function(require){
 	});
 
 	$(".subordinate").on('click', '.sub-operate', function(event) {
+		dialog.show(urlcfg.forwardAdd + $.fn.zTree.getZTreeObj("tree").getSelectedNodes()[0].id);
 		$(".ui-dialog").css('boxShadow', '0px 4px 16px #a8adb2');
 		$(".ui-dialog-content").css('height', 425 - 40);
-		dialog.show(urlcfg.forwardAdd + $.fn.zTree.getZTreeObj("tree").getSelectedNodes()[0].id);
 	});
 
 	
@@ -264,7 +264,7 @@ define(function(require){
 			otherParam : [],
 			type : "post",
 			url: function(treeId, treeNode){
-				return urlcfg.getNode + "I/"  treeNode.id;
+				return urlcfg.getNode + "I/" + treeNode.id;
 			}
 		}
 	}

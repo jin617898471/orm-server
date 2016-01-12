@@ -7,6 +7,8 @@ define(function(require){
 	require("gallery/ztree/3.5.2/core-debug");
 	require("gallery/ztree/3.5.2/exedit-debug");
 	require("gallery/ztree/3.5.14/ztree-debug.css");
+	Dialog = require("inno/dialog/1.0.0/dialog-debug");
+	Confirmbox=require("inno/dialog/1.0.0/confirmbox-debug");
 
 
 	$(".codeinf-title").on('click', '.title-ico', function(event) {
@@ -53,7 +55,9 @@ define(function(require){
 		fowardInstTab: basePath + "org/forward/instTab/",
 		fowardDepTab: basePath + "org/forward/depTab/",
 		fowardPostTab: basePath + "org/forward/postTab/",
-		fowardEmpTab: basePath + "org/forward/empTab/"
+		fowardEmpTab: basePath + "org/forward/empTab/",
+		
+		deleteOrg : basePath + "org/delete/"
 	}
 	var tagIndex = 0;
 	$(".dep-tabs-nav").on('click', 'li', function(event) {
@@ -61,7 +65,11 @@ define(function(require){
 		console.log("tagIndex:" + tagIndex);
 	});
 	
-	
+	frameHeight= function (height){
+//		var h = document.getElementById("orgTab").contentWindow.document.body.scrollHeight + "px";
+//		console.log(h);
+		$("#orgTab").css("height",height);
+	}
 	//创建机构树
 	var setting = {
 		data : {
@@ -178,6 +186,80 @@ define(function(require){
 //		if(tagIndex == 1){
 //		}
 	}
+	
+	var dialog = new Dialog({
+		//trigger:'.sub-operate',
+		width:'760px',
+//		height:'525px',
+		//content:'./dialog-subadd.html',
+		hasMask:false,
+//		title:'新增下属机构',
+		ifEsc:false,
+		closeTpl:'&#xe62a;'
+	}).before('show',function(url,title,height){
+//		var url = urlcfg.forwardAdd pId;
+		this.set("content",url);
+		this.set("title",title);
+		this.set("height",height);
+	});
+	
+	refreshTree = function(type){
+		$.fn.zTree.getZTreeObj("tree").reAsyncChildNodes(selectedNode,"refresh");
+		orgTab.window.refreshTreeAndList(type);
+	}
+	
+	
+	showDialog = function(url,title,height,type){
+		dialog.show(url,title,height+"px");
+		switch(type){
+		case "O":
+			$(".ui-dialog").css('boxShadow', '0px 4px 16px #a8adb2');
+			$(".ui-dialog-content").css('height', height - 30);
+			break;
+		case "P":
+			$(".ui-dialog").css('boxShadow', '0px 4px 16px #a8adb2');
+			$(".ui-dialog-content").css('height', height - 30);
+			break;
+		case "E":
+			$(".ui-dialog").css('boxShadow', '0px 4px 16px #a8adb2');
+			$(".ui-dialog-content").css('height', height - 30);
+		}
+	}
+	deleteConfirm = function(url,type){
+		Confirmbox.confirm('是否确定要删除该记录？','',function(){
+			var parameter={
+				url:url,
+				type:"POST",
+				async:false,
+				success:function(data){
+					refreshTree(type);
+				},
+				error:function(result){
+					Confirmbox.alert('删除失败！');
+				}
+			};
+			$.ajax( parameter );
+		},function(){
+
+		});
+	}
+	getRootNodeId = function (){
+		 var nodes = $.fn.zTree.getZTreeObj("tree").getNodes();
+		 for(var i=0;i<nodes.length;i++){
+			 if(nodes[i].attributes.type == "I"){
+				 return nodes[i].id;
+			 }
+		 }
+	}
+	getSelectNode = function(){
+		return  $.fn.zTree.getZTreeObj("tree").getSelectedNodes()[0];
+	}
+	
+	
+	
+	
+	
+	
 	function roleAssign(type,id){
 		var roleName = $("#roleName").val();
 		var systemId = systemSelect.currentItem.attr("data-value");

@@ -39,7 +39,7 @@
 			</div>
 			<div class="main-wrap">
 				<iframe id="orgTab" name="orgTab" src="" 
-					frameborder="0" style="width:100%;" onload="this.height=orgTab.document.body.scrollHeight" 
+					frameborder="0" style="width:100%;" onload="this.height=orgTab.document.body.scrollHeight;" 
 					scrolling="no" ></iframe>
 			</div>
 		</div>

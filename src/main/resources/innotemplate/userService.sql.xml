@@ -4,43 +4,36 @@
 			<![CDATA[
 			   SELECT
              DISTINCT 
-             u.CREATE_DT as "createDt",
-             u.USER_ID as "userId",
-             u.USER_IDENTITYCARD as "userIdentitycard",
-             u.USER_ACCT as "userAcct",
-             u.USER_NAME as "userName",
-             u.USER_SEX as "userSex",
-             u.USER_BIRTH as "userBirth",
-             u.USER_EMAIL as "userEmail",
-             u.USER_MOBILE as "userMobile",
-             u.USER_TEL as "userTel",
-             u.USER_FAX as "userFax",
-             WMSYS.WM_CONCAT(o.ORG_NAME) as "orgName"
+             USER_ID as "userId",
+             USER_ACCT as "userAcct",
+             USER_NAME as "userName",
+             USER_STATUS as "userStatus",
+             USER_SEX as "userSex",
+             USER_BIRTH as "userBirth",
+             USER_MOBILE as "userMobile",
+             WMSYS.WM_CONCAT(org_i_name) as "institution",
+             WMSYS.WM_CONCAT(org_o_name) as "department"
           FROM
-              ORM_USER u,
-              ORM_ORG_USER_MAP m,
-              ORM_ORGANIZATION o
-          WHERE
-            u.VALID_SIGN = 'Y'
-            AND u.USER_ID=m.USER_ID
-            and m.ORG_ID=o.ORG_ID
-            <#if userId?? && userId != ''>
-				AND u.USER_ID = :userId
-			</#if>
-            <#if userAcct?? && userAcct != ''>
-				AND u.USER_ACCT LIKE :userAcct
-			</#if>
-			<#if userName?? && userName != ''>
-				AND u.USER_NAME LIKE :userName
-			</#if>
-			<#if userMobile?? && userMobile != ''>
-				AND u.USER_MOBILE LIKE :userMobile
-			</#if>
-			<#if orgId??>
-				AND O.ORG_ID IN (SELECT DISTINCT ORG_ID FROM ORM_ORGANIZATION START WITH ORG_ID IN (:orgId) CONNECT BY PRIOR ORG_ID=PARENT_ORG_ID)
-			</#if>
-          GROUP BY u.CREATE_DT,u.USER_ID,u.USER_IDENTITYCARD,u.USER_ACCT,u.USER_NAME,u.USER_SEX,u.USER_BIRTH,
-          u.USER_EMAIL,u.USER_EMAIL,u.USER_MOBILE,u.USER_MOBILE,u.USER_TEL,u.USER_FAX
+              (
+					select A.*,b.org_i_name,b.org_o_name 
+					from 
+						ORM_USER a,
+						ORM_ORG_USER_MAP_VIEW b 
+					where 
+						a.user_id=b.user_id 
+						and B.ORG_I_ID=:orgId
+						<#if userAcct?? && userAcct != ''>
+							AND a.USER_ACCT LIKE '%${userAcct}%'
+						</#if>
+						<#if userName?? && userName != ''>
+							AND a.USER_NAME LIKE '%${userName}%'
+						</#if>
+						<#if userStatus?? && userStatus != ''>
+							AND a.USER_STATUS = :userStatus
+						</#if>
+						order by a.create_dt
+				)
+				GROUP BY USER_ID,USER_ACCT,USER_STATUS,USER_NAME,USER_SEX,USER_BIRTH,USER_MOBILE
 			]]>
 		</sql>
 	</class>
@@ -189,6 +182,19 @@
 				AND r.SYSTEM_ID = :systemId
 			</#if>
 			]]>
+		</sql>
+	</class>
+	<class id="org">
+		<sql id="emps">
+			select 
+				c.*
+			 from 
+			 	ORM_USER c,
+			 	ORM_ORG_USER_MAP_VIEW m
+			 
+			 where 
+			 	c.user_id = m.user_id
+			 	AND m.org_id = :orgId
 		</sql>
 	</class>
 </template>

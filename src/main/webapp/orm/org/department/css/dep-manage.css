@@ -425,3 +425,40 @@
 	display: none;
 }
 
+
+/*重写dialog样式start*/
+.ui-dialog .ui-dialog-head{
+	height: 40px;
+	background: url(imgs/dialog-title-ico.png) 15px center no-repeat #f5f7fa;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	border: 1px solid #e1e3e5;
+	border-radius: 0;
+	line-height: 38px;
+}
+
+.ui-dialog-head .ui-dialog-title{
+	padding-left: 45px;
+	color: #444444;
+	font-size: 16px;
+}
+
+.ui-dialog-head a.ui-dialog-close{
+	color: #96a5b3;
+	font-size: 20px;
+	line-height: 38px;
+	top: 0;
+}
+
+.ui-dialog-head a.ui-dialog-close:hover{
+	color: #e54d4d;
+}
+
+.ui-dialog .ui-dialog-content{
+	border: 1px solid #e1e3e5;
+	border-top: 0;
+}
+/*重写dialog样式end*/
+
+
+

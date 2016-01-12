@@ -88,15 +88,16 @@
 								<i class="iconfont">&#xf00a0;</i>
 								<span class="status-message"></span>
 							</div>
+							<input type="hidden"  name="orgColumns" value="orgName,orgNameShort,orgCode,orgArea,orgPhone,orgLinkman,orgEmail,orgWeburl,orgPostcode,orgAddress" />
 							<input type="hidden" id="orgId" name="orgId" value="${orgId}">
 						</div>
 					</form>
 				</div>
 			</div>
 			<div class="hidden content-panel">
-				<div class="subordinate">
+				<div class="subordinate" id="addDepDiv">
 					<div class="sub-title">
-						<span class="sub-operate">
+						<span class="sub-operate" id="addDep">
 							<i class="iconfont">&#xe641;</i>
 							<span>新增</span>
 						</span>
@@ -108,9 +109,9 @@
 				</div>
 			</div>
 			<div class="hidden content-panel">
-				<div class="subordinate">
+				<div class="subordinate" id="addPostDiv">
 					<div class="sub-title">
-						<span class="sub-operate">
+						<span class="sub-operate" id="addPost">
 							<i class="iconfont">&#xe641;</i>
 							<span>新增</span>
 						</span>
@@ -122,9 +123,9 @@
 				</div>
 			</div>
 			<div class="hidden content-panel">
-				<div class="subordinate">
+				<div class="subordinate" id="addEmpDiv">
 					<div class="sub-title">
-						<span class="sub-operate">
+						<span class="sub-operate" id="addEmp">
 							<i class="iconfont">&#xe641;</i>
 							<span>新增</span>
 						</span>

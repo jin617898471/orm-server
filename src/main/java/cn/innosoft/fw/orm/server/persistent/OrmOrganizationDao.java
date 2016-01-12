@@ -20,11 +20,18 @@ public interface OrmOrganizationDao extends BaseDao<OrmOrganization, String> {
 	//
 	@Query(value = "SELECT DISTINCT * FROM ORM_ORGANIZATION START WITH ORG_ID"
 			+ "=?1 CONNECT BY PRIOR ORG_ID=PARENT_ORG_ID", nativeQuery = true)
-	 List<OrmOrganization> getOrgByParentOrg(String orgId);
+	List<OrmOrganization> getOrgByParentOrg(String orgId);
+
+	@Query(value = "SELECT DISTINCT * FROM ORM_ORGANIZATION  WHERE ORG_TYPE=?1 START WITH ORG_ID"
+			+ "=?2 CONNECT BY PRIOR ORG_ID=PARENT_ORG_ID", nativeQuery = true)
+	List<OrmOrganization> getOrgByParentOrgAndOrgType(String orgType, String orgId);
 
 	List<OrmOrganization> findByOrgType(String orgType);
 
 	List<OrmOrganization> findByParentOrgId(String parentOrgId);
+
+	@Query(value = "from OrmOrganization o where o.parentOrgId=?1 and o.orgType<>?2")
+	List<OrmOrganization> getChildDeps(String parentOrgId, String orgType);
 
 	List<OrmOrganization> findByOrgTypeAndParentOrgId(String orgType, String parentOrgId);
 }

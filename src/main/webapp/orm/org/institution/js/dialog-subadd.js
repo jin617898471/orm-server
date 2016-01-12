@@ -24,11 +24,6 @@ define(function(require){
 		setUrl: urlcfg.updateInst
 	});
 	
-	if(sign == "edit"){
-		console.log("sign: " + sign);
-		$("input[name=orgName]").attr("disabled",true);
-		$("input[name=orgCode]").attr("disabled",true);
-	}
 	//保存
 	$(".items-save").click(function(event) {
 		var flag = true;
@@ -70,6 +65,9 @@ define(function(require){
 		requireLi.removeClass('subadd-items-error');
 		requireLi.find('.items-error-text').hide();
 
+	});
+	$("#btnCancel").click(function(){
+		window.frameElement.trigger('close'); 
 	});
 
 	$(window).resize(function(event) {
