@@ -3,6 +3,7 @@
 	<name>orm-server</name>
 	<comment></comment>
 	<projects>
+		<project>orm-client</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

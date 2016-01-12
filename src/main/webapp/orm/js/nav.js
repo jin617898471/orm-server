@@ -2,22 +2,22 @@ define(function(require){
 	var $ = require("$"),
 		Menu = require("menu"),
 		Tabs=require("inno/switchable/1.0.0/tabs-debug");
+	
+	OrmJsObj.resourceInit($,document);
+//	$(".sidebar-unfold").show();
+//	$(".sidebar-fold").show();
 
 	//超级管理员
 	$(".user-info-admin").click(function(event) {
-
 		$("#nav-more .sub-nav-container-white").hide();
 		$("#nav-more").removeClass('nav-more-active');
-
 		var spinner = $(this).find('.spinner'),
 		    isShow = spinner.css("display");
-
 		if(isShow == "none"){
 			spinner.show();
 		}else{
 			spinner.hide();
 		}
-		
 	});
 
 	//new Menu({trigger:'#nav-more'});
@@ -208,5 +208,7 @@ define(function(require){
 		}
 		$(".content-panel iframe").css('height', $(".main-wrap").height() - 48);
 	});
+	
+
 
 });

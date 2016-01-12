@@ -5,62 +5,56 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.GenericGenerator;
-
-
 /**
  * The persistent class for the ORM_ROLE database table.
  * 
  */
 @Entity
-@Table(name="ORM_ROLE")
-@NamedQuery(name="OrmRole.findAll", query="SELECT o FROM OrmRole o")
+@Table(name = "ORM_ROLE")
+@NamedQuery(name = "OrmRole.findAll", query = "SELECT o FROM OrmRole o")
 public class OrmRole implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
-	@Column(name="ROLE_ID")
+	@Column(name = "ROLE_ID")
 	private String roleId;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="CREATE_DT")
+	@Column(name = "CREATE_DT")
 	private Date createDt;
 
-	@Column(name="CREATE_USER_ID")
+	@Column(name = "CREATE_USER_ID")
 	private String createUserId;
 
-	@Column(name="ROLE_DESC")
+	@Column(name = "ROLE_DESC")
 	private String roleDesc;
 
-	@Column(name="ROLE_NAME_CN")
+	@Column(name = "ROLE_NAME_CN")
 	private String roleNameCn;
 
-	@Column(name="ROLE_NAME_EN")
+	@Column(name = "ROLE_NAME_EN")
 	private String roleNameEn;
 
-	@Column(name="ROLE_TYPE")
+	@Column(name = "ROLE_TYPE")
 	private String roleType;
 
-	@Column(name="SYSTEM_ID")
+	@Column(name = "SYSTEM_ID")
 	private String systemId;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="UPDATE_DT")
+	@Column(name = "UPDATE_DT")
 	private Date updateDt;
 
-	@Column(name="UPDATE_USER_ID")
+	@Column(name = "UPDATE_USER_ID")
 	private String updateUserId;
 
-	@Column(name="VALID_SIGN")
+	@Column(name = "VALID_SIGN")
 	private String validSign;
 
 	public OrmRole() {
