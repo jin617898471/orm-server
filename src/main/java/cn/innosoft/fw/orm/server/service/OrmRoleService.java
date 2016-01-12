@@ -184,7 +184,8 @@ public class OrmRoleService extends AbstractBaseService<OrmRole, String> {
 	private List<String> getList(String resources) {
 		List<String> res = new ArrayList<String>();
 		if (null != resources && resources.trim().length() > 0) {
-			res = Arrays.asList(resources.split(","));
+			List<String> ress = Arrays.asList(resources.split(","));
+			res.addAll(ress);
 		}
 		return res;
 	}

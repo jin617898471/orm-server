@@ -1,0 +1,98 @@
+html,body{
+	height: 100%;
+}
+
+.main-repeat.layout-left-center{
+	width: 100%;
+	height: 100%;
+}
+
+.col-main{
+	height: 100%;
+}
+
+.layout-left-center .col-sub{
+	width: 287px;
+	height: 100%;
+	margin-right: 0;
+	margin-bottom: 0;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	padding: 12px 0;
+}
+
+.layout-left-center .main-wrap{
+	margin-left: 288px;
+	margin-bottom: 0;
+	height: 100%;
+}
+
+.colsub-container{
+	height: 100%;
+	border-right: 1px solid #e1e3e5;
+	padding-left: 10px;
+}
+
+#sel-system{
+	width: 258px;
+	height: 30px;
+}
+
+.trigger-ico{
+	background: url(../../../commons/css/imgs/select-arrow.png) -3px -14px;
+}
+
+.role-list{
+	margin-top: 10px;
+	line-height: 28px;
+}
+
+.role-list-title{
+	color: #444444;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.role-list-items{
+	color: #666666;
+	font-size: 13px;
+}
+
+.role-list-items .ui-scroll{
+	height: 100%;
+}
+
+.role-list-content{
+	width: 260px;
+}
+
+.role-list-content li{
+	padding-left: 10px;
+}
+
+.role-list-content li:hover{
+	background: #f5f7fa;
+	text-decoration: underline;
+}
+
+.main-container{
+	height: 100%;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	padding: 12px 0 12px 20px;
+}
+
+.main-title{
+	margin-right: 20px;
+	line-height: 49px;
+	border-bottom: 1px solid #e1e3e5;
+	color: #444444;
+	font-size: 18px;
+}
+
+.main-title-ico{
+	margin-right: 15px;
+	vertical-align: middle;
+}
+
+

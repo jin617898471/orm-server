@@ -2,6 +2,7 @@ package cn.innosoft.fw.orm.server.resource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.innosoft.fw.biz.base.web.PageRequest;
 import cn.innosoft.fw.biz.base.web.PageResponse;
 import cn.innosoft.fw.orm.server.model.OrmRole;
+import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.service.OrmRoleService;
 
 @Controller
@@ -26,6 +28,11 @@ public class OrmRoleResource {
 	@RequestMapping("/forward/manage")
 	public String forwardManage(Model model){
 		return "/orm/authority/role/roleManage";
+	}
+	
+	@RequestMapping("/forward/authorize")
+	public String forwardAuthorize(Model model){
+		return "/orm/authority/authorize/authorizeManage";
 	}
 	
 	@RequestMapping("/forward/detail/{roleId}")
@@ -79,6 +86,24 @@ public class OrmRoleResource {
 	@ResponseBody
 	public PageResponse<OrmRole> list(PageRequest pageRequest){
 		return ormRoleService.findAll(pageRequest);
+	}
+	
+	@RequestMapping("/listnopage")
+	@ResponseBody
+	public List<OrmRole> listNoPage(PageRequest pageRequest){
+		return ormRoleService.findAll(pageRequest.getFilterGroup());
+	}
+	
+	@RequestMapping("/getRoleResourceTrees")
+	@ResponseBody
+	public List<ZtreeBean> getRoleResourceTrees(String roleId){
+		return ormRoleService.getRoleResourceTrees(roleId);
+	}
+	
+	@RequestMapping("/saveRoleResourceRight")
+	@ResponseBody
+	public void saveRoleResourceRight(String roleId,String resourceId){
+		ormRoleService.saveRoleResourceRight(roleId,resourceId);
 	}
 	
 }

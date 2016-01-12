@@ -13,17 +13,17 @@ define(function(require){
 	if(sign!="detail"){
 		$(".subadd-bottom").show();
 	}
-	var urlBasePath='./authority/resource/';
+	var urlBasePath='./authority/code/';
 	var url_cfg={
 		"add":'add',
 		"edit":'edit',
 	}
 	
 	new Select({
-		name:"resourceType",
-		trigger:'#resourceType',
+		name:"isRight",
+		trigger:'#isRight',
 		width:'220px',
-		model:OrmJsObj.system.getHasRight( $("#resourceType").attr("value") )
+		model:[{"text":"是","value":"Y"},{"text":"否","value":"N"}]
 	}).render();
 	
 	function getSubmitData(){

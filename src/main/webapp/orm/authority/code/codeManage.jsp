@@ -9,12 +9,12 @@
 <head>
 	<meta charset="UTF-8">
 	<base href="${basePath}" />
-	<title>资源管理</title>
+	<title>代码管理</title>
 	<link rel="stylesheet" type="text/css" href="resources/commons/css/base.css">
     <link rel="stylesheet" type="text/css" href="resources/commons/css/widget.css">
     <link rel="stylesheet" type="text/css" href="resources/commons/css/theme.css">
     <link rel="stylesheet" type="text/css" href="orm/commons/css/Manage.css" />
-    <link rel="stylesheet" type="text/css" href="orm/authority/resource/css/resourceManage.css" />
+    <link rel="stylesheet" type="text/css" href="orm/authority/code/css/codeManage.css" />
     <script src="authority/system/js" ></script>
 </head>
 <body>
@@ -24,7 +24,7 @@
 				<div class="colsub-container">
 					<div class="code-title">
 						<img src="orm/commons/css/imgs/code-title.png" alt="" class="code-title-img" />
-						<span>资源管理</span>
+						<span>代码管理</span>
 						<ul id="tree" class="ztree" style="width:259px;overflow-y:auto;overflow-x:auto;height:538px"></ul>
 					</div>
 				</div>
@@ -34,16 +34,16 @@
 					<div class="ui-scroll">
 						<div class="ui-scroll-container">
 							<div class="code-cond clearfix">
-								<input type="text" class="orm-input code-inps" style="display:none;" rule-op="equal" rule-field="parentResId"  />
+								<input type="text" class="orm-input code-inps" style="display:none;" rule-op="equal" rule-field="parentCodeId"  />
 								<input type="text" class="orm-input code-inps" style="display:none;" rule-op="equal" rule-field="systemId"  />
 								<ul>
 									<li>
-										<label class="code-label">资源名称：</label>
-										<input type="text" class="orm-input code-inps" rule-op="like" rule-field="resourceName"  />
+										<label class="code-label">代码名称：</label>
+										<input type="text" class="orm-input code-inps" rule-op="like" rule-field="codeName"  />
 									</li>
 									<li>
-										<label class="code-label">资源代码：</label>
-										<input type="text" class="orm-input code-inps" rule-op="like" rule-field="resourceCode"   />
+										<label class="code-label">代码值：</label>
+										<input type="text" class="orm-input code-inps" rule-op="like" rule-field="codeValue"   />
 									</li>
 								</ul>
 							</div>
@@ -85,7 +85,7 @@
 	<script src="resources/commons/js/seajs/sea-debug.js" ></script>
     <script src="resources/commons/js/seajs/sea-config-debug.js"></script>
     <script>
-    	seajs.use("${basePath}orm/authority/resource/js/resourceManage.js");
+    	seajs.use("${basePath}orm/authority/code/js/codeManage.js");
     </script>
 	
 </body>

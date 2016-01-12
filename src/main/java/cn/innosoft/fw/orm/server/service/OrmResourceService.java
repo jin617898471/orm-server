@@ -40,8 +40,10 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		List<OrmRoleResourceRight> roleright = ormRoleResourceRightDao.findByRoleId(roleId);
 		for (ZtreeBean bean : codetrees) {
 			String id = bean.getId();
-			if (roleright.contains(id)) {
-				bean.setChecked(true);
+			for (OrmRoleResourceRight right : roleright) {
+				if (right.getResourceId().equals(id)) {
+					bean.setChecked(true);
+				}
 			}
 		}
 		return codetrees;
@@ -97,6 +99,10 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		String pId = res.getParentResId();
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		attributes.put("nodeType", "RESOURCE");
+		attributes.put("oldPid", pId);
+		if("ROOT".equals(pId)){
+			pId=res.getSystemId();
+		}
 		node.setpId(pId);
 		node.setName(res.getResourceName());
 		node.setAttributes(attributes);
@@ -133,7 +139,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 
 	public void addResource(OrmResource ormResource) {
 		ormResource.setResourceId(Identities.uuid2());
-		if ("ROOT" == ormResource.getParentResId()) {
+		if ("ROOT".equals(ormResource.getParentResId())) {
 			ormResource.setRootResId(ormResource.getResourceId());
 		} else {
 			OrmResource parent = findOne(ormResource.getParentResId());
@@ -164,7 +170,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 
 	public OrmResource findParentNode(String parentId, String parentType) {
 		OrmResource res = new OrmResource();
-		if ("SYSTEM" == parentType) {
+		if ("SYSTEM".equals(parentType)) {
 			res.setParentResId("ROOT");
 			res.setSystemId(parentId);
 		} else {

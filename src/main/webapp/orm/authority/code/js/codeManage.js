@@ -8,9 +8,9 @@ define(function(require){
 
 	require("easyui");
 	
-	var modulName="资源";
-	var idField="resourceId";
-	var urlBasePath='./authority/resource/';
+	var modulName="代码";
+	var idField="codeId";
+	var urlBasePath='./authority/code/';
 	var url_cfg={
 		"fadd":'forward/add',
 		"fedit":'forward/edit',
@@ -29,11 +29,10 @@ define(function(require){
 		url : urlBasePath+url_cfg["list"],
 		queryParams:{queryCondition:null},
 		columns:[[
-		    {field:'resourceId',checkbox:true},
-		    {field:'resourceName',title:'资源名称',align:'center'},
-		    {field:'resourceCode',title:'资源代码',align:'center'},
-		    {field:'resourceType',title:'资源类型',align:'center',formatter:Dm2Mc},
-		    {field:'resourceUrl',title:'资源Url',align:'center',formatter:Dm2Mc},
+		    {field:'codeId',checkbox:true},
+		    {field:'codeName',title:'代码名称',align:'center'},
+		    {field:'codeValue',title:'代码值',align:'center'},
+		    {field:'isRight',title:'是否数据权限代码',align:'center',formatter:Dm2Mc},
 			{field:'opt',title:'操作',align:'center',formatter:getOptionColumn}
 		]],
 		onLoadSuccess:bingRowEvent,
@@ -73,7 +72,7 @@ define(function(require){
 			parentResId=id;
 			systemId=""
 		}
-		$("*[rule-field=parentResId]").val(parentResId);
+		$("*[rule-field=parentCodeId]").val(parentResId);
 		$("*[rule-field=systemId]").val(systemId);
 	}
 	function getFirstNode(){
@@ -102,7 +101,7 @@ define(function(require){
 	loadTree();
 	
 	function Dm2Mc(value,row,index){
-		var list = OrmJsObj.system.getHasRight();
+		var list = [{"text":"是","value":"Y"},{"text":"否","value":"N"}];
 		for(var ind in list){
 			var obj=list[ind];
 			if(value==obj.value){

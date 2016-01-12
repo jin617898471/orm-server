@@ -134,7 +134,7 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 
 	public OrmCode findParentNode(String parentId, String parentType) {
 		OrmCode code = new OrmCode();
-		if ("SYSTEM" == parentType) {
+		if ("SYSTEM".equals(parentType)){
 			code.setParentCodeId("ROOT");
 			code.setSystemId(parentId);
 		} else {
@@ -145,7 +145,7 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 
 	public void addCode(OrmCode ormCode) {
 		ormCode.setCodeId(Identities.uuid2());
-		if ("ROOT" == ormCode.getParentCodeId()) {
+		if ("ROOT".equals(ormCode.getParentCodeId())) {
 			checkCodeIndexValue(ormCode.getCodeValue(),ormCode.getCodeId());
 			ormCode.setRootCodeId(ormCode.getCodeId());
 		}else{
@@ -158,7 +158,7 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 	}
 	
 	public void updateCode(OrmCode ormCode, List<String> updateField) {
-		if ("ROOT" == ormCode.getParentCodeId()) {
+		if ("ROOT".equals(ormCode.getParentCodeId())) {
 			checkCodeIndexValue(ormCode.getCodeValue(),ormCode.getCodeId());
 		}else{
 			checkCodeValue(ormCode.getRootCodeId(),ormCode.getCodeValue(),ormCode.getCodeId());
