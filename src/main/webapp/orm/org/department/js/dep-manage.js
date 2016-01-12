@@ -47,10 +47,7 @@ define(function(require){
 	var urlcfg= {
 		depTree : basePath + "org/depTree/",
 		updateTree : basePath + "org/depTree/updateNode/",
-		orgRoleAssign : basePath + "org/role/assign",
-		orgRoleNotAssign : basePath + "org/role/notassign",
-		userRoleAssign : basePath + "user/role/assign",
-		userRoleNotAssign : basePath + "user/role/notassign",
+
 		
 		fowardInstTab: basePath + "org/forward/instTab/",
 		fowardDepTab: basePath + "org/forward/depTab/",
@@ -260,76 +257,5 @@ define(function(require){
 	
 	
 	
-	function roleAssign(type,id){
-		var roleName = $("#roleName").val();
-		var systemId = systemSelect.currentItem.attr("data-value");
-		console.log(systemId);
-		if(type == "E"){
-			$.ajax({
-				url: urlcfg.userRoleAssign,
-				data: {
-					orgId: id,
-					roleName: roleName,
-					systemId: systemId
-				},
-				type: "post",
-				dataType: "json",
-				success: function(data){
-					console.log(data);
-				},
-				error: function(){
-					
-				}
-			});
-			$.ajax({
-				url: urlcfg.userRoleNotAssign,
-				data: {
-					orgId: id,
-					roleName: roleName,
-					systemId: systemId
-				},
-				type: "post",
-				dataType: "json",
-				success: function(data){
-					console.log(data);
-				},
-				error: function(){
-					
-				}
-			});
-		}else{
-			$.ajax({
-				url: urlcfg.orgRoleAssign,
-				data: {
-					orgId: id,
-					roleName: roleName,
-					systemId: systemId
-				},
-				type: "post",
-				dataType: "json",
-				success: function(data){
-					console.log(data);
-				},
-				error: function(){
-					
-				}
-			});
-			$.ajax({
-				url: urlcfg.orgRoleNotAssign,
-				data: {
-					orgId: id,
-					roleName: roleName,
-					systemId: systemId
-				},
-				type: "post",
-				dataType: "json",
-				success: function(data){
-					console.log(data);
-				},
-				error: function(){
-					
-				}
-			});
-		}
-	}
+
 });

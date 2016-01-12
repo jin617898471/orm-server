@@ -3,6 +3,9 @@ define(function(require){
 		Tabs=require("inno/switchable/1.0.0/tabs-debug"),
 		Select = require("inno/select/1.0.0/select-debug"),
 		Scroll = require("inno/scroll/1.0.0/scroll-debug");
+		require("gallery/ztree/3.5.2/core-debug");
+		require("gallery/ztree/3.5.2/exedit-debug");
+		require("gallery/ztree/3.5.14/ztree-debug.css");
 		require("easyui");
 		Form = require("form");
 	
@@ -19,10 +22,8 @@ define(function(require){
 	new Select({
 		trigger:'#cond-system',
 		width:'200px',
-		model:[
-			{value:'0', text:'组织权限管理系统'},
-			{value:'1', text:'综合管理'}
-		]
+		name : "system",
+		model:OrmJsObj.system.getHasRight()
 	}).render();
 
 	function addressInput(){
@@ -67,41 +68,41 @@ define(function(require){
 		container:"#col-tbody-already .ui-scroll-container"
 	});
 
-	
+	var userId = $("#userId").val();
+	var tabActive = new Array(true,true,false,false);
 	$(".dep-tabs-nav").on('click', 'li', function(event) {
 
 		var thisIndex = $(this).index();
 
-		if(thisIndex == 1){
-			$("#grid-table").datagrid({
-				nowrap : true,
-				autoRowHeight : true,
-				striped : true,
-				collapsible : true,
-//				url : 'datagrid_data.json',
-				columns:[[
-					{field:'id',title:'序号',align:'center'},
-					{field:'name',title:'机构名称',align:'center'},
-					{field:'code',title:'机构代码',align:'center'},
-					{field:'operate',title:'操作',align:'center'}
-				]],
-				pagination : true,
-				rownumbers : false
-			});
-
-			setTimeout(function(){
-				$("#grid-table").datagrid("resize");
-			},500);
-			
-		}else if(thisIndex == 0){
-			addressInput();
+		switch(thisIndex){
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			if(!tabActive[2]){
+				roleAssign(userId);
+				tabActive[2] = true;
+			}
+			break;
+		case 3:
+			if(!tabActive[3]){
+				addRoleTree(userId);
+			}
+			break;
 		}
+		var h = document.body.scrollWidth;
+		parent.frameHeight(h);
+		
 		
 	});
 	
 	var basePath = "/orm-server/";
 	var urlcfg= {
 		editUser : basePath + "user/edit",
+		userRoleTree : basePath + "user/role/ztree/",
+		userRoleAssign : basePath + "user/role/assign",
+		userRoleNotAssign : basePath + "user/role/notassign"
 	}
 	
 	var userForm = new Form({
@@ -154,4 +155,79 @@ define(function(require){
 			}
 		});
 	});
+	
+	//创建机构树
+	var setting = {
+		data : {
+			simpleData : {
+				enable : true,
+				idKey : "id",
+				pIdKey : "pId",
+				rootPId : null
+			}
+		},
+		view : {
+			selectedMulti: false,
+			showLine : false
+		},
+		callback : {
+			onClick : clickAction
+		},
+	}
+	
+	addRoleTree = function (orgId){
+		$.post(urlcfg.userRoleTree + orgId,function(data){
+			if(data.status == 200){
+				var nodes = data.data;
+				$.fn.zTree.init($("#tree"), setting, nodes);
+				var defaultSelect = $.fn.zTree.getZTreeObj("tree").getNodes()[0];
+				$.fn.zTree.getZTreeObj("tree").selectNode(defaultSelect);
+				clickAction(null,null,defaultSelect);
+			}else {
+				console.log(data.message);
+			}
+
+		});
+	}
+	function clickAction (event, treeId, treeNode){
+		selectedNode = treeNode;
+	}
+	function roleAssign(id){
+		console.log(id);
+		var roleName = $("#roleName").val();
+		var systemId = $("#select-system").val();
+		console.log(systemId +","+roleName+","+id);
+		$.ajax({
+			url: urlcfg.userRoleAssign,
+			data: {
+				userId: id,
+				roleName: roleName,
+				systemId: systemId
+			},
+			type: "post",
+			dataType: "json",
+			success: function(data){
+				console.log(data);
+			},
+			error: function(){
+				
+			}
+		});
+		$.ajax({
+			url: urlcfg.userRoleNotAssign,
+			data: {
+				userId: id,
+				roleName: roleName,
+				systemId: systemId
+			},
+			type: "post",
+			dataType: "json",
+			success: function(data){
+				console.log(data);
+			},
+			error: function(){
+				
+			}
+		});
+	}
 });

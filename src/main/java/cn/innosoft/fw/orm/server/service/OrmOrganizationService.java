@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.biz.core.service.AbstractBaseService;
+import cn.innosoft.fw.orm.server.model.OrmOrgCodeRightView;
 import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
 import cn.innosoft.fw.orm.server.model.OrmOrgUserMapView;
 import cn.innosoft.fw.orm.server.model.OrmOrganization;
 import cn.innosoft.fw.orm.server.model.OrmUser;
 import cn.innosoft.fw.orm.server.model.ZtreeBean;
+import cn.innosoft.fw.orm.server.persistent.OrmOrgCodeRightViewDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgUserMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgUserMapViewDao;
@@ -43,8 +45,15 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 	private OrmUserRoleMapDao ormUserRoleMapDao;
 
 	@Autowired
+	private OrmOrgCodeRightViewDao ormOrgCodeRightViewDao;
+
+	@Autowired
 	private OrmUserService ormUserService;
 
+	@Autowired
+	private OrmCodeService ormCodeService;
+	@Autowired
+	private OrmRoleService ormRoleService;
 	@Override
 	public BaseDao<OrmOrganization, String> getBaseDao() {
 		return ormOrganizationDao;
@@ -202,6 +211,27 @@ public class OrmOrganizationService extends AbstractBaseService<OrmOrganization,
 			map.put("text", "请选择");
 		}
 		return map;
+	}
+
+	public List<ZtreeBean> generateOrgCodeTree(String orgId) {
+		List<OrmOrgCodeRightView> ocrs = ormOrgCodeRightViewDao.findByOrgId(orgId);
+		List<ZtreeBean> nodes = ormCodeService.findHasRightTrees();
+		Map<String, ZtreeBean> map = new HashMap<String, ZtreeBean>();
+		for (ZtreeBean node : nodes) {
+			map.put(node.getId(), node);
+		}
+		for (OrmOrgCodeRightView ocr : ocrs) {
+			String codeId = ocr.getCodeId();
+			ZtreeBean n = map.get(codeId);
+			if (n != null) {
+				n.setChecked(true);
+			}
+		}
+		return nodes;
+	}
+
+	public List<ZtreeBean> getOrgRight(String orgId) {
+		return ormRoleService.findOrgResourceTrees(orgId);
 	}
 	// /**
 	// * 添加组织机构

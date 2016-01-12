@@ -1,6 +1,7 @@
 package cn.innosoft.fw.orm.server.resource;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.LogManager;
@@ -19,6 +20,7 @@ import cn.innosoft.fw.biz.log.FwLogFactory;
 import cn.innosoft.fw.orm.server.common.entity.InfoWrap;
 import cn.innosoft.fw.orm.server.common.result.Result;
 import cn.innosoft.fw.orm.server.model.OrmUser;
+import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.service.OrmOrganizationService;
 import cn.innosoft.fw.orm.server.service.OrmRoleService;
 import cn.innosoft.fw.orm.server.service.OrmUserService;
@@ -39,11 +41,10 @@ public class OrmUserResource {
 
 	@RequestMapping("/role/assign")
 	@ResponseBody
-	public InfoWrap getOrgAssignRole(String orgId, String roleName, String systemId) {
+	public InfoWrap getOrgAssignRole(String userId, String roleName, String systemId) {
 		try {
-			// List<Map<String, Object>> data =
-			// ormRoleService.getUserAssignRole(orgId, roleName, systemId);
-			return Result.generateSuccess("获取用户已分配角色成功", null);
+			List<Map<String, Object>> data = ormRoleService.getUserAssignRole(userId, roleName, systemId);
+			return Result.generateSuccess("获取用户已分配角色成功", data);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return Result.generateFail("500", "获取用户已分配角色失败");
@@ -52,11 +53,10 @@ public class OrmUserResource {
 
 	@RequestMapping("/role/notassign")
 	@ResponseBody
-	public InfoWrap getOrgNotAssignRole(String orgId, String roleName, String systemId) {
+	public InfoWrap getOrgNotAssignRole(String userId, String roleName, String systemId) {
 		try {
-			// List<Map<String, Object>> data =
-			// ormRoleService.getUserNotAssignRole(orgId, roleName, systemId);
-			return Result.generateSuccess("获取用户可分配角色成功", null);
+			List<Map<String, Object>> data = ormRoleService.getUserNotAssignRole(userId, roleName, systemId);
+			return Result.generateSuccess("获取用户可分配角色成功", data);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return Result.generateFail("500", "获取用户可分配角色失败");
@@ -174,6 +174,18 @@ public class OrmUserResource {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return Result.generateFail("500", "修改密码失败");
+		}
+	}
+
+	@RequestMapping("role/ztree/{userId}")
+	@ResponseBody
+	public InfoWrap getOrgRoleTree(@PathVariable String userId) {
+		try {
+			List<ZtreeBean> data = ormUserService.getUserRoles(userId);
+			return Result.generateSuccess("获取岗位权限树成功", data);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return Result.generateFail("500", "获取岗位权限树失败");
 		}
 	}
 	// /**

@@ -28,6 +28,7 @@ import cn.innosoft.fw.orm.server.model.OrmOrgRoleMap;
 import cn.innosoft.fw.orm.server.model.OrmOrgUserMap;
 import cn.innosoft.fw.orm.server.model.OrmUser;
 import cn.innosoft.fw.orm.server.model.OrmUserRoleMap;
+import cn.innosoft.fw.orm.server.model.ZtreeBean;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgRoleMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmOrgUserMapDao;
 import cn.innosoft.fw.orm.server.persistent.OrmUserDao;
@@ -55,6 +56,7 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 	private OrmRoleService ormRoleService;
 	@Autowired
 	private OrmSystemService ormSystemService;
+
 
 	@Override
 	public BaseDao<OrmUser, String> getBaseDao() {
@@ -158,6 +160,10 @@ public class OrmUserService extends AbstractBaseService<OrmUser, String> {
 		OrmUser user = findOne(userId);
 		user.setUserPwd(userPwd);
 		update(user);
+	}
+
+	public List<ZtreeBean> getUserRoles(String userId){
+		return ormRoleService.findUserResourceTrees(userId);
 	}
 
 	/**

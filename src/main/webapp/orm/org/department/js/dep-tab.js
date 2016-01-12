@@ -2,6 +2,9 @@ define(function(require){
 	var $ = require("$"),
 		Tabs=require("inno/switchable/1.0.0/tabs-debug"),
 		Scroll = require("inno/scroll/1.0.0/scroll-debug");
+	require("gallery/ztree/3.5.2/core-debug");
+	require("gallery/ztree/3.5.2/exedit-debug");
+	require("gallery/ztree/3.5.14/ztree-debug.css");
 		require("easyui");
 		Form = require("form");
 		Confirmbox=require("inno/dialog/1.0.0/confirmbox-debug");
@@ -73,7 +76,8 @@ define(function(require){
 		forwardPostAdd : basePath + "org/post/forward/add/",
 		forwardPostEdit : basePath + "org/post/forward/edit/",
 		forwardEmpAdd : basePath + "org/emp/forward/add",
-		forwardEmpEdit : basePath + "org/emp/forward/edit/"
+		forwardEmpEdit : basePath + "org/emp/forward/edit/",
+		orgCodeTree : basePath + "org/code/ztree/",
 	}
 	var orgId = $("#orgId").val();
 	var tabActive = new Array(true,false,false,false,false)
@@ -109,7 +113,7 @@ define(function(require){
 			break;
 		case 4:
 			if(!tabActive[4]){
-				loadEmpGrid(orgId);
+				addRoleTree(orgId)
 				tabActive[4] = true;
 			}
 			break;
@@ -286,5 +290,45 @@ define(function(require){
 		}
 	}
 	
+	
+	//创建机构树
+	var setting = {
+		data : {
+			simpleData : {
+				enable : true,
+				idKey : "id",
+				pIdKey : "pId",
+				rootPId : null
+			}
+		},
+		view : {
+			selectedMulti: false,
+			showLine : false
+		},
+		callback : {
+			onClick : clickAction
+		},
+
+	}
+	
+	addRoleTree = function (orgId){
+		$.post(urlcfg.orgCodeTree + orgId,function(data){
+			if(data.status == 200){
+				var nodes = data.data;
+
+				$.fn.zTree.init($("#tree"), setting, nodes);
+				var defaultSelect = $.fn.zTree.getZTreeObj("tree").getNodes()[0];
+				$.fn.zTree.getZTreeObj("tree").selectNode(defaultSelect);
+				clickAction(null,null,defaultSelect);
+			}else {
+				console.log(data.message);
+			}
+
+		});
+	}
+	function clickAction (event, treeId, treeNode){
+		selectedNode = treeNode;
+
+		}
 	
 });

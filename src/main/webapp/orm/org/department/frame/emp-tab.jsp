@@ -23,6 +23,7 @@
 			width: 100%;
 		}
 	</style>
+	<script src="<%=basePath%>authority/system/js"></script>
 </head>
 <body>
 	<div class="wrap-title">
@@ -114,7 +115,7 @@
 								<i class="iconfont">&#xf00a0;</i>
 								<span class="status-message"></span>
 							</div>
-							<input type="hidden" name="userId" value="${user.userId}" />
+							<input type="hidden" name="userId" id="userId" value="${user.userId}" />
 						</div>
 						<input type="hidden" name="userColumns" value="userAcct,userName,userNameEng,userSex,userBirth,userCardtype,userCardno,userMobile,userEmail,userEmail,empQq,empWeibo,empHaddress,empHzipcode,empHtel,empParty">
 					</form>
@@ -398,7 +399,7 @@
 				</div>
 			</div>
 			<div class="hidden content-panel">
-				<h1>权限计算</h1>
+				<ul id="tree" class="ztree" style="width:400px;overflow-y:auto;overflow-x:auto"></ul>
 			</div>
 		</div>
 	</div>

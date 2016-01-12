@@ -23,6 +23,7 @@
 			width: 100%;
 		}
 	</style>
+	<script src="<%=basePath%>authority/system/js"></script>
 </head>
 <body>
 	<div class="wrap-title">
@@ -293,7 +294,7 @@
 				</div>
 			</div>
 			<div class="hidden content-panel">
-				<h1>权限计算</h1>
+				<ul id="tree" class="ztree" style="width:400px;overflow-y:auto;overflow-x:auto"></ul>
 			</div>
 		</div>
 	</div>

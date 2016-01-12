@@ -3,6 +3,9 @@ define(function(require){
 		Tabs=require("inno/switchable/1.0.0/tabs-debug"),
 		Select = require("inno/select/1.0.0/select-debug"),
 		Scroll = require("inno/scroll/1.0.0/scroll-debug");
+	require("gallery/ztree/3.5.2/core-debug");
+	require("gallery/ztree/3.5.2/exedit-debug");
+	require("gallery/ztree/3.5.14/ztree-debug.css");
 		require("easyui");
 		Form = require("form");
 	
@@ -21,10 +24,8 @@ define(function(require){
 	new Select({
 		trigger:'#cond-system',
 		width:'200px',
-		model:[
-			{value:'0', text:'组织权限管理系统'},
-			{value:'1', text:'综合管理'}
-		]
+		name : "system",
+		model:OrmJsObj.system.getHasRight()
 	}).render();
 
 	function addressInput(){
@@ -77,10 +78,14 @@ define(function(require){
 		belongEmp : basePath + "org/emps/",
 		updatePost : basePath + "org/update",
 		forwardEmpAdd : basePath + "org/emp/forward/add",
-		forwardEmpEdit : basePath + "org/emp/forward/edit/"
+		forwardEmpEdit : basePath + "org/emp/forward/edit/",
+		orgRoleTree : basePath + "org/role/ztree/",
+		orgRoleAssign : basePath + "org/role/assign",
+		orgRoleNotAssign : basePath + "org/role/notassign"
+
 	}
 	var orgId = $("#orgId").val();
-	var tabActive = new Array(true,false,false,false)
+	var tabActive = new Array(true,false,false,false);
 	$(".dep-tabs-nav").on('click', 'li', function(event) {
 
 		var thisIndex = $(this).index();
@@ -97,12 +102,13 @@ define(function(require){
 			break;
 		case 2:
 			if(!tabActive[2]){
-				
+				roleAssign(orgId);
 				tabActive[2] = true;
 			}
 			break;
 		case 3:
 			if(!tabActive[3]){
+				addRoleTree(orgId);
 			}
 			break;
 		}
@@ -189,5 +195,81 @@ define(function(require){
 		if(type=="E"){
 			loadEmpGrid(orgId)
 		}
+	}
+	
+	
+	//创建机构树
+	var setting = {
+		data : {
+			simpleData : {
+				enable : true,
+				idKey : "id",
+				pIdKey : "pId",
+				rootPId : null
+			}
+		},
+		view : {
+			selectedMulti: false,
+			showLine : false
+		},
+		callback : {
+			onClick : clickAction
+		},
+	}
+	
+	addRoleTree = function (orgId){
+		$.post(urlcfg.orgRoleTree + orgId,function(data){
+			if(data.status == 200){
+				var nodes = data.data;
+				$.fn.zTree.init($("#tree"), setting, nodes);
+				var defaultSelect = $.fn.zTree.getZTreeObj("tree").getNodes()[0];
+				$.fn.zTree.getZTreeObj("tree").selectNode(defaultSelect);
+				clickAction(null,null,defaultSelect);
+			}else {
+				console.log(data.message);
+			}
+
+		});
+	}
+	function clickAction (event, treeId, treeNode){
+		selectedNode = treeNode;
+	}
+	
+	function roleAssign(id){
+		var roleName = $("#roleName").val();
+		var systemId = $("#select-system").val();
+		console.log(systemId);
+		$.ajax({
+			url: urlcfg.orgRoleAssign,
+			data: {
+				orgId: id,
+				roleName: roleName,
+				systemId: systemId
+			},
+			type: "post",
+			dataType: "json",
+			success: function(data){
+				console.log(data);
+			},
+			error: function(){
+				
+			}
+		});
+		$.ajax({
+			url: urlcfg.orgRoleNotAssign,
+			data: {
+				orgId: id,
+				roleName: roleName,
+				systemId: systemId
+			},
+			type: "post",
+			dataType: "json",
+			success: function(data){
+				console.log(data);
+			},
+			error: function(){
+				
+			}
+		});
 	}
 });

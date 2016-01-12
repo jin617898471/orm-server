@@ -176,9 +176,8 @@ public class OrmOrganizationResource {
 	@ResponseBody
 	public InfoWrap getOrgAssignRole(String orgId, String roleName, String systemId) {
 		try {
-			// List<Map<String, Object>> data =
-			// ormRoleService.getOrgAssignRole(orgId, roleName, systemId);
-			return Result.generateSuccess("获取组织机构已分配角色成功", null);
+			List<Map<String, Object>> data = ormRoleService.getOrgAssignRole(orgId, roleName, systemId);
+			return Result.generateSuccess("获取组织机构已分配角色成功", data);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return Result.generateFail("500", "获取组织机构已分配角色失败");
@@ -189,9 +188,8 @@ public class OrmOrganizationResource {
 	@ResponseBody
 	public InfoWrap getOrgNotAssignRole(String orgId, String roleName, String systemId) {
 		try {
-			// List<Map<String, Object>> data =
-			// ormRoleService.getOrgNotAssignRole(orgId, roleName, systemId);
-			return Result.generateSuccess("获取组织机构可分配角色成功", null);
+			List<Map<String, Object>> data = ormRoleService.getOrgNotAssignRole(orgId, roleName, systemId);
+			return Result.generateSuccess("获取组织机构可分配角色成功", data);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return Result.generateFail("500", "获取组织机构可分配角色失败");
@@ -320,6 +318,30 @@ public class OrmOrganizationResource {
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			return Result.generateFail("500", "获取机构下拉选项失败");
+		}
+	}
+
+	@RequestMapping("code/ztree/{orgId}")
+	@ResponseBody
+	public InfoWrap getOrgCodeTree(@PathVariable String orgId) {
+		try {
+			List<ZtreeBean> data = ormOrganizationService.generateOrgCodeTree(orgId);
+			return Result.generateSuccess("获取部门代码树成功", data);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return Result.generateFail("500", "获取部门代码树失败");
+		}
+	}
+
+	@RequestMapping("role/ztree/{orgId}")
+	@ResponseBody
+	public InfoWrap getOrgRoleTree(@PathVariable String orgId) {
+		try {
+			List<ZtreeBean> data = ormOrganizationService.getOrgRight(orgId);
+			return Result.generateSuccess("获取岗位权限树成功", data);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+			return Result.generateFail("500", "获取岗位权限树失败");
 		}
 	}
 	// @RequestMapping("/forward/manage")
