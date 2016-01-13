@@ -5,6 +5,12 @@
 	width: 100%;
 }
 
+.datagrid-view1 .datagrid-header{
+	height: 34px;
+	border-top: 0;
+	border-bottom: 1px solid #e1e3e5;
+	background: #f5f7fa;
+}
 .datagrid-view2 .datagrid-header{
 	height: 34px;
 	border-top: 0;
@@ -23,12 +29,21 @@
 }
 
 .datagrid-header .datagrid-header-row .datagrid-cell{
-	padding: 0;
+/* 	padding: 0; */
 }
 
+.datagrid-view1 .datagrid-body{
+	color: #666666;
+	font-size: 13px;
+}
 .datagrid-view2 .datagrid-body{
 	color: #666666;
 	font-size: 13px;
+}
+.datagrid-body-inner .datagrid-btable .datagrid-cell-rownumber {
+    padding: 0;
+    line-height: 31px;
+    font-size: 13px;
 }
 
 .datagrid-btable .datagrid-row{
@@ -41,7 +56,7 @@
 }
 
 .datagrid-body .datagrid-btable .datagrid-cell{
-	padding: 0;
+/* 	padding: 0; */
 	line-height: 31px;
 	font-size: 13px;
 }

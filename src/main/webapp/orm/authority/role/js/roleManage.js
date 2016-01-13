@@ -29,23 +29,25 @@ define(function(require){
 		nowrap : true,
 		autoRowHeight : true,
 		striped : true,
-		collapsible : true,
 		url : urlBasePath+url_cfg["list"],
 		queryParams:{queryCondition:null},
-		columns:[[
-		    {field:'roleId',checkbox:true},
-		    {field:'roleNameCn',title:'角色名称',align:'center'},
-		    {field:'systemId',title:'所属系统',align:'center',formatter:Dm2Mc},
-			{field:'opt',title:'操作',align:'center',formatter:getOptionColumn}
+		frozenColumns:[[
+            {field:'roleId',checkbox:true,width:20},
+        ]],
+        columns:[[
+            {field:'roleNameCn',title:'角色名称',align:'left',halign:'center',width:600},
+		    {field:'systemId',title:'所属系统',align:'left',formatter:Dm2Mc,dm:"sex",width:300},
+			{field:'opt',title:'操作',align:'center',formatter:getOptionColumn,width:100}
 		]],
 		onLoadSuccess:bingRowEvent,
 		onDblClickRow:bindRowDbClickEvent,
 		pagination : true,
-		rownumbers : false,
+		rownumbers : true,
 		pageList:[15,30,50,100]
 	});
 	
 	function Dm2Mc(value,row,index){
+		console.log(index);
 		var list = OrmJsObj.system.getHasRight();
 		for(var ind in list){
 			var obj=list[ind];
@@ -129,7 +131,7 @@ define(function(require){
 				$.ajax( {
 					url:urlBasePath+url_cfg["del"]+"/"+id,
 					error:function(){
-						Confirmbox.alert('删除失败,请联系管理员');
+						alert('操作失败,请联系管理员');
 					},
 					statusCode: { 
 						200: function(msg) {
@@ -174,7 +176,7 @@ define(function(require){
 				$.ajax( {
 					url:urlBasePath+url_cfg["dels"]+"/"+arr,
 					error:function(){
-						Confirmbox.alert('删除失败,请联系管理员');
+						alert('操作,请联系管理员');
 					},
 					statusCode: { 
 						200: function(msg) {

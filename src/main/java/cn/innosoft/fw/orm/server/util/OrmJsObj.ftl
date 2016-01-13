@@ -1,4 +1,4 @@
-﻿(function(window){
+(function(window){
 	var OrmJsObj = window.OrmJsObj;
 	if(null==OrmJsObj){
 		OrmJsObj={};
