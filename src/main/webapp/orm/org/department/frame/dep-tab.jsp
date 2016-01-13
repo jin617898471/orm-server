@@ -124,7 +124,9 @@
 			<div class="hidden content-panel">
 				<div class="code-layout">
 					<div class="col-main">
-						<div class="col-sub"></div>
+						<div class="col-sub">
+							<ul id="tree" class="ztree" style="width:245px;overflow-y:auto;overflow-x:auto"></ul>
+						</div>
 						<div class="main-wrap">
 							<div class="codeinf-sec" active="0">
 								<div class="codeinf-title">

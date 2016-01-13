@@ -3,7 +3,6 @@
 	<persistence-unit name="orm-server">
 		<class>cn.innosoft.fw.orm.server.model.OrmCode</class>
 		<class>cn.innosoft.fw.orm.server.model.OrmOrganization</class>
-		<class>cn.innosoft.fw.orm.server.model.OrmOrgCodeMap</class>
 		<class>cn.innosoft.fw.orm.server.model.OrmOrgCodeRight</class>
 		<class>cn.innosoft.fw.orm.server.model.OrmOrgOrgRight</class>
 		<class>cn.innosoft.fw.orm.server.model.OrmOrgRoleMap</class>
@@ -18,5 +17,6 @@
 		<class>cn.innosoft.fw.orm.server.model.OrmUserOrgRightView</class>
 		<class>cn.innosoft.fw.orm.server.model.OrmUserRoleMap</class>
 		<class>cn.innosoft.fw.orm.server.model.OrmUserRoleMapView</class>
+		<class>cn.innosoft.fw.orm.server.model.OrmOrgCodeRightView</class>
 	</persistence-unit>
 </persistence>
