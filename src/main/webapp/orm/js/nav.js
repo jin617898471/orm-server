@@ -86,6 +86,36 @@ define(function(require){
 				addUserTab();
 			}
 			break;
+		case "system":
+			var flag = checkTabExist("系统管理");
+			if(!flag){
+				addSystemTab();
+			}
+			break;
+		case "role":
+			var flag = checkTabExist("角色管理");
+			if(!flag){
+				addRoleTab();
+			}
+			break;
+		case "resource":
+			var flag = checkTabExist("资源管理");
+			if(!flag){
+				addResourceTab();
+			}
+			break;
+		case "code":
+			var flag = checkTabExist("代码管理");
+			if(!flag){
+				addCodeTab();
+			}
+			break;
+		case "authorize":
+			var flag = checkTabExist("授权管理");
+			if(!flag){
+				addAuthorizeTab();
+			}
+			break;
 		}
 		console.log();
 		
@@ -196,6 +226,51 @@ define(function(require){
 		var content ="<iframe id='user' name='user' src='/orm-server/user/forward/manage' frameborder='0'></iframe>";
 		tabs.addPanel("用户管理",content,true,index);
 		$("iframe[name=user]").parent().addClass("content-panel");
+		tabs.switchTo(index);
+		$(".content-panel iframe").css('height', $(".main-wrap").height() - 48);
+		tabIndex = index;
+	}
+	function addSystemTab(){
+		var index = tabs.get("length");
+		var content ="<iframe id='system' name='system' src='/orm-server/authority/system/forward/manage' frameborder='0'></iframe>";
+		tabs.addPanel("系统管理",content,true,index);
+		$("iframe[name=system]").parent().addClass("content-panel");
+		tabs.switchTo(index);
+		$(".content-panel iframe").css('height', $(".main-wrap").height() - 48);
+		tabIndex = index;
+	}
+	function addRoleTab(){
+		var index = tabs.get("length");
+		var content ="<iframe id='role' name='role' src='/orm-server/authority/role/forward/manage' frameborder='0'></iframe>";
+		tabs.addPanel("角色管理",content,true,index);
+		$("iframe[name=role]").parent().addClass("content-panel");
+		tabs.switchTo(index);
+		$(".content-panel iframe").css('height', $(".main-wrap").height() - 48);
+		tabIndex = index;
+	}
+	function addResourceTab(){
+		var index = tabs.get("length");
+		var content ="<iframe id='resource' name='resource' src='/orm-server/authority/resource/forward/manage' frameborder='0'></iframe>";
+		tabs.addPanel("资源管理",content,true,index);
+		$("iframe[name=resource]").parent().addClass("content-panel");
+		tabs.switchTo(index);
+		$(".content-panel iframe").css('height', $(".main-wrap").height() - 48);
+		tabIndex = index;
+	}
+	function addCodeTab(){
+		var index = tabs.get("length");
+		var content ="<iframe id='code' name='code' src='/orm-server/authority/code/forward/manage' frameborder='0'></iframe>";
+		tabs.addPanel("代码管理",content,true,index);
+		$("iframe[name=code]").parent().addClass("content-panel");
+		tabs.switchTo(index);
+		$(".content-panel iframe").css('height', $(".main-wrap").height() - 48);
+		tabIndex = index;
+	}
+	function addAuthorizeTab(){
+		var index = tabs.get("length");
+		var content ="<iframe id='authorize' name='authorize' src='/orm-server/authority/role/forward/authorize' frameborder='0'></iframe>";
+		tabs.addPanel("授权管理",content,true,index);
+		$("iframe[name=authorize]").parent().addClass("content-panel");
 		tabs.switchTo(index);
 		$(".content-panel iframe").css('height', $(".main-wrap").height() - 48);
 		tabIndex = index;

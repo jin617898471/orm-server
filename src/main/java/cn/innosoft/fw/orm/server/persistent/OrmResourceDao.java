@@ -21,4 +21,7 @@ public interface OrmResourceDao extends BaseDao<OrmResource, String> {
 	@Query(value = "SELECT A.* FROM ORM_RESOURCE A ,ORM_ROLE_RESOURCE_RIGHT_VIEW B ,ORM_ORG_ROLE_MAP_VIEW C WHERE A.RESOURCE_ID = B.RESOURCE_ID AND B.ROLE_ID=C.ROLE_ID AND C.ORG_ID= ?1 ",nativeQuery=true)
 	public List<OrmResource> findOrgResource(String orgId);
 
+	@Query(value = "SELECT * FROM ORM_RESOURCE CONNECT BY PRIOR RESOURCE_ID=  PARENT_RES_ID START WITH RESOURCE_ID IN (?1)",nativeQuery=true)
+	public List<OrmResource> getAllChildrenNode(List<String>  resourceId);
+
 }

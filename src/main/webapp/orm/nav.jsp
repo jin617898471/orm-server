@@ -98,7 +98,7 @@
 							</div>
 							<div class="items-sub">
 								<ul>
-									<li class="items-sub-list items-sub-list-active" name="inst" resource-code="institution2">
+									<li class="items-sub-list items-sub-list-active" name="inst" resource-code="institution">
 										<span class="sidebar-icons sideicon-1"></span>
 										<span>机构管理</span>
 									</li>
@@ -120,27 +120,23 @@
 							</div>
 							<div class="items-sub">
 								<ul>
-<!-- 									<li class="items-sub-list"> -->
-<!-- 										<span class="sidebar-icons sideicon-5"></span> -->
-<!-- 										<span>安全策略管理</span> -->
-<!-- 									</li> -->
-									<li class="items-sub-list" resource-code="system">
+									<li class="items-sub-list" name="system" resource-code="system">
 										<span class="sidebar-icons sideicon-6"></span>
 										<span>系统管理</span>
 									</li>
-									<li class="items-sub-list" resource-code="code">
+									<li class="items-sub-list" name="code" resource-code="code">
 										<span class="sidebar-icons sideicon-7"></span>
 										<span>代码管理</span>
 									</li>
-									<li class="items-sub-list" resource-code="resource">
+									<li class="items-sub-list" name="resource" resource-code="resource">
 										<span class="sidebar-icons sideicon-8"></span>
 										<span>功能管理</span>
 									</li>
-									<li class="items-sub-list" resource-code="role">
+									<li class="items-sub-list" name="role" resource-code="role">
 										<span class="sidebar-icons sideicon-9"></span>
 										<span>角色管理</span>
 									</li>
-									<li class="items-sub-list" resource-code="authorize">
+									<li class="items-sub-list" name="authorize" resource-code="authorize">
 										<span class="sidebar-icons sideicon-10"></span>
 										<span>授权管理</span>
 									</li>
@@ -169,13 +165,6 @@
 											<span>部门管理</span>
 										</div>
 									</li>
-<!-- 									<li class="items-sub-list"> -->
-<!-- 										<span class="sidebar-icons sideicon-3"></span> -->
-<!-- 										<div class="sublist-tips"> -->
-<!-- 											<img src="css/imgs/side-tip-arr.png" alt="" class="sublist-tips-arrow" /> -->
-<!-- 											<span>工作管理</span> -->
-<!-- 										</div> -->
-<!-- 									</li> -->
 									<li class="items-sub-list" resource-code="user">
 										<span class="sidebar-icons sideicon-4"></span>
 										<div class="sublist-tips">
@@ -192,13 +181,6 @@
 							</div>
 							<div class="items-sub">
 								<ul>
-<!-- 									<li class="items-sub-list"> -->
-<!-- 										<span class="sidebar-icons sideicon-5"></span> -->
-<!-- 										<div class="sublist-tips"> -->
-<!-- 											<img src="css/imgs/side-tip-arr.png" alt="" class="sublist-tips-arrow" /> -->
-<!-- 											<span>安全策略管理</span> -->
-<!-- 										</div> -->
-<!-- 									</li> -->
 									<li class="items-sub-list" resource-code="system">
 										<span class="sidebar-icons sideicon-6"></span>
 										<div class="sublist-tips">

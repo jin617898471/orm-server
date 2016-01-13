@@ -2,6 +2,7 @@ package cn.innosoft.fw.orm.server.persistent;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
@@ -20,5 +21,12 @@ public interface OrmCodeDao extends BaseDao<OrmCode, String> {
 	public Integer countByRootCodeIdAndCodeValueAndCodeIdNot(String rootCodeId, String codeValue, String codeId);
 
 	public Integer countByParentCodeIdAndCodeValueAndCodeIdNot(String string, String codeValue, String codeId);
+
+	@Query(value = "SELECT * FROM ORM_CODE CONNECT BY PRIOR RESOURCE_ID=  PARENT_RES_ID START WITH RESOURCE_ID IN (?1)",nativeQuery=true)
+	public List<OrmCode> getAllChildrenNode(List<String> list);
+
+	@Modifying
+	@Query(value = "UPDATE ORM_CODE SET IS_RIGHT = ?1 WHERE CODE_ID IN (SELECT CODE_ID FROM ORM_CODE  CONNECT BY PRIOR CODE_ID=  PARENT_CODE_ID START WITH CODE_ID IN (?2) )",nativeQuery=true)
+	public void updateIsRightColumn(String isRight,String codeId);
 	
 }
