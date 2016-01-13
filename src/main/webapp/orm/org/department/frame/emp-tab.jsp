@@ -27,7 +27,7 @@
 </head>
 <body>
 	<div class="wrap-title">
-		<img src="<%=basePath%>/orm/css/imgs/ajob.png" alt="" class="wrap-title-img" />
+		<img src="<%=basePath%>/orm/css/imgs/person.png" alt="" class="wrap-title-img" />
 		<span>${user.userName}</span>
 	</div>
 	<div class="dep-tabs">
