@@ -102,7 +102,7 @@ define(function(require){
 	loadTree();
 	
 	function Dm2Mc(value,row,index){
-		var list = OrmJsObj.system.getHasRight();
+		var list = OrmJsObj.getCode("RESOURCE_TYPE");
 		for(var ind in list){
 			var obj=list[ind];
 			if(value==obj.value){

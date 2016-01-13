@@ -23,7 +23,7 @@ define(function(require){
 		name:"resourceType",
 		trigger:'#resourceType',
 		width:'220px',
-		model:OrmJsObj.system.getHasRight( $("#resourceType").attr("value") )
+		model:OrmJsObj.getCode( "RESOURCE_TYPE",$("#resourceType").attr("value") )
 	}).render();
 	
 	function getSubmitData(){

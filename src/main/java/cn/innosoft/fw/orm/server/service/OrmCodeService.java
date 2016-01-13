@@ -174,7 +174,6 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 	public void updateCode(OrmCode ormCode, List<String> updateField) {
 		if ("ROOT".equals(ormCode.getParentCodeId())) {
 			checkCodeIndexValue(ormCode.getCodeValue(),ormCode.getCodeId());
-			ormCodeDao.updateIsRightColumn(ormCode.getIsRight(),ormCode.getCodeId());
 		}else{
 			checkCodeValue(ormCode.getRootCodeId(),ormCode.getCodeValue(),ormCode.getCodeId());
 		}

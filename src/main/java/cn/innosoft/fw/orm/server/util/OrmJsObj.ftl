@@ -48,15 +48,7 @@
 		return data;
 	};
 	OrmJsObj.copy = function( list ) {
-		var data=[];
-		for(var index in list){
-			var obj= list[index];
-			var nobj={};
-			for(var key in obj){
-				nobj[key]=obj[key];
-			}
-			data.push(nobj);
-		}
+		var data=$.extend( true,[],list );
 		return data;
 	};
 })(window)

@@ -14,6 +14,7 @@
     <link rel="stylesheet" type="text/css" href="resources/commons/css/theme.css">
     <link rel="stylesheet" type="text/css" href="orm/commons/css/ADE.css" />
     <script src="authority/system/js" ></script>
+    <script src="orm/userinfo.js" ></script>
 </head>
 <body>
 	<div class="subadd-container">

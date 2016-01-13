@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="orm/commons/css/Manage.css" />
     <link rel="stylesheet" type="text/css" href="orm/authority/resource/css/resourceManage.css" />
     <script src="authority/system/js" ></script>
+    <script src="orm/userinfo.js" ></script>
 </head>
 <body>
 	<div class="main-repeat layout-left-center">
