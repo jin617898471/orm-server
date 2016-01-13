@@ -238,41 +238,19 @@ define(function(require){
 	};
 	
 	$("#addDepDiv").on('click', '#addDep', function(event) {
-//		$(".ui-dialog").css('boxShadow', '0px 4px 16px #a8adb2');
-//		$(".ui-dialog-content").css('height', 325 - 40);
 		parent.showDialog(urlcfg.forwardDepAdd + orgId,"新增下属部门",325,"O");
 		
 	});
 	$("#addPostDiv").on('click', '#addPost', function(event) {
-//		$(".ui-dialog").css('boxShadow', '0px 4px 16px #a8adb2');
-//		$(".ui-dialog-content").css('height', 225 - 40);
 		parent.showDialog(urlcfg.forwardPostAdd + orgId,"新增下属岗位",225,"P");
 		
 	});
 	$("#addEmpDiv").on('click', '#addEmp', function(event) {
 		console.log("addEmp")
-//		$(".ui-dialog").css('boxShadow', '0px 4px 16px #a8adb2');
-//		$(".ui-dialog-content").css('height', 525 - 40);
-//		parent.dialog.show(urlcfg.forwardEmpAdd + orgId,"新增下属人员","525px");
 		parent.showDialog(urlcfg.forwardEmpAdd,"新增下属人员",525,"E");
 		
 	});
 	
-//	var dialog = new Dialog({
-//		//trigger:'.sub-operate',
-//		width:'760px',
-////		height:'525px',
-//		//content:'./dialog-subadd.html',
-//		hasMask:false,
-////		title:'新增下属机构',
-//		ifEsc:false,
-//		closeTpl:'&#xe62a;'
-//	}).before('show',function(url,title,height){
-////		var url = urlcfg.forwardAdd pId;
-//		this.set("content",url);
-//		this.set("title",title);
-//		this.set("height",height);
-//	});
 	
 	refreshTreeAndList = function(type){
 		if(type=="E"){

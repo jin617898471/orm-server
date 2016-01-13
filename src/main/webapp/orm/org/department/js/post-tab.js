@@ -58,17 +58,7 @@ define(function(require){
 		
 	});
 
-	//待选角色滚动条
-	var one = new Scroll({
-		trigger:"#col-tbody-wait .ui-scroll",
-		container:"#col-tbody-wait .ui-scroll-container"
-	});
 
-	//已选角色滚动条
-	var two = new Scroll({
-		trigger:"#col-tbody-already .ui-scroll",
-		container:"#col-tbody-already .ui-scroll-container"
-	});
 
 	
 	var tabInstId = new Array("","");
@@ -81,8 +71,9 @@ define(function(require){
 		forwardEmpEdit : basePath + "org/emp/forward/edit/",
 		orgRoleTree : basePath + "org/role/ztree/",
 		orgRoleAssign : basePath + "org/role/assign",
-		orgRoleNotAssign : basePath + "org/role/notassign"
-
+		orgRoleNotAssign : basePath + "org/role/notassign",
+		orgAddRoles : basePath + "org/role/add",
+		orgdelRoles : basePath + "org/role/delete",
 	}
 	var orgId = $("#orgId").val();
 	var tabActive = new Array(true,false,false,false);
@@ -160,13 +151,9 @@ define(function(require){
 			type: 1,
 			successFn: function(result){
 				if(result.status == 200){
-//					var selected = $.fn.zTree.getZTreeObj("tree").getSelectedNodes()[0];
-//					ztreeNodeAction(null,null,selectedNode);
 					$(".operate-status .status-message").text(result.message);
 					$(".operate-status").show();
-//					console.log("selected: " + selectedNode);
-//					$(".operate-status .status-message").text(result.message);
-//					$(".operate-status").show();
+
 				}else{
 					console.log(result.message);
 				}
@@ -187,7 +174,6 @@ define(function(require){
 		console.log("addEmp")
 		$(".ui-dialog").css('boxShadow', '0px 4px 16px #a8adb2');
 		$(".ui-dialog-content").css('height', 525 - 40);
-//		parent.dialog.show(urlcfg.forwardEmpAdd + orgId,"新增下属人员","525px");
 		parent.showDialog(urlcfg.forwardEmpAdd,"新增下属人员","525px","E");
 		
 	});
@@ -235,6 +221,182 @@ define(function(require){
 		selectedNode = treeNode;
 	}
 	
+//	待选角色滚动条
+	var one = new Scroll({
+		trigger:"#col-tbody-wait .ui-scroll",
+		container:"#col-tbody-wait .ui-scroll-container"
+	});
+
+	//已选角色滚动条
+	var two = new Scroll({
+		trigger:"#col-tbody-already .ui-scroll",
+		container:"#col-tbody-already .ui-scroll-container"
+	});
+	function showAssignRoles(data){
+		var length = data.length;
+		var def = 11 - length;
+		var table = $("#assignRole");
+		table.empty();
+		for(var i=0;i<length;i++){
+			table.append(createTr(data[i]));
+		}
+		$("#assignRole").off('dblclick', '.hasRole');
+		$("#assignRole").on('dblclick', '.hasRole', function(event) {
+			var roleList = new Array();
+			var roleId = $(this).children("input[name=roleId]").val();
+			roleList.push(roleId);
+			doRoleAssignAjax(roleList,urlcfg.orgdelRoles);
+		});
+		if(def > 0){
+			for(var j=0;j<def;j++){
+				table.append(createTr(null));
+			}
+		}
+		two.reset();
+	}
+	function doRoleAssignAjax(json,url){
+		var data = {
+				orgId : orgId,
+				roles : json
+		}
+		$.ajax({
+			url: url,
+            type:"post",
+            data: data,
+            dataType: 'json',
+            success:function(result){
+				if(result.status == 200){
+					roleAssign(orgId);
+				}else{
+					console.log(result.message);
+				}
+            },
+            error:function(result, err){
+            }
+		});
+	}
+	function showNotAssignRoles(data){
+		var length = data.length;
+		var def = 11 - length;
+		var table = $("#notAssignRole");
+		table.empty();
+		for(var i=0;i<length;i++){
+			table.append(createTr(data[i]));
+		}
+		$("#notAssignRole").off('dblclick', '.hasRole');
+		$("#notAssignRole").on('dblclick', '.hasRole', function(event) { 
+			var roleList = new Array();
+			var roleId = $(this).children("input[name=roleId]").val();
+			var systemId = $(this).children("input[name=systemId]").val();
+			var role = {
+					roleId : roleId,
+					systemId : systemId
+			};
+			roleList.push(role);
+			var json = window.JSON.stringify(roleList);
+			doRoleAssignAjax(json,urlcfg.orgAddRoles);
+		});
+		if(def > 0){
+			for(var j=0;j<def;j++){
+				table.append(createTr(null));
+			}
+		}
+		one.reset();
+	}
+	function createTr(role){
+		var html = null;
+		if(role){
+			html = "<tr class='hasRole'>" +
+			"<td class='w39 text-center'><input type='checkbox' class='chk-wait' name='checkbox' /></td>"+
+			"<td class='w79'>"+role.roleNameCn+"</td>"+
+			"<td>"+role.systemName+"</td>"+
+			"<input type='hidden' name='roleId' value='"+role.roleId+"'/>"+
+			"<input type='hidden' name='systemId' value='"+role.systemId+"'/>"+
+		"</tr>";
+		}else{
+			html = "<tr>" +
+			"<td class='w39 text-center'></td>"+
+			"<td class='w79'></td>"+
+			"<td></td>"+
+		"</tr>";
+		}
+		return html;
+	}
+	$("#selectButton").click(function(event){
+		var selected = $("#notAssignRole input[name='checkbox']:checked");
+		if(selected.length < 1){
+			return;
+		}
+		var roleList = new Array();
+		selected.each(function(){
+			var roleId = $(this).parent().parent().children("input[name=roleId]").val();
+			var systemId = $(this).parent().parent().children("input[name=systemId]").val();
+			var role = {
+					roleId : roleId,
+					systemId : systemId
+			};
+			roleList.push(role);
+		});
+		var json = window.JSON.stringify(roleList);
+		doRoleAssignAjax(json,urlcfg.orgAddRoles);
+	});
+	$("#selectAllButton").click(function(event){
+		var selected =$("#notAssignRole .hasRole");
+		console.log(selected);
+		if(selected.length < 1){
+			return;
+		}
+		var roleList = new Array();
+		selected.each(function(){
+			var roleId = $(this).children("input[name=roleId]").val();
+			var systemId = $(this).children("input[name=systemId]").val();
+			var role = {
+					roleId : roleId,
+					systemId : systemId
+			};
+			roleList.push(role);
+		});
+		var json = window.JSON.stringify(roleList);
+		doRoleAssignAjax(json,urlcfg.orgAddRoles);
+	});
+	$("#deleteButton").click(function(event){
+		var selected = $("#assignRole input[name='checkbox']:checked");
+		if(selected.length < 1){
+			return;
+		}
+		var roleList = new Array();
+		selected.each(function(){
+			var roleId = $(this).parent().parent().children("input[name=roleId]").val();
+//			var systemId = $(this).parent().parent().children("input[name=systemId]").val();
+//			var role = {
+//					roleId : roleId,
+//					systemId : systemId
+//			};
+			roleList.push(roleId)
+		});
+		console.log(roleList);
+//		var json = window.JSON.stringify(roleList);
+		doRoleAssignAjax(roleList,urlcfg.orgdelRoles);
+	});
+	$("#deleteAllButton").click(function(event){
+		var selected =$("#assignRole .hasRole");
+		console.log(selected);
+		if(selected.length < 1){
+			return;
+		}
+		var roleList = new Array();
+		selected.each(function(){
+			var roleId = $(this).children("input[name=roleId]").val();
+//			var systemId = $(this).children("input[name=systemId]").val();
+//			var role = {
+//					roleId : roleId,
+//					systemId : systemId
+//			};
+			roleList.push(roleId);
+		});
+//		var json = window.JSON.stringify(roleList);
+		doRoleAssignAjax(roleList,urlcfg.orgdelRoles);
+	});
 	function roleAssign(id){
 		var roleName = $("#roleName").val();
 		var systemId = $("#select-system").val();
@@ -249,7 +411,11 @@ define(function(require){
 			type: "post",
 			dataType: "json",
 			success: function(data){
-				console.log(data);
+				if(data.status == 200){
+					showAssignRoles(data.data);
+				}else{
+					console.log(data.message);
+				}
 			},
 			error: function(){
 				
@@ -265,11 +431,18 @@ define(function(require){
 			type: "post",
 			dataType: "json",
 			success: function(data){
-				console.log(data);
+				if(data.status == 200){
+					showNotAssignRoles(data.data);
+				}else{
+					console.log(data.message);
+				}
 			},
 			error: function(){
 				
 			}
 		});
 	}
+	$("#search").click(function(event){
+		roleAssign(orgId);
+	})
 });

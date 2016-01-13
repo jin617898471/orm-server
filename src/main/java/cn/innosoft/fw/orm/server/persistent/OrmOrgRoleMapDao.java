@@ -28,4 +28,6 @@ public interface OrmOrgRoleMapDao extends BaseDao<OrmOrgRoleMap, String> {
 	public List<OrmRole> findRoleByOrgId(String orgId);
 
 	public void deleteByRoleIdIn(ArrayList<String> idArray);
+
+	Long deleteByOrgIdAndRoleIdIn(String orgId, List<String> roleIds);
 }

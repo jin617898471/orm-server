@@ -204,29 +204,6 @@ define(function(require){
 						console.log("rootId:" + rootId);
 						inst.selectValue(rootId);
 					}
-//					var instId = $("#select-institution"+index).val();
-//					$.ajax({
-//						url: urlcfg.getInstChildrenOptions + instId,
-//			            type:"post",
-//			            success:function(result){
-//							if(result.status == 200){
-//								var depOptions = result.data.depOptions;
-//								var postOptions = result.data.postOptions;
-//								if(depOptions && depOptions!=""){
-//									dep.syncModel(depOptions);
-//									dep.attrs.disabled = {value:false};
-//								}
-//								if(postOptions && postOptions!=""){
-//									post.syncModel(postOptions);
-//									post.attrs.disabled = {value:false};
-//								}
-//							}else{
-//								console.log(result.message);
-//							}
-//			            },
-//			            error:function(result, err){
-//			            }
-//					});
 				}else{
 					console.log(result.message);
 				}
@@ -244,8 +221,6 @@ define(function(require){
 			]
 		}).render().on('change',function(target,prev){
 			var instId = $("#select-institution"+index).val();
-//			var t = $(this);
-//			console.log(this);
 			$.ajax({
 				url: urlcfg.getInstChildrenOptions + instId,
 	            type:"post",

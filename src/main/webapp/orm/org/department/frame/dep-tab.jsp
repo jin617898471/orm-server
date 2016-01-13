@@ -124,7 +124,7 @@
 			<div class="hidden content-panel">
 				<div class="code-layout">
 					<div class="col-main">
-						<div class="col-sub">
+						<div class="col-sub" style="float:left;">
 							<ul id="tree" class="ztree" style="width:245px;overflow-y:auto;overflow-x:auto"></ul>
 						</div>
 						<div class="main-wrap">

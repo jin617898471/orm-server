@@ -102,7 +102,9 @@ define(function(require){
 		editUser : basePath + "user/edit",
 		userRoleTree : basePath + "user/role/ztree/",
 		userRoleAssign : basePath + "user/role/assign",
-		userRoleNotAssign : basePath + "user/role/notassign"
+		userRoleNotAssign : basePath + "user/role/notassign",
+		userAddRoles : basePath + "user/role/add",
+		userdelRoles : basePath + "user/role/delete"
 	}
 	
 	var userForm = new Form({
@@ -117,11 +119,7 @@ define(function(require){
 			successFn: function(result){
 				if(result.status == 200){
 					console.log(result)
-//					$(".subadd-bottom-status span").text(result.message);
-//					$(".subadd-bottom-status").show();
 				}else{
-//					$(".subadd-bottom-status span").text(result.message);
-//					$(".subadd-bottom-status").show();
 					console.log(result)
 				}
 			},
@@ -142,11 +140,7 @@ define(function(require){
 			successFn: function(result){
 				if(result.status == 200){
 					console.log(result)
-//					$(".subadd-bottom-status span").text(result.message);
-//					$(".subadd-bottom-status").show();
 				}else{
-//					$(".subadd-bottom-status span").text(result.message);
-//					$(".subadd-bottom-status").show();
 					console.log(result)
 				}
 			},
@@ -207,7 +201,11 @@ define(function(require){
 			type: "post",
 			dataType: "json",
 			success: function(data){
-				console.log(data);
+				if(data.status == 200){
+					showAssignRoles(data.data);
+				}else{
+					console.log(data.message);
+				}
 			},
 			error: function(){
 				
@@ -223,11 +221,173 @@ define(function(require){
 			type: "post",
 			dataType: "json",
 			success: function(data){
-				console.log(data);
+				if(data.status == 200){
+					showNotAssignRoles(data.data);
+				}else{
+					console.log(data.message);
+				}
 			},
 			error: function(){
 				
 			}
 		});
 	}
+	
+	
+	function showAssignRoles(data){
+		var length = data.length;
+		var def = 11 - length;
+		var table = $("#assignRole");
+		table.empty();
+		for(var i=0;i<length;i++){
+			table.append(createTr(data[i]));
+		}
+		$("#assignRole").off('dblclick', '.hasRole');
+		$("#assignRole").on('dblclick', '.hasRole', function(event) {
+			var roleList = new Array();
+			var roleId = $(this).children("input[name=roleId]").val();
+			roleList.push(roleId);
+			doRoleAssignAjax(roleList,urlcfg.userdelRoles);
+		});
+		if(def > 0){
+			for(var j=0;j<def;j++){
+				table.append(createTr(null));
+			}
+		}
+		two.reset();
+	}
+	function doRoleAssignAjax(json,url){
+		var data = {
+				userId : userId,
+				roles : json
+		}
+		$.ajax({
+			url: url,
+            type:"post",
+            data: data,
+            dataType: 'json',
+            success:function(result){
+				if(result.status == 200){
+					roleAssign(userId);
+				}else{
+					console.log(result.message);
+				}
+            },
+            error:function(result, err){
+            }
+		});
+	}
+	function showNotAssignRoles(data){
+		var length = data.length;
+		var def = 11 - length;
+		var table = $("#notAssignRole");
+		table.empty();
+		for(var i=0;i<length;i++){
+			table.append(createTr(data[i]));
+		}
+		$("#notAssignRole").off('dblclick', '.hasRole');
+		$("#notAssignRole").on('dblclick', '.hasRole', function(event) { 
+			var roleList = new Array();
+			var roleId = $(this).children("input[name=roleId]").val();
+			var systemId = $(this).children("input[name=systemId]").val();
+			var role = {
+					roleId : roleId,
+					systemId : systemId
+			};
+			roleList.push(role);
+			var json = window.JSON.stringify(roleList);
+			doRoleAssignAjax(json,urlcfg.userAddRoles);
+		});
+		if(def > 0){
+			for(var j=0;j<def;j++){
+				table.append(createTr(null));
+			}
+		}
+		one.reset();
+	}
+	function createTr(role){
+		var html = null;
+		if(role){
+			html = "<tr class='hasRole'>" +
+			"<td class='w39 text-center'><input type='checkbox' class='chk-wait' name='checkbox' /></td>"+
+			"<td class='w79'>"+role.roleNameCn+"</td>"+
+			"<td>"+role.systemName+"</td>"+
+			"<input type='hidden' name='roleId' value='"+role.roleId+"'/>"+
+			"<input type='hidden' name='systemId' value='"+role.systemId+"'/>"+
+		"</tr>";
+		}else{
+			html = "<tr>" +
+			"<td class='w39 text-center'></td>"+
+			"<td class='w79'></td>"+
+			"<td></td>"+
+		"</tr>";
+		}
+		return html;
+	}
+	$("#selectButton").click(function(event){
+		var selected = $("#notAssignRole input[name='checkbox']:checked");
+		if(selected.length < 1){
+			return;
+		}
+		var roleList = new Array();
+		selected.each(function(){
+			var roleId = $(this).parent().parent().children("input[name=roleId]").val();
+			var systemId = $(this).parent().parent().children("input[name=systemId]").val();
+			var role = {
+					roleId : roleId,
+					systemId : systemId
+			};
+			roleList.push(role);
+		});
+		var json = window.JSON.stringify(roleList);
+		doRoleAssignAjax(json,urlcfg.userAddRoles);
+	});
+	$("#selectAllButton").click(function(event){
+		var selected =$("#notAssignRole .hasRole");
+		console.log(selected);
+		if(selected.length < 1){
+			return;
+		}
+		var roleList = new Array();
+		selected.each(function(){
+			var roleId = $(this).children("input[name=roleId]").val();
+			var systemId = $(this).children("input[name=systemId]").val();
+			var role = {
+					roleId : roleId,
+					systemId : systemId
+			};
+			roleList.push(role);
+		});
+		var json = window.JSON.stringify(roleList);
+		doRoleAssignAjax(json,urlcfg.userAddRoles);
+	});
+	$("#deleteButton").click(function(event){
+		var selected = $("#assignRole input[name='checkbox']:checked");
+		if(selected.length < 1){
+			return;
+		}
+		var roleList = new Array();
+		selected.each(function(){
+			var roleId = $(this).parent().parent().children("input[name=roleId]").val();
+			roleList.push(roleId)
+		});
+		console.log(roleList);
+		doRoleAssignAjax(roleList,urlcfg.userdelRoles);
+	});
+	$("#deleteAllButton").click(function(event){
+		var selected =$("#assignRole .hasRole");
+		console.log(selected);
+		if(selected.length < 1){
+			return;
+		}
+		var roleList = new Array();
+		selected.each(function(){
+			var roleId = $(this).children("input[name=roleId]").val();
+			roleList.push(roleId);
+		});
+		doRoleAssignAjax(roleList,urlcfg.userdelRoles);
+	});
+	$("#search").click(function(event){
+		roleAssign(userId);
+	})
 });
