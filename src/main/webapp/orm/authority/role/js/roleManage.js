@@ -153,6 +153,9 @@ define(function(require){
 		$('.opt-seach').click(function(event){
 			seach()
 		});
+		$('.opt-reflash').click(function(event){
+			seach()
+		});
 		$('.opt-fadd').click(function(event){
 			d_add.show();
 		});

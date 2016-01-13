@@ -118,12 +118,26 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 	}
 
 	public void deleteCode(String id) {
-		delete(id);
+		List<String> list = new ArrayList<String>();
+		list.add(id);
+		List<OrmCode> children = ormCodeDao.getAllChildrenNode(list);
+		List<String> ids=getResId(children);
+		delete(ids);
 		ormOrgCodeRightDao.deleteByCodeId(id);
+	}
+	
+	private List<String> getResId(List<OrmCode> children) {
+		List<String> ids = new ArrayList<String>();
+		for(OrmCode child:children){
+			ids.add(child.getCodeId());
+		}
+		return ids;
 	}
 
 	public void deleteCode(ArrayList<String> idArray) {
-		delete(idArray);
+		List<OrmCode> children = ormCodeDao.getAllChildrenNode(idArray);
+		List<String> ids=getResId(children);
+		delete(ids);
 		ormOrgCodeRightDao.deleteByCodeIdIn(idArray);
 	}
 
@@ -160,6 +174,7 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 	public void updateCode(OrmCode ormCode, List<String> updateField) {
 		if ("ROOT".equals(ormCode.getParentCodeId())) {
 			checkCodeIndexValue(ormCode.getCodeValue(),ormCode.getCodeId());
+			ormCodeDao.updateIsRightColumn(ormCode.getIsRight(),ormCode.getCodeId());
 		}else{
 			checkCodeValue(ormCode.getRootCodeId(),ormCode.getCodeValue(),ormCode.getCodeId());
 		}

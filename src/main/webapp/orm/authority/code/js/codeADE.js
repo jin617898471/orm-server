@@ -18,12 +18,17 @@ define(function(require){
 		"add":'add',
 		"edit":'edit',
 	}
-	
+	var isfalse=false;
+	if($("#isRight").attr("value")=="N"){
+		isfalse=true;
+	}
+		
+		
 	new Select({
 		name:"isRight",
 		trigger:'#isRight',
 		width:'220px',
-		model:[{"text":"是","value":"Y"},{"text":"否","value":"N"}]
+		model:[{"text":"是","value":"Y"},{"text":"否","value":"N","selected":isfalse}]
 	}).render();
 	
 	function getSubmitData(){

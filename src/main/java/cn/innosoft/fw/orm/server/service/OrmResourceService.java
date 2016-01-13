@@ -154,12 +154,26 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 	}
 
 	public void deleteResource(String id) {
-		delete(id);
+		List<String> list = new ArrayList<String>();
+		list.add(id);
+		List<OrmResource> children = ormResourceDao.getAllChildrenNode(list);
+		List<String> ids=getResId(children);
+		delete(ids);
 		ormRoleResourceRightDao.deleteByResourceId(id);
 	}
 
+	private List<String> getResId(List<OrmResource> children) {
+		List<String> ids = new ArrayList<String>();
+		for(OrmResource child:children){
+			ids.add(child.getResourceId());
+		}
+		return ids;
+	}
+
 	public void deleteResource(ArrayList<String> idArray) {
-		delete(idArray);
+		List<OrmResource> children = ormResourceDao.getAllChildrenNode(idArray);
+		List<String> ids=getResId(children);
+		delete(ids);
 		ormRoleResourceRightDao.deleteByResourceIdIn(idArray);
 	}
 
