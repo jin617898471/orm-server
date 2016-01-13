@@ -1,9 +1,8 @@
 define(function(require){
 	var $ = require("$");
-	Dialog = require("inno/dialog/1.0.0/dialog-debug");
-	Confirmbox=require("inno/dialog/1.0.0/confirmbox-debug");
-	Select = require("inno/select/1.0.0/select-debug");
-
+	var Dialog = require("inno/dialog/1.0.0/dialog-debug");
+	var Confirmbox=require("inno/dialog/1.0.0/confirmbox-debug");
+	var Select = require("inno/select/1.0.0/select-debug");
 	require("easyui");
 	
 	var modulName="角色";
@@ -36,7 +35,7 @@ define(function(require){
         ]],
         columns:[[
             {field:'roleNameCn',title:'角色名称',align:'left',halign:'center',width:600},
-		    {field:'systemId',title:'所属系统',align:'left',formatter:Dm2Mc,dm:"sex",width:300},
+		    {field:'systemId',title:'所属系统',align:'left',formatter:OrmJsObj.translate,codeIndex:"system",width:300},
 			{field:'opt',title:'操作',align:'center',formatter:getOptionColumn,width:100}
 		]],
 		onLoadSuccess:bingRowEvent,
@@ -46,21 +45,10 @@ define(function(require){
 		pageList:[15,30,50,100]
 	});
 	
-	function Dm2Mc(value,row,index){
-		console.log(index);
-		var list = OrmJsObj.system.getHasRight();
-		for(var ind in list){
-			var obj=list[ind];
-			if(value==obj.value){
-				return obj.text;
-			}
-		}
-    	return "";
-	}
-	
 	function getOptionColumn(value,row,index){
 		var id=row[idField];
-		return "<a class='operate-items items-space opt-fedit' rowid='"+id+"'>编辑</a><a class='operate-items opt-delete' rowid='"+id+"'>删除</a>";
+		var type=row["roleType"];
+		return "<a class='operate-items items-space opt-fedit' rowid='"+id+"' roletype='"+type+"'>编辑</a><a class='operate-items opt-delete' rowid='"+id+"' roletype='"+type+"'>删除</a>";
 	}
 	
 	function getQueryCondition(){
@@ -114,7 +102,7 @@ define(function(require){
 	});
 	var d_detail = new Dialog($.extend({},dialog_ade_cfg,{
 		content:urlBasePath+url_cfg["fdetail"],
-		title:'编辑'+modulName
+		title:'查看'+modulName
 	})).before('show',function(id){
 		var url=urlBasePath+url_cfg["fdetail"]+'/'+id;
 		this.set('content',url);
@@ -122,10 +110,20 @@ define(function(require){
 	
 	function bingRowEvent(){
 		$('.opt-fedit').click(function(event){
+			var roletype=$(this).attr("roletype");
+			if("ADMIN"==roletype){
+				Confirmbox.alert('该角色是系统内置的理员角色,不允许编辑');
+				return false;
+			}
 			var id=$(this).attr("rowid");
 			d_edit.show(id);
 		});
 		$('.opt-delete').click(function(event){
+			var roletype=$(this).attr("roletype");
+			if("ADMIN"==roletype){
+				Confirmbox.alert('该角色是系统内置的理员角色,不允许删除');
+				return false;
+			}
 			var id=$(this).attr("rowid");
 			Confirmbox.confirm('确定要删除','',function(){
 				$.ajax( {
@@ -141,7 +139,11 @@ define(function(require){
 				});
 			})
 		});
+		var col = gridTable.datagrid('getColumnOption','opt');
+		$("td[field=opt]").width(col.width);
 	}
+	
+	var i=0;
 	
 	function seach(){
 		var query=getQueryCondition();
@@ -156,7 +158,7 @@ define(function(require){
 			seach()
 		});
 		$('.opt-reflash').click(function(event){
-			seach()
+			gridTable.datagrid("reload");
 		});
 		$('.opt-fadd').click(function(event){
 			d_add.show();
@@ -164,10 +166,22 @@ define(function(require){
 		$('.opt-deletes').click(function(event){
 			var arr=[];
 			var selectedRow = gridTable.datagrid('getSelections');  
+			var breakpar=false;
 			$.each(selectedRow, function(index, row) {
+				var rowindex = gridTable.datagrid('getRowIndex',row);
+				var rownumber=$(".datagrid-body-inner tr[datagrid-row-index="+rowindex+"]").find(".datagrid-cell-rownumber").html();
+				var roleType = row["roleType"];
+				if("ADMIN"==roleType){
+					Confirmbox.alert('第"'+rownumber+'"行的角色是系统内置的理员角色,不允许删除');
+					breakpar = true;
+					return false;
+				}
 				var id = row[idField];
 				arr.push(id);
 			});
+			if(breakpar == true){
+				return false;
+			};
 			if(arr.length <= 0){
 				Confirmbox.alert('请选择要删除的数据');
 				return false;

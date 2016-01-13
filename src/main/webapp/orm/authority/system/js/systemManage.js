@@ -24,16 +24,18 @@ define(function(require){
 		collapsible : true,
 		url : urlBasePath+url_cfg["list"],
 		queryParams:{queryCondition:null},
+		frozenColumns:[[
+            {field:'systemId',checkbox:true},
+        ]],
 		columns:[[
-		    {field:'systemId',checkbox:true},
-		    {field:'systemName',title:'系统名称',align:'center'},
-		    {field:'systemCode',title:'系统代码',align:'center'},
-			{field:'opt',title:'操作',align:'center',formatter:getOptionColumn}
+		    {field:'systemName',title:'系统名称',align:'left',width:600},
+		    {field:'systemCode',title:'系统代码',align:'left',width:300},
+			{field:'opt',title:'操作',align:'center',formatter:getOptionColumn,width:100}
 		]],
 		onLoadSuccess:bingRowEvent,
 		onDblClickRow:bindRowDbClickEvent,
 		pagination : true,
-		rownumbers : false,
+		rownumbers : true,
 		pageList:[15,30,50,100]
 	});
 	
@@ -96,7 +98,7 @@ define(function(require){
 				$.ajax( {
 					url:urlBasePath+url_cfg["del"]+"/"+id,
 					error:function(){
-						Confirmbox.alert('删除失败,请联系管理员');
+						alert('操作失败,请联系管理员');
 					},
 					statusCode: { 
 						200: function(msg) {
@@ -106,6 +108,8 @@ define(function(require){
 				});
 			})
 		});
+		var col = gridTable.datagrid('getColumnOption','opt');
+		$("td[field=opt]").width(col.width);
 	}
 	
 	function reset(){
@@ -121,6 +125,9 @@ define(function(require){
 	function bingGlobalEvent(){
 		$('.opt-reset').click(function(event){
 			reset();
+		});
+		$('.opt-reflash').click(function(event){
+			gridTable.datagrid("reload");
 		});
 		$('.opt-seach').click(function(event){
 			seach()
@@ -143,7 +150,7 @@ define(function(require){
 				$.ajax( {
 					url:urlBasePath+url_cfg["dels"]+"/"+arr,
 					error:function(){
-						Confirmbox.alert('删除失败,请联系管理员');
+						alert('操作失败,请联系管理员');
 					},
 					statusCode: { 
 						200: function(msg) {

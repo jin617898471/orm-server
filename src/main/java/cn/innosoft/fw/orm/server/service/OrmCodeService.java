@@ -121,14 +121,14 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 		List<String> list = new ArrayList<String>();
 		list.add(id);
 		List<OrmCode> children = ormCodeDao.getAllChildrenNode(list);
-		List<String> ids=getResId(children);
+		List<String> ids = getResId(children);
 		delete(ids);
 		ormOrgCodeRightDao.deleteByCodeId(id);
 	}
-	
+
 	private List<String> getResId(List<OrmCode> children) {
 		List<String> ids = new ArrayList<String>();
-		for(OrmCode child:children){
+		for (OrmCode child : children) {
 			ids.add(child.getCodeId());
 		}
 		return ids;
@@ -136,7 +136,7 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 
 	public void deleteCode(ArrayList<String> idArray) {
 		List<OrmCode> children = ormCodeDao.getAllChildrenNode(idArray);
-		List<String> ids=getResId(children);
+		List<String> ids = getResId(children);
 		delete(ids);
 		ormOrgCodeRightDao.deleteByCodeIdIn(idArray);
 	}
@@ -148,11 +148,12 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 
 	public OrmCode findParentNode(String parentId, String parentType) {
 		OrmCode code = new OrmCode();
-		if ("SYSTEM".equals(parentType)){
+		if ("SYSTEM".equals(parentType)) {
 			code.setParentCodeId("ROOT");
 			code.setSystemId(parentId);
 		} else {
 			code.setParentCodeId(parentId);
+			code.setIsRight(findOne(parentId).getIsRight());
 		}
 		return code;
 	}
@@ -160,37 +161,41 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 	public void addCode(OrmCode ormCode) {
 		ormCode.setCodeId(Identities.uuid2());
 		if ("ROOT".equals(ormCode.getParentCodeId())) {
-			checkCodeIndexValue(ormCode.getCodeValue(),ormCode.getCodeId());
+			checkCodeIndexValue(ormCode.getCodeValue(), ormCode.getCodeId());
 			ormCode.setRootCodeId(ormCode.getCodeId());
-		}else{
+		} else {
 			OrmCode parent = findOne(ormCode.getParentCodeId());
 			ormCode.setRootCodeId(parent.getRootCodeId());
 			ormCode.setSystemId(parent.getSystemId());
-			checkCodeValue(ormCode.getRootCodeId(),ormCode.getCodeValue(),ormCode.getCodeId());
+			checkCodeValue(ormCode.getRootCodeId(), ormCode.getCodeValue(), ormCode.getCodeId());
 		}
 		add(ormCode);
 	}
-	
+
 	public void updateCode(OrmCode ormCode, List<String> updateField) {
 		if ("ROOT".equals(ormCode.getParentCodeId())) {
-			checkCodeIndexValue(ormCode.getCodeValue(),ormCode.getCodeId());
-		}else{
-			checkCodeValue(ormCode.getRootCodeId(),ormCode.getCodeValue(),ormCode.getCodeId());
+			checkCodeIndexValue(ormCode.getCodeValue(), ormCode.getCodeId());
+			OrmCode old = findOne(ormCode.getCodeId());
+			if (!ormCode.getIsRight().equals(old.getIsRight())) {
+				ormCodeDao.updateIsRight(ormCode.getIsRight(), ormCode.getCodeId());
+			}
+		} else {
+			checkCodeValue(ormCode.getRootCodeId(), ormCode.getCodeValue(), ormCode.getCodeId());
 		}
-		updateSome(ormCode,updateField);
+		updateSome(ormCode, updateField);
 	}
 
-	private void checkCodeValue(String rootCodeId, String codeValue,String codeId) {
-		Integer cout = ormCodeDao.countByRootCodeIdAndCodeValueAndCodeIdNot(rootCodeId,codeValue,codeId);
-		if(cout>0){
-			throw new ObjectMessageException("存在值为"+codeValue+"的代码");
+	private void checkCodeValue(String rootCodeId, String codeValue, String codeId) {
+		Integer cout = ormCodeDao.countByRootCodeIdAndCodeValueAndCodeIdNot(rootCodeId, codeValue, codeId);
+		if (cout > 0) {
+			throw new ObjectMessageException("存在值为" + codeValue + "的代码");
 		}
 	}
 
-	private void checkCodeIndexValue(String codeValue,String codeId){
-		Integer cout = ormCodeDao.countByParentCodeIdAndCodeValueAndCodeIdNot("ROOT",codeValue,codeId);
-		if(cout>0){
-			throw new ObjectMessageException("存在值为"+codeValue+"的代码集");
+	private void checkCodeIndexValue(String codeValue, String codeId) {
+		Integer cout = ormCodeDao.countByParentCodeIdAndCodeValueAndCodeIdNot("ROOT", codeValue, codeId);
+		if (cout > 0) {
+			throw new ObjectMessageException("存在值为" + codeValue + "的代码集");
 		}
 	}
 }

@@ -2,8 +2,10 @@ define(function(require){
 	var $ = require("$"),
 		Menu = require("menu"),
 		Tabs=require("inno/switchable/1.0.0/tabs-debug");
+		Dialog = require("inno/dialog/1.0.0/dialog-debug");
+		Confirmbox=require("inno/dialog/1.0.0/confirmbox-debug");
 	
-	OrmJsObj.resourceInit($,document);
+	OrmJsObj.resourceInit(document);
 //	$(".sidebar-unfold").show();
 //	$(".sidebar-fold").show();
 

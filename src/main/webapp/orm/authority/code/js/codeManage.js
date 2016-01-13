@@ -28,17 +28,19 @@ define(function(require){
 		collapsible : true,
 		url : urlBasePath+url_cfg["list"],
 		queryParams:{queryCondition:null},
+		frozenColumns:[[
+            {field:'codeId',checkbox:true},
+        ]],
 		columns:[[
-		    {field:'codeId',checkbox:true},
-		    {field:'codeName',title:'代码名称',align:'center'},
-		    {field:'codeValue',title:'代码值',align:'center'},
-		    {field:'isRight',title:'是否数据权限代码',align:'center',formatter:Dm2Mc},
-			{field:'opt',title:'操作',align:'center',formatter:getOptionColumn}
+		    {field:'codeName',title:'代码名称',align:'left',width:220},
+		    {field:'codeValue',title:'代码值',align:'left',width:220},
+		    {field:'isRight',title:'数据权限',align:'center',formatter:OrmJsObj.translate,codeIndex:"IS_RIGHT",width:100},
+			{field:'opt',title:'操作',align:'center',formatter:getOptionColumn,width:100}
 		]],
 		onLoadSuccess:bingRowEvent,
 		onDblClickRow:bindRowDbClickEvent,
 		pagination : true,
-		rownumbers : false,
+		rownumbers : true,
 		pageList:[15,30,50,100]
 	});
 	
@@ -83,15 +85,30 @@ define(function(require){
 	}
 	function loadTree(){
 		$.post( urlBasePath+url_cfg["tree"],function( data ){
-			$.fn.zTree.init($("#tree"), setting, data );
+			$.fn.zTree.init($("#tree"), setting, handlerTree(data) );
 			var node = getFirstNode();
 			$.fn.zTree.getZTreeObj("tree").selectNode( node);
 		} );
 	}
+	
+	function handlerTree(data){
+		$.each(data,function(i,node){
+			var type = node.attributes.nodeType;
+			if("SYSTEM"==type){
+				node.isParent=true;
+				node.open=true;
+			}else if("CODEINDEX"==type){
+				node.isParent=true;
+			}else{
+				node.isParent=false;
+			}
+		})
+		return data;
+	}
 	function reloadTree(){
 		var selectedId=getSelectNode().id;
 		$.post( urlBasePath+url_cfg["tree"],function( data ){
-			$.fn.zTree.init($("#tree"), setting, data );
+			$.fn.zTree.init($("#tree"), setting, handlerTree(data) );
 			var node = $.fn.zTree.getZTreeObj("tree").getNodeByParam("id", selectedId, null);
 			$.fn.zTree.getZTreeObj("tree").selectNode(node);
 			$.fn.zTree.getZTreeObj("tree").expandNode(node);
@@ -99,17 +116,6 @@ define(function(require){
 		} );
 	}
 	loadTree();
-	
-	function Dm2Mc(value,row,index){
-		var list = [{"text":"是","value":"Y"},{"text":"否","value":"N"}];
-		for(var ind in list){
-			var obj=list[ind];
-			if(value==obj.value){
-				return obj.text;
-			}
-		}
-    	return "";
-	}
 	
 	function getOptionColumn(value,row,index){
 		var id=row[idField];
@@ -199,6 +205,10 @@ define(function(require){
 				});
 			})
 		});
+		var col = gridTable.datagrid('getColumnOption','opt');
+		$("td[field=opt]").width(col.width);
+		var isRight = gridTable.datagrid('getColumnOption','isRight');
+		$("td[field=isRight]").width(isRight.width);
 	}
 	
 	function seach(){
@@ -209,6 +219,9 @@ define(function(require){
 		$('.opt-reset').click(function(event){
 			reset();
 			seach();
+		});
+		$('.opt-reflash').click(function(event){
+			gridTable.datagrid("reload");
 		});
 		$('.opt-seach').click(function(event){
 			seach()

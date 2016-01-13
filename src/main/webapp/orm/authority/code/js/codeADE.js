@@ -23,12 +23,16 @@ define(function(require){
 		isfalse=true;
 	}
 		
-		
+	var select_disabled=true;
+	if( "ROOT" == $("input[name=parentCodeId]").val() ){
+		select_disabled = false;
+	}
 	new Select({
 		name:"isRight",
 		trigger:'#isRight',
+		disabled:select_disabled,
 		width:'220px',
-		model:[{"text":"是","value":"Y"},{"text":"否","value":"N","selected":isfalse}]
+		model:OrmJsObj.getCode( "IS_RIGHT", $("#isRight").attr("value") ) 
 	}).render();
 	
 	function getSubmitData(){

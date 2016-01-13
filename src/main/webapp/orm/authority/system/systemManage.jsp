@@ -41,7 +41,7 @@
 					<img src="orm/authority/system/css/imgs/code-ico1.png" alt="" class="operate-spans-ico" />
 					<span>批量删除</span>
 				</span>
-				<span class="operate-spans">
+				<span class="operate-spans opt-reflash">
 					<img src="orm/authority/system/css/imgs/code-ico2.png" alt="" class="operate-spans-ico" />
 					<span>刷新</span>
 				</span>

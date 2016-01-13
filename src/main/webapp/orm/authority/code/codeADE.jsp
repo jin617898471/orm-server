@@ -14,6 +14,7 @@
     <link rel="stylesheet" type="text/css" href="resources/commons/css/theme.css">
     <link rel="stylesheet" type="text/css" href="orm/commons/css/ADE.css" />
     <script src="authority/system/js" ></script>
+    <script src="orm/userinfo.js" ></script>
 </head>
 <body>
 	<div class="subadd-container">
@@ -35,7 +36,7 @@
 
 			</li>
 			<li class="subadd-items">
-				<label class="subadd-items-label">是否权限控制代码：</label>
+				<label class="subadd-items-label">权限控制：</label>
 				<div class="ui-select-trigger ui-select-trigger-none w218" id="isRight" value="${ormCode.isRight}">
 					<span data-role="trigger-content"></span>
 					<span class="trigger-ico"></span>
