@@ -4,6 +4,7 @@ define(function(require){
 	Confirmbox=require("inno/dialog/1.0.0/confirmbox-debug");
 	Select = require("inno/select/1.0.0/select-debug");
 	require("gallery/ztree/3.5.2/core-debug");
+	require("gallery/ztree/3.5.2/exedit-debug");
 	require("gallery/ztree/3.5.14/ztree-debug.css");
 
 	require("easyui");
@@ -52,6 +53,14 @@ define(function(require){
 				pIdKey:"pId",
 			}
 		},
+		edit:{
+			drag:{
+				isCopy :false,
+			},
+			showRemoveBtn: false,
+			showRenameBtn: false,
+			enable:true
+		},
 		key:{
 			name:"text"
 		},
@@ -59,9 +68,49 @@ define(function(require){
 			onClick : function(event, treeId, treeNode){
 				setQueryConditon(treeNode);
 				reload();
-			}
+			},
+			beforeDrop: function(treeId, treeNodes, targetNode, moveType) {
+				var result=false;
+				if(moveType=="inner"){
+					result=typeNum[treeNodes[0].attributes.nodeType]-typeNum[targetNode[0].attributes.nodeType]==1
+				}
+				if(moveType=="prev" || moveType=="next"){
+					result=typeNum[treeNodes[0].attributes.nodeType]-typeNum[targetNode[0].attributes.nodeType]==0
+				}
+				if(!result){
+					return false;
+				}
+				result = dragTree(treeNodes[0].id,targetNode[0].id,moveType);
+				return result;
+			},
+			beforeDrag:function(treeId, treeNodes){
+				for (var i=0,l=treeNodes.length; i<l; i++) {
+					if (treeNodes[i].drag === false) {
+						return false;
+					}
+				}
+				return true;
+			},
 		}
 	};
+	function dragTree(sourceId,targetId,moveType){
+		$.ajax( {
+			url:urlBasePath+url_cfg["del"]+"/"+id,
+			error:function(){
+				Confirmbox.alert('删除失败,请联系管理员');
+			},
+			statusCode: { 
+				200: function(msg) {
+					reloadGrid();
+			  	}
+			}
+		});
+	}
+	var typeNum={
+		"SYSTEM":1,
+		"CODEINDEX":2,
+		"CODE":3
+	}
 	function setQueryConditon(treeNode){
 		var type = treeNode.attributes.nodeType;
 		var id = treeNode.id;
@@ -94,9 +143,10 @@ define(function(require){
 	function handlerTree(data){
 		$.each(data,function(i,node){
 			var type = node.attributes.nodeType;
+			node.iconSkin=type;
 			if("SYSTEM"==type){
-				node.isParent=true;
 				node.open=true;
+				node.drag=false;
 			}else if("CODEINDEX"==type){
 				node.isParent=true;
 			}else{

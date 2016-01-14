@@ -1,5 +1,6 @@
 package cn.innosoft.fw.orm.server.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -183,6 +184,22 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 			checkCodeValue(ormCode.getRootCodeId(), ormCode.getCodeValue(), ormCode.getCodeId());
 		}
 		updateSome(ormCode, updateField);
+	}
+	
+	public void adjustmentOrder(String sourceId,String targetId,String moveType) {
+		OrmCode targ = findOne(targetId);
+		BigDecimal order = targ.getOrderNumber();
+		String pid = targ.getParentCodeId();
+		if("prev".equals(moveType)){
+			if(null==order){
+				order=new BigDecimal(1);
+			}
+			ormCodeDao.updateSelfOrderNumber(order,pid,sourceId);
+			ormCodeDao.updateSelfAndNextOrderNumber(order,sourceId);
+		}else if("next".equals(moveType)){
+			ormCodeDao.updateNextOrderNumber(order,sourceId);
+			ormCodeDao.updateSelfOrderNumber(order,pid,sourceId);
+		}
 	}
 
 	private void checkCodeValue(String rootCodeId, String codeValue, String codeId) {
