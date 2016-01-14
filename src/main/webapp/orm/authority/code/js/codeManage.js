@@ -136,6 +136,7 @@ define(function(require){
 			$.fn.zTree.init($("#tree"), setting, handlerTree(data) );
 			var node = getFirstNode();
 			$.fn.zTree.getZTreeObj("tree").selectNode( node);
+			setQueryConditon(node);
 		} );
 	}
 	
