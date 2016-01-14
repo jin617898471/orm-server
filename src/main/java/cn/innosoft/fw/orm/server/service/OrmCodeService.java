@@ -82,6 +82,8 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		attributes.put("nodeType", "SYSTEM");
 		node.setAttributes(attributes);
+		node.setOpen(true);
+		node.setIconSkin((String) attributes.get("nodeType"));
 		list.add(node);
 		for (OrmSystem sys : ormSystems) {
 			ZtreeBean tree = createSytemTreeNode(sys);
@@ -98,6 +100,8 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		attributes.put("nodeType", "SYSTEM");
 		node.setAttributes(attributes);
+		node.setOpen(true);
+		node.setIconSkin((String) attributes.get("nodeType"));
 		return node;
 	}
 
@@ -117,6 +121,7 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 		attributes.put("systemId", code.getSystemId());
 		node.setName(code.getCodeName());
 		node.setAttributes(attributes);
+		node.setIconSkin((String) attributes.get("nodeType"));
 		return node;
 	}
 
@@ -215,7 +220,7 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 				ormCodeDao.updateOrderNumber(tarorder.subtract(new BigDecimal(1)), targetId);
 			}
 		} else if (-1 == result) {// 目标的序号比源的序号小
-			ormCodeDao.addOrderNumber(sourorder, tarorder, pid);
+			ormCodeDao.addOrderNumber( tarorder,sourorder, pid);
 			if ("prev".equals(moveType)) {
 				ormCodeDao.updateOrderNumber(tarorder, sourceId);
 				ormCodeDao.updateOrderNumber(tarorder.add(new BigDecimal(1)), targetId);

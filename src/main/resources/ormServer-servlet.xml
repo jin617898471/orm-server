@@ -72,4 +72,26 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 	
+	<bean class="cn.innosoft.fw.biz.base.exception.CustomSimpleMappingExceptionResolver">
+		<!-- 默认的HTTP状态码 -->
+		<property name="defaultStatusCode" value="500" />
+		<!-- 默认的异常处理页面 -->
+		<property name="defaultErrorView" value="error"></property>
+		<!-- 异常处理页面用来获取异常信息的变量名，默认名为exception -->
+		<property name="exceptionAttribute" value="ex"></property>
+		
+		<!-- 定义需要特殊处理的异常，用类名或完全路径名作为key，异常也页名作为值 -->
+		<property name="exceptionMappings">
+			<props>
+				<prop key="cn.innosoft.fw.biz.base.exception.ObjectMessageException">businessError</prop>
+			</props>
+		</property>
+		<!-- 相关状态码对应的错误页面 -->
+		<property name="statusCodes">
+			<props>
+				<prop key="businessError">210</prop>
+			</props>
+		</property>
+	</bean>
+	
 </beans>

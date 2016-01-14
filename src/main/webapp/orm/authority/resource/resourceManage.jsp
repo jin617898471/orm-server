@@ -70,7 +70,7 @@
 											<span>新增</span>
 										</span>
 									</span>
-									<span class="tab-title-text">代码管理</span>
+									<span class="tab-title-text">资源管理</span>
 								</div>
 								<div class="tab-grid">
 									<table id="grid-table"></table>

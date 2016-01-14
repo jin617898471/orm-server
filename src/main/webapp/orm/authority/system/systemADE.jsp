@@ -12,8 +12,7 @@
 	<link rel="stylesheet" type="text/css" href="resources/commons/css/base.css">
     <link rel="stylesheet" type="text/css" href="resources/commons/css/widget.css">
     <link rel="stylesheet" type="text/css" href="resources/commons/css/theme.css">
-    <link rel="stylesheet" type="text/css" href="orm/authority/system/css/systemADE.css" />
-</head>
+	<link rel="stylesheet" type="text/css" href="orm/commons/css/ADE.css" /></head>
 <body>
 	<div class="subadd-container">
 		<input type="text" class="subadd-items-inp" style="display:none;" name="systemId" value="${ormSystem.systemId}"/>
@@ -34,11 +33,15 @@
 		<div class="subadd-bottom">
 			<div class="subadd-bottom-operate">
 				<input type="button" class="operate-items items-save" value="保存" />
-				<input type="button" class="operate-items" value="取消" />
+				<input type="button" class="operate-items items-cacel" value="取消" />
 			</div>
-			<div class="subadd-bottom-status">
+			<div class="subadd-bottom-status bottom-status-success">
 				<i class="iconfont">&#xf00a0;</i>
 				<span>保存成功！</span>
+			</div>
+			<div class="subadd-bottom-status bottom-status-error">
+				<i class="iconfont">&#xf0097;</i>
+				<span>保存失败！</span>
 			</div>
 		</div>
 	</div>

@@ -23,30 +23,6 @@ define(function(require){
 		"order":'adjustmentorder',
 	}
 	
-	var gridTable=$("#grid-table").datagrid({
-		nowrap : true,
-		autoRowHeight : true,
-		striped : true,
-		collapsible : true,
-		url : urlBasePath+url_cfg["list"],
-		queryParams:{queryCondition:getQueryCondition()},
-		sortName:"orderNumber",
-		sortOrder:"asc",
-		frozenColumns:[[
-            {field:'codeId',checkbox:true},
-        ]],
-		columns:[[
-		    {field:'codeName',title:'代码名称',align:'left',width:220},
-		    {field:'codeValue',title:'代码值',align:'left',width:220},
-		    {field:'isRight',title:'数据权限',align:'center',formatter:OrmJsObj.translate,codeIndex:"IS_RIGHT",width:100},
-			{field:'opt',title:'操作',align:'center',formatter:getOptionColumn,width:100}
-		]],
-		onLoadSuccess:bingRowEvent,
-		onDblClickRow:bindRowDbClickEvent,
-		pagination : true,
-		rownumbers : true,
-		pageList:[15,30,50,100]
-	});
 	
 	var setting = {
 		data:{
@@ -131,21 +107,46 @@ define(function(require){
 	function getSelectNode(){
 		return $.fn.zTree.getZTreeObj("tree").getSelectedNodes()[0];
 	}
+	
+	var gridTable;
 	function loadTree(){
 		$.post( urlBasePath+url_cfg["tree"],function( data ){
 			$.fn.zTree.init($("#tree"), setting, handlerTree(data) );
 			var node = getFirstNode();
 			$.fn.zTree.getZTreeObj("tree").selectNode( node);
 			setQueryConditon(node);
+			
+			gridTable=$("#grid-table").datagrid({
+				nowrap : true,
+				autoRowHeight : true,
+				striped : true,
+				collapsible : true,
+				url : urlBasePath+url_cfg["list"],
+				queryParams:{queryCondition:getQueryCondition()},
+				sortName:"orderNumber",
+				sortOrder:"asc",
+				frozenColumns:[[
+		            {field:'codeId',checkbox:true},
+		        ]],
+				columns:[[
+				    {field:'codeName',title:'代码名称',align:'left',width:220},
+				    {field:'codeValue',title:'代码值',align:'left',width:220},
+				    {field:'isRight',title:'数据权限',align:'center',formatter:OrmJsObj.translate,codeIndex:"IS_RIGHT",width:100},
+					{field:'opt',title:'操作',align:'center',formatter:getOptionColumn,width:100}
+				]],
+				onLoadSuccess:bingRowEvent,
+				onDblClickRow:bindRowDbClickEvent,
+				pagination : true,
+				rownumbers : true,
+				pageList:[15,30,50,100]
+			});
 		} );
 	}
 	
 	function handlerTree(data){
 		$.each(data,function(i,node){
 			var type = node.attributes.nodeType;
-			node.iconSkin=type;
 			if("SYSTEM"==type){
-				node.open=true;
 				node.drag=false;
 			}
 		})
@@ -157,7 +158,7 @@ define(function(require){
 			$.fn.zTree.init($("#tree"), setting, handlerTree(data) );
 			var node = $.fn.zTree.getZTreeObj("tree").getNodeByParam("id", selectedId, null);
 			$.fn.zTree.getZTreeObj("tree").selectNode(node);
-			$.fn.zTree.getZTreeObj("tree").expandNode(node);
+			$.fn.zTree.getZTreeObj("tree").expandNode(node,true);
 			reload();
 		} );
 	}
@@ -187,7 +188,7 @@ define(function(require){
 		 return str;
 	}
 	function reset(){
-		$("*[rule-field]").each(function(){
+		$("ul").find("input[rule-field]").each(function(){
 			var tagName = this.tagName;
 			if("INPUT"==tagName){
 				$(this).val("");
@@ -224,7 +225,7 @@ define(function(require){
 	});
 	var d_detail = new Dialog($.extend({},dialog_ade_cfg,{
 		content:urlBasePath+url_cfg["fdetail"],
-		title:'编辑'+modulName
+		title:'查看'+modulName
 	})).before('show',function(id){
 		var url=urlBasePath+url_cfg["fdetail"]+'/'+id;
 		this.set('content',url);

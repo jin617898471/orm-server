@@ -3,7 +3,6 @@ package cn.innosoft.fw.orm.server.model;
 import java.io.Serializable;
 import java.util.Map;
 
-
 /**
  * ztree存储初始化对象bean.
  * 
@@ -35,6 +34,10 @@ public class ZtreeBean implements Serializable {
 
 	private Boolean nocheck = false; // 是否隐藏单/复选框
 
+	private Boolean chkDisabled = false; // 是否冻结复选框
+
+	private String iconSkin = ""; // icon的自定义样式
+
 	public ZtreeBean() {
 	}
 
@@ -61,7 +64,7 @@ public class ZtreeBean implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public Boolean getChecked() {
 		return checked;
 	}
@@ -70,12 +73,9 @@ public class ZtreeBean implements Serializable {
 		this.checked = checked;
 	}
 
-
-
 	public Boolean getIsParent() {
 		return isParent;
 	}
-
 
 	public void setIsParent(Boolean isParent) {
 		this.isParent = isParent;
@@ -93,7 +93,6 @@ public class ZtreeBean implements Serializable {
 		return url;
 	}
 
-
 	public Map<String, Object> getAttributes() {
 		return attributes;
 	}
@@ -106,21 +105,17 @@ public class ZtreeBean implements Serializable {
 		this.url = url;
 	}
 
-
 	public String getTarget() {
 		return target;
 	}
-
 
 	public void setTarget(String target) {
 		this.target = target;
 	}
 
-
 	public String getIconUrl() {
 		return iconUrl;
 	}
-
 
 	public void setIconUrl(String iconUrl) {
 		this.iconUrl = iconUrl;
@@ -132,6 +127,22 @@ public class ZtreeBean implements Serializable {
 
 	public void setNocheck(Boolean nocheck) {
 		this.nocheck = nocheck;
+	}
+
+	public Boolean getChkDisabled() {
+		return chkDisabled;
+	}
+
+	public void setChkDisabled(Boolean chkDisabled) {
+		this.chkDisabled = chkDisabled;
+	}
+
+	public String getIconSkin() {
+		return iconSkin;
+	}
+
+	public void setIconSkin(String iconSkin) {
+		this.iconSkin = iconSkin;
 	}
 
 }

@@ -89,5 +89,11 @@ public class OrmResourceResource {
 	public PageResponse<OrmResource> list(PageRequest pageRequest){
 		return ormResourceService.findAll(pageRequest);
 	}
+	
+	@RequestMapping("/adjustmentorder")
+	@ResponseBody
+	public void adjustmentOrder(String sourceId,String targetId,String moveType){
+		ormResourceService.adjustmentOrder(sourceId,targetId,moveType);
+	}
 
 }

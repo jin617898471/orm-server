@@ -63,21 +63,42 @@ define(function(require){
 			}
 		});
 		if(save){
+			showstatu(true,"保存中...");
 			$.ajax( {
 				url:urlBasePath+url_cfg[sign],
 				data:getSubmitData(),
 				type:"POST",
 				error:function(){
-					alert('删除失败,请联系管理员');
+					alert('操作失败,请联系管理员');
 				},
 				statusCode: { 
 					200: function(msg) {
 						parent.reloadGrid && parent.reloadGrid();
-				  	}
+						showstatu(true);
+				  	},
+					210: function(msg) {
+						showstatu(false,msg.message);
+					}
 				}
 			});
 		}
 	});
+	$(".items-cacel").click(function(event) {
+		window.frameElement.trigger('close'); 
+	});
+	
+	function showstatu(res,msg){
+		$(".subadd-bottom-status").hide();
+		if(res){
+			msg = msg || "保存成功!";
+			$(".bottom-status-success").find("span").html(msg);
+			$(".bottom-status-success").show();
+		}else{
+			msg = msg || "保存失败!";
+			$(".bottom-status-error").find("span").html(msg);
+			$(".bottom-status-error").show();
+		}
+	}
 
 	$(".subadd-items-required .subadd-items-inp").focus(function(event) {
 		var requireLi = $(this).parent();

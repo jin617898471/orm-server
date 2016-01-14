@@ -230,3 +230,64 @@
 	position: relative;
 	top: 1px;
 }
+
+.ui-dialog .ui-dialog-head {
+    height: 40px;
+    background: url(../../../orm/commons/css/imgs/dialog-title-ico.png) 15px center no-repeat #f5f7fa;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    border: 1px solid #e1e3e5;
+    border-radius: 0;
+    line-height: 38px;
+}
+
+.ztree li span.button.SYSTEM_ico_open{
+	background-position: -110px -16px;
+    background-image: url("../js/gallery/ztree/3.5.14/imgs/ztree.png");
+}
+.ztree li span.button.SYSTEM_ico_close{
+	background-position: -110px 0;
+    background-image: url("../js/gallery/ztree/3.5.14/imgs/ztree.png");
+}
+.ztree li span.button.SYSTEM_ico_docu{
+	background-position: -110px -16px;
+    background-image: url("../js/gallery/ztree/3.5.14/imgs/ztree.png");
+}
+
+.ztree li span.button.CODEINDEX_ico_open{
+    background-position: -110px -32px;
+    background-image: url("../js/gallery/ztree/3.5.14/imgs/ztree.png");
+}
+.ztree li span.button.CODEINDEX_ico_close{
+    background-position: -110px -32px;
+    background-image: url("../js/gallery/ztree/3.5.14/imgs/ztree.png");
+}
+.ztree li span.button.CODEINDEX_ico_docu{
+    background-position: -110px -32px;
+    background-image: url("../js/gallery/ztree/3.5.14/imgs/ztree.png");
+}
+
+.ztree li span.button.CODE_ico_open{
+    background-position: -110px -32px;
+    background-image: url("../js/gallery/ztree/3.5.14/imgs/ztree.png");
+}
+.ztree li span.button.CODE_ico_close{
+    background-position: -110px -32px;
+    background-image: url("../js/gallery/ztree/3.5.14/imgs/ztree.png");
+}
+.ztree li span.button.CODE_ico_docu{
+    background-position: -110px -32px;
+    background-image: url("../js/gallery/ztree/3.5.14/imgs/ztree.png");
+}
+.ztree li span.button.RESOURCE_ico_open{
+    background-position: -110px -32px;
+    background-image: url("../js/gallery/ztree/3.5.14/imgs/ztree.png");
+}
+.ztree li span.button.RESOURCE_ico_close{
+    background-position: -110px -32px;
+    background-image: url("../js/gallery/ztree/3.5.14/imgs/ztree.png");
+}
+.ztree li span.button.RESOURCE_ico_docu{
+    background-position: -110px -32px;
+    background-image: url("../js/gallery/ztree/3.5.14/imgs/ztree.png");
+}

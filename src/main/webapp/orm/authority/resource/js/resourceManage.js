@@ -4,6 +4,7 @@ define(function(require){
 	Confirmbox=require("inno/dialog/1.0.0/confirmbox-debug");
 	Select = require("inno/select/1.0.0/select-debug");
 	require("gallery/ztree/3.5.2/core-debug");
+	require("gallery/ztree/3.5.2/exedit-debug");
 	require("gallery/ztree/3.5.14/ztree-debug.css");
 
 	require("easyui");
@@ -19,29 +20,8 @@ define(function(require){
 		"dels":'deletes',
 		"list":'list',
 		"tree":'tree',
+		"order":'adjustmentorder',
 	}
-	
-	var gridTable=$("#grid-table").datagrid({
-		nowrap : true,
-		autoRowHeight : true,
-		striped : true,
-		collapsible : true,
-		url : urlBasePath+url_cfg["list"],
-		queryParams:{queryCondition:null},
-		columns:[[
-		    {field:'resourceId',checkbox:true},
-		    {field:'resourceName',title:'资源名称',align:'center'},
-		    {field:'resourceCode',title:'资源代码',align:'center'},
-		    {field:'resourceType',title:'资源类型',align:'center',formatter:Dm2Mc},
-		    {field:'resourceUrl',title:'资源Url',align:'center',formatter:Dm2Mc},
-			{field:'opt',title:'操作',align:'center',formatter:getOptionColumn}
-		]],
-		onLoadSuccess:bingRowEvent,
-		onDblClickRow:bindRowDbClickEvent,
-		pagination : true,
-		rownumbers : false,
-		pageList:[15,30,50,100]
-	});
 	
 	var setting = {
 		data:{
@@ -51,6 +31,14 @@ define(function(require){
 				pIdKey:"pId",
 			}
 		},
+		edit:{
+			drag:{
+				isCopy :false,
+			},
+			showRemoveBtn: false,
+			showRenameBtn: false,
+			enable:true
+		},
 		key:{
 			name:"text"
 		},
@@ -58,9 +46,45 @@ define(function(require){
 			onClick : function(event, treeId, treeNode){
 				setQueryConditon(treeNode);
 				reload();
-			}
+			},
+			beforeDrop: function(treeId, treeNodes, targetNode, moveType) {
+				var result=false;
+				if(moveType=="prev" || moveType=="next"){
+					result=treeNodes[0].attributes.nodeType==targetNode.attributes.nodeType && treeNodes[0].pId==targetNode.pId
+				}
+				if(!result){
+					return false;
+				}
+				result = dragTree(treeNodes[0].id,targetNode.id,moveType);
+				return result;
+			},
+			beforeDrag:function(treeId, treeNodes){
+				for (var i=0,l=treeNodes.length; i<l; i++) {
+					if (treeNodes[i].drag === false) {
+						return false;
+					}
+				}
+				return true;
+			},
 		}
 	};
+	function dragTree(sourceId,targetId,moveType){
+		var result=false;
+		$.ajax( {
+			url:urlBasePath+url_cfg["order"],
+			data:{sourceId:sourceId,targetId:targetId,moveType:moveType},
+			async:false,
+			error:function(){
+				alert('操作失败,请联系管理员');
+			},
+			statusCode: { 
+				200: function(msg) {
+					result=true;
+			  	}
+			}
+		});
+		return result;
+	}
 	function setQueryConditon(treeNode){
 		var type = treeNode.attributes.nodeType;
 		var id = treeNode.id;
@@ -82,35 +106,62 @@ define(function(require){
 	function getSelectNode(){
 		return $.fn.zTree.getZTreeObj("tree").getSelectedNodes()[0];
 	}
+	
+	function handlerTree(data){
+		$.each(data,function(i,node){
+			var type = node.attributes.nodeType;
+			if("SYSTEM"==type){
+				node.drag=false;
+			}
+		})
+		return data;
+	}
+	var gridTable;
 	function loadTree(){
 		$.post( urlBasePath+url_cfg["tree"],function( data ){
-			$.fn.zTree.init($("#tree"), setting, data );
+			$.fn.zTree.init($("#tree"), setting, handlerTree(data) );
 			var node = getFirstNode();
 			$.fn.zTree.getZTreeObj("tree").selectNode( node);
+			setQueryConditon(node);
+			
+			gridTable=$("#grid-table").datagrid({
+				nowrap : true,
+				autoRowHeight : true,
+				striped : true,
+				collapsible : true,
+				url : urlBasePath+url_cfg["list"],
+				queryParams:{queryCondition:getQueryCondition()},
+				sortName:"orderNumber",
+				sortOrder:"asc",
+				frozenColumns:[[
+		            {field:'resourceId',checkbox:true},
+		        ]],
+				columns:[[
+				    {field:'resourceName',title:'资源名称',align:'left',width:150},
+				    {field:'resourceCode',title:'资源代码',align:'left',width:150},
+				    {field:'resourceUrl',title:'资源Url',align:'left',width:150},
+				    {field:'resourceType',title:'资源类型',align:'center',formatter:OrmJsObj.translate,codeIndex:"RESOURCE_TYPE",width:100},
+					{field:'opt',title:'操作',align:'center',formatter:getOptionColumn,width:100}
+				]],
+				onLoadSuccess:bingRowEvent,
+				onDblClickRow:bindRowDbClickEvent,
+				pagination : true,
+				rownumbers : true,
+				pageList:[15,30,50,100]
+			});
 		} );
 	}
 	function reloadTree(){
 		var selectedId=getSelectNode().id;
 		$.post( urlBasePath+url_cfg["tree"],function( data ){
-			$.fn.zTree.init($("#tree"), setting, data );
+			$.fn.zTree.init($("#tree"), setting, handlerTree(data) );
 			var node = $.fn.zTree.getZTreeObj("tree").getNodeByParam("id", selectedId, null);
 			$.fn.zTree.getZTreeObj("tree").selectNode(node);
-			$.fn.zTree.getZTreeObj("tree").expandNode(node);
+			$.fn.zTree.getZTreeObj("tree").expandNode(node,true);
 			reload();
 		} );
 	}
 	loadTree();
-	
-	function Dm2Mc(value,row,index){
-		var list = OrmJsObj.getCode("RESOURCE_TYPE");
-		for(var ind in list){
-			var obj=list[ind];
-			if(value==obj.value){
-				return obj.text;
-			}
-		}
-    	return "";
-	}
 	
 	function getOptionColumn(value,row,index){
 		var id=row[idField];
@@ -136,7 +187,7 @@ define(function(require){
 		 return str;
 	}
 	function reset(){
-		$("*[rule-field]").each(function(){
+		$("ul").find("input[rule-field]").each(function(){
 			var tagName = this.tagName;
 			if("INPUT"==tagName){
 				$(this).val("");
@@ -200,6 +251,10 @@ define(function(require){
 				});
 			})
 		});
+		var col = gridTable.datagrid('getColumnOption','opt');
+		$("td[field=opt]").width(col.width);
+		var isRight = gridTable.datagrid('getColumnOption','resourceType');
+		$("td[field=resourceType]").width(isRight.width);
 	}
 	
 	function seach(){
@@ -210,6 +265,9 @@ define(function(require){
 		$('.opt-reset').click(function(event){
 			reset();
 			seach();
+		});
+		$('.opt-reflash').click(function(event){
+			gridTable.datagrid("reload");
 		});
 		$('.opt-seach').click(function(event){
 			seach()

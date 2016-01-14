@@ -48,11 +48,15 @@
 		<div class="subadd-bottom">
 			<div class="subadd-bottom-operate">
 				<input type="button" class="operate-items items-save" value="保存" />
-				<input type="button" class="operate-items" value="取消" />
+				<input type="button" class="operate-items items-cacel" value="取消" />
 			</div>
-			<div class="subadd-bottom-status">
+			<div class="subadd-bottom-status bottom-status-success">
 				<i class="iconfont">&#xf00a0;</i>
 				<span>保存成功！</span>
+			</div>
+			<div class="subadd-bottom-status bottom-status-error">
+				<i class="iconfont">&#xf0097;</i>
+				<span>保存失败！</span>
 			</div>
 		</div>
 	</div>

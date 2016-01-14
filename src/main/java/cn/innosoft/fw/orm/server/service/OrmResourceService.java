@@ -1,5 +1,6 @@
 package cn.innosoft.fw.orm.server.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -106,6 +107,7 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		node.setpId(pId);
 		node.setName(res.getResourceName());
 		node.setAttributes(attributes);
+		node.setIconSkin((String) attributes.get("nodeType"));
 		return node;
 	}
 
@@ -126,6 +128,8 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		attributes.put("nodeType", "SYSTEM");
 		node.setAttributes(attributes);
+		node.setOpen(true);
+		node.setIconSkin((String) attributes.get("nodeType"));
 		return node;
 	}
 
@@ -146,11 +150,54 @@ public class OrmResourceService extends AbstractBaseService<OrmResource, String>
 			ormResource.setRootResId(parent.getRootResId());
 			ormResource.setSystemId(parent.getSystemId());
 		}
+		BigDecimal order = getMaxOrderNumber(ormResource.getParentResId());
+		ormResource.setOrderNumber(order);
 		add(ormResource);
+	}
+
+	private BigDecimal getMaxOrderNumber(String parentResId) {
+		OrmResource ormResource = ormResourceDao.getMaxOrderNumber(parentResId);
+		BigDecimal order = ormResource.getOrderNumber();
+		if (null == order) {
+			order = new BigDecimal(0);
+		}
+		return order.add(new BigDecimal(1));
 	}
 
 	public void updateResource(OrmResource ormResource, List<String> updateField) {
 		updateSome(ormResource, updateField);
+	}
+	
+	public void adjustmentOrder(String sourceId, String targetId, String moveType) {
+		OrmResource targ = findOne(targetId);
+		String pid = targ.getParentResId();
+		BigDecimal tarorder = targ.getOrderNumber();
+		OrmResource sour = findOne(sourceId);
+		BigDecimal sourorder = sour.getOrderNumber();
+		int result = tarorder.compareTo(sourorder);
+		if (1 == result) {// 目标的序号比源的序号大
+			ormResourceDao.substractOrderNumber(sourorder, tarorder, pid);
+			if ("prev".equals(moveType)) {
+				ormResourceDao.updateOrderNumber(tarorder.subtract(new BigDecimal(1)), sourceId);
+			} else if ("next".equals(moveType)) {
+				ormResourceDao.updateOrderNumber(tarorder, sourceId);
+				ormResourceDao.updateOrderNumber(tarorder.subtract(new BigDecimal(1)), targetId);
+			}
+		} else if (-1 == result) {// 目标的序号比源的序号小
+			ormResourceDao.addOrderNumber(tarorder,sourorder, pid);
+			if ("prev".equals(moveType)) {
+				ormResourceDao.updateOrderNumber(tarorder, sourceId);
+				ormResourceDao.updateOrderNumber(tarorder.add(new BigDecimal(1)), targetId);
+			} else if ("next".equals(moveType)) {
+				ormResourceDao.updateOrderNumber(tarorder.add(new BigDecimal(1)), sourceId);
+			}
+		} else {// 目标的序号和源的序号相等
+			if ("prev".equals(moveType)) {
+				ormResourceDao.updateOrderNumber(tarorder.subtract(new BigDecimal(1)), sourceId);
+			} else if ("next".equals(moveType)) {
+				ormResourceDao.updateOrderNumber(tarorder.add(new BigDecimal(1)), sourceId);
+			}
+		}
 	}
 
 	public void deleteResource(String id) {

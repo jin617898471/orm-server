@@ -12,69 +12,72 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-
 /**
  * The persistent class for the ORM_RESOURCE database table.
  * 
  */
 @Entity
-@Table(name="ORM_RESOURCE")
-@NamedQuery(name="OrmResource.findAll", query="SELECT o FROM OrmResource o")
+@Table(name = "ORM_RESOURCE")
+@NamedQuery(name = "OrmResource.findAll", query = "SELECT o FROM OrmResource o")
 public class OrmResource implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="RESOURCE_ID")
+	@Column(name = "RESOURCE_ID")
 	private String resourceId;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="CREATE_DT")
+	@Column(name = "CREATE_DT")
 	private Date createDt;
 
-	@Column(name="CREATE_USER_ID")
+	@Column(name = "CREATE_USER_ID")
 	private String createUserId;
 
-	@Column(name="ORDER_NUMBER")
+	@Column(name = "ORDER_NUMBER")
 	private BigDecimal orderNumber;
 
-	@Column(name="PARENT_RES_ID")
+	@Column(name = "PARENT_RES_ID")
 	private String parentResId;
 
-	@Column(name="RESOURCE_CODE")
+	@Column(name = "RESOURCE_CODE")
 	private String resourceCode;
 
-	@Column(name="RESOURCE_DESC")
+	@Column(name = "RESOURCE_DESC")
 	private String resourceDesc;
 
-	@Column(name="RESOURCE_NAME")
+	@Column(name = "RESOURCE_NAME")
 	private String resourceName;
 
-	@Column(name="RESOURCE_OPEN_TYPE")
+	@Column(name = "RESOURCE_OPEN_TYPE")
 	private String resourceOpenType;
 
-	@Column(name="RESOURCE_TYPE")
+	@Column(name = "RESOURCE_TYPE")
 	private String resourceType;
 
-	@Column(name="RESOURCE_URL")
+	@Column(name = "RESOURCE_URL")
 	private String resourceUrl;
 
-	@Column(name="ROOT_RES_ID")
+	@Column(name = "ROOT_RES_ID")
 	private String rootResId;
 
-	@Column(name="SYSTEM_ID")
+	@Column(name = "SYSTEM_ID")
 	private String systemId;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="UPDATE_DT")
+	@Column(name = "UPDATE_DT")
 	private Date updateDt;
 
-	@Column(name="UPDATE_USER_ID")
+	@Column(name = "UPDATE_USER_ID")
 	private String updateUserId;
 
-	@Column(name="VALID_SIGN")
+	@Column(name = "VALID_SIGN")
 	private String validSign;
 
 	public OrmResource() {
+	}
+
+	public OrmResource(BigDecimal orderNumber) {
+		this.orderNumber = orderNumber;
 	}
 
 	public String getResourceId() {

@@ -107,9 +107,16 @@
 }
 
 .subadd-bottom-status .iconfont{
-	color: #34cb89;
 	font-size: 24px;
 	margin: 0 5px 0 20px;
+}
+
+.bottom-status-success .iconfont{
+	color: #34cb89;
+}
+
+.bottom-status-error .iconfont{
+	color: #e54d4d;
 }
 
 .trigger-ico{
