@@ -5,6 +5,7 @@ define(function(require){
 	require("gallery/ztree/3.5.2/core-debug");
 	require("gallery/ztree/3.5.2/exedit-debug");
 	require("gallery/ztree/3.5.14/ztree-debug.css");
+	require("gallery/ztree/3.5.2/excheck-debug");
 		require("easyui");
 		Form = require("form");
 		Confirmbox=require("inno/dialog/1.0.0/confirmbox-debug");
@@ -261,26 +262,10 @@ define(function(require){
 		console.log("addEmp")
 		$(".ui-dialog").css('boxShadow', '0px 4px 16px #a8adb2');
 		$(".ui-dialog-content").css('height', 525 - 40);
-//		parent.dialog.show(urlcfg.forwardEmpAdd + orgId,"新增下属人员","525px");
 		parent.showDialog(urlcfg.forwardEmpAdd,"新增下属人员",525,"E");
 		
 	});
 	
-//	var dialog = new Dialog({
-//		//trigger:'.sub-operate',
-//		width:'760px',
-////		height:'525px',
-//		//content:'./dialog-subadd.html',
-//		hasMask:false,
-////		title:'新增下属机构',
-//		ifEsc:false,
-//		closeTpl:'&#xe62a;'
-//	}).before('show',function(url,title,height){
-////		var url = urlcfg.forwardAdd pId;
-//		this.set("content",url);
-//		this.set("title",title);
-//		this.set("height",height);
-//	});
 	
 	refreshTreeAndList = function(type){
 		if(type=="E"){
@@ -291,7 +276,6 @@ define(function(require){
 	}
 	
 	
-	//创建机构树
 	var setting = {
 		data : {
 			simpleData : {
@@ -302,33 +286,166 @@ define(function(require){
 			}
 		},
 		view : {
-			selectedMulti: false,
-			showLine : false
+			selectedMulti: true,
+			showLine : true
 		},
 		callback : {
-			onClick : clickAction
+			onCheck : checkAction
 		},
-
+		check : {
+			chkboxType : {"Y": "", "N": ""},
+			chkStyle : "checkbox",
+			enable : true,
+		}
 	}
 	
 	addRoleTree = function (orgId){
 		$.post(urlcfg.orgCodeTree + orgId,function(data){
 			if(data.status == 200){
 				var nodes = data.data;
-
+				for(var i=0;i<nodes.length;i++){
+					if(nodes[i].attributes.nodeType == 'SYSTEM'){
+						nodes[i].nocheck = true;
+					}
+				}
 				$.fn.zTree.init($("#tree"), setting, nodes);
-				var defaultSelect = $.fn.zTree.getZTreeObj("tree").getNodes()[0];
-				$.fn.zTree.getZTreeObj("tree").selectNode(defaultSelect);
-				clickAction(null,null,defaultSelect);
 			}else {
 				console.log(data.message);
 			}
-
 		});
 	}
-	function clickAction (event, treeId, treeNode){
-		selectedNode = treeNode;
-
+	function checkAction (event, treeId, treeNode){
+		console.log(treeNode);
+		var rootNode = treeNode;
+		while(rootNode.getParentNode()){
+			rootNode = rootNode.getParentNode();
 		}
-	
+		if(treeNode.checked){
+			if(treeNode.isParent){
+				var childnodes = treeNode.children;
+				var children = new Array();
+				for(var i=0;i<childnodes.length;i++){
+					if(!childnodes[i].isParent){
+						children.push(childnodes[i])
+					}
+				}
+				if(children.length < 1){
+					return;
+				}
+				var system = $("#"+rootNode.id);
+				if(system.length==0){
+					$("#selectedInfo").append(createSystemHtml(rootNode.name,rootNode.id));
+					system = $("#"+rootNode.id);
+				}
+				var codeIndex = $("#"+treeNode.id);
+				if(codeIndex.length == 0){
+					system.append('<dt id="'+treeNode.id+'">'+treeNode.name+'：</dt>');
+					codeIndex = $("#"+treeNode.id);
+				}
+				var dd = codeIndex.next("dd");
+				for(var i=0;i<children.length;i++){
+					$.fn.zTree.getZTreeObj("tree").checkNode(children[i],true,false,false);
+					if(i == 0){
+						if(codeIndex.next("dd").length == 0){
+							codeIndex.after('<dd>'+children[i].name+'</dd>');
+							dd = codeIndex.next("dd");
+						}else{
+							var text = dd.text();
+							text = text + "、" +children[i].name;
+							dd.text(text);
+						}
+					}else{
+						var text = dd.text();
+							text = text + "、" +children[i].name;
+							dd.text(text);
+					}
+				}
+			}else{
+				parentNode = treeNode.getParentNode();
+				var system = $("#"+rootNode.id);
+				if(system.length==0){
+					$("#selectedInfo").append(createSystemHtml(rootNode.name,rootNode.id));
+					system = $("#"+rootNode.id);
+				}
+				var codeIndex = $("#"+parentNode.id);
+				if(codeIndex.length == 0){
+					system.append('<dt id="'+parentNode.id+'">'+parentNode.name+'：</dt>');
+					codeIndex = $("#"+parentNode.id);
+				}
+				$.fn.zTree.getZTreeObj("tree").checkNode(parentNode,true,false,false);
+				var dd = codeIndex.next("dd");
+				if(dd.length == 0){
+					codeIndex.after('<dd>'+treeNode.name+'</dd>');
+					dd = codeIndex.next("dd");
+				}else{
+					var text = dd.text();
+					text = text + "、" +treeNode.name;
+					dd.text(text);
+				}
+			}
+		}else{
+			if(treeNode.isParent){
+				var childnodes = treeNode.children;
+				var children = new Array();
+				for(var i=0;i<childnodes.length;i++){
+					if(!childnodes[i].isParent){
+						children.push(childnodes[i])
+					}
+				}
+				if(children.length < 1){
+					return;
+				}
+				var dt = $("#"+treeNode.id);
+				var dd = dt.next("dd");
+				dt.remove();
+				dd.remove();
+				for(var i=0;i<children.length;i++){
+					$.fn.zTree.getZTreeObj("tree").checkNode(children[i],false,false,false);
+				}
+				var system = $("#"+rootNode.id);
+				if(system.has("dt").length < 1){
+					system.parent().parent().remove();
+				}
+			}else{
+				parentNode = treeNode.getParentNode();
+				var dt = $("#"+parentNode.id);
+				var dd = dt.next("dd");
+				var text = dd.text();
+				var name = treeNode.name;
+				var start = text.indexOf(name);
+				if(text.length > start + name.length){
+					text = text.substring(0,start) + text.substring(start+name.length + 1,text.length);
+				}else{
+					text = text.substring(0,start - 1);
+				}
+				if(text.length > 0){
+					dd.text(text);
+					$.fn.zTree.getZTreeObj("tree").checkNode(treeNode,false,false,false);
+				}else{
+					dt.remove();
+					dd.remove();
+					$.fn.zTree.getZTreeObj("tree").checkNode(parentNode,false,false,false);
+					var system = $("#"+rootNode.id);
+					if(system.has("dt").length < 1){
+						system.parent().parent().remove();
+					}
+				}
+				
+			}
+		}
+	}
+	function createSystemHtml(name,id){
+		var html = '<div class="codeinf-sec" active="0">'+
+						'<div class="codeinf-title">'+
+							'<span>'+name+'</span>'+
+							'<span class="title-ico"></span>'+
+						'</div>'+
+						'<div class="codeinf-detail">'+
+							'<dl id="'+id+'">'+
+							'</dl>'+
+						'</div>'+
+					'</div>';
+		return html;
+	}
+
 });

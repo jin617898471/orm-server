@@ -1,6 +1,7 @@
 package cn.innosoft.fw.orm.server.persistent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.innosoft.fw.biz.core.persistent.BaseDao;
 import cn.innosoft.fw.orm.server.model.OrmUserRoleMap;
@@ -56,4 +57,6 @@ public interface OrmUserRoleMapDao extends BaseDao<OrmUserRoleMap, String> {
 	void deleteBySystemId(String systemId);
 
 	void deleteByUserId(String userId);
+
+	Long deleteByUserIdAndRoleIdIn(String orgId, List<String> roleIds);
 }

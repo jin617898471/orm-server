@@ -26,7 +26,7 @@
 </head>
 <body>
 	<div class="wrap-title">
-		<img src="<%=basePath%>/orm/css/imgs/ajob.png" alt="" class="wrap-title-img" />
+		<img src="<%=basePath%>/orm/css/imgs/department.png" alt="" class="wrap-title-img" />
 		<span>${org.orgName}</span>
 	</div>
 	<div class="dep-tabs">
@@ -124,44 +124,44 @@
 			<div class="hidden content-panel">
 				<div class="code-layout">
 					<div class="col-main">
-						<div class="col-sub">
+						<div class="col-sub" style="float:left;">
 							<ul id="tree" class="ztree" style="width:245px;overflow-y:auto;overflow-x:auto"></ul>
 						</div>
-						<div class="main-wrap">
-							<div class="codeinf-sec" active="0">
-								<div class="codeinf-title">
-									<span>全局系统</span>
-									<span class="title-ico"></span>
-								</div>
-								<div class="codeinf-detail">
-									<dl>
-										<dt>有效性标记：</dt>
-										<dd>有效、无效</dd>
-										<dt>性别：</dt>
-										<dd>未知、男、女</dd>
-										<dt>行业类别代码：</dt>
-										<dd>交通运输、应对气候变化、其他行业</dd>
-										<dt>行政区划代码：</dt>
-										<dd>浙江省、杭州市、宁波市、温州市、义乌市、衢州市、舟山市、台州市、丽水市、北京市、江西省、上饶市</dd>
-										<dt>公司产品组：</dt>
-										<dd>交通运输产品组、应对气候变化组、产品组</dd>
-									</dl>
-								</div>
-							</div>
-							<div class="codeinf-sec" active="0">
-								<div class="codeinf-title">
-									<span>组织机构管理系统</span>
-									<span class="title-ico"></span>
-								</div>
-								<div class="codeinf-detail">
-									<dl>
-										<dt>正式/临时标识：</dt>
-										<dd>正式、临时</dd>
-										<dt>组织类型：</dt>
-										<dd>部门、机构、岗位</dd>
-									</dl>
-								</div>
-							</div>
+						<div class="main-wrap" id="selectedInfo">
+<!-- 							<div class="codeinf-sec" active="0"> -->
+<!-- 								<div class="codeinf-title"> -->
+<!-- 									<span>全局系统</span> -->
+<!-- 									<span class="title-ico"></span> -->
+<!-- 								</div> -->
+<!-- 								<div class="codeinf-detail"> -->
+<!-- 									<dl> -->
+<!-- 										<dt>有效性标记：</dt> -->
+<!-- 										<dd>有效、无效</dd> -->
+<!-- 										<dt>性别：</dt> -->
+<!-- 										<dd>未知、男、女</dd> -->
+<!-- 										<dt>行业类别代码：</dt> -->
+<!-- 										<dd>交通运输、应对气候变化、其他行业</dd> -->
+<!-- 										<dt>行政区划代码：</dt> -->
+<!-- 										<dd>浙江省、杭州市、宁波市、温州市、义乌市、衢州市、舟山市、台州市、丽水市、北京市、江西省、上饶市</dd> -->
+<!-- 										<dt>公司产品组：</dt> -->
+<!-- 										<dd>交通运输产品组、应对气候变化组、产品组</dd> -->
+<!-- 									</dl> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<div class="codeinf-sec" active="0"> -->
+<!-- 								<div class="codeinf-title"> -->
+<!-- 									<span>组织机构管理系统</span> -->
+<!-- 									<span class="title-ico"></span> -->
+<!-- 								</div> -->
+<!-- 								<div class="codeinf-detail"> -->
+<!-- 									<dl> -->
+<!-- 										<dt>正式/临时标识：</dt> -->
+<!-- 										<dd>正式、临时</dd> -->
+<!-- 										<dt>组织类型：</dt> -->
+<!-- 										<dd>部门、机构、岗位</dd> -->
+<!-- 									</dl> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
 						</div>
 					</div>
 				</div>

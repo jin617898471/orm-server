@@ -27,7 +27,7 @@
 </head>
 <body>
 	<div class="wrap-title">
-		<img src="<%=basePath%>/orm/css/imgs/ajob.png" alt="" class="wrap-title-img" />
+		<img src="<%=basePath%>/orm/css/imgs/person.png" alt="" class="wrap-title-img" />
 		<span>${user.userName}</span>
 	</div>
 	<div class="dep-tabs">
@@ -188,7 +188,7 @@
 			</div>
 			<div class="hidden content-panel">
 				<div class="jur-condition">
-					<input type="button" class="jur-btn" value="查询" />
+					<input type="button" class="jur-btn" value="查询" id="search"/>
 					<div class="condition-items">
 						<ul>
 							<li>
@@ -224,72 +224,8 @@
 								<div class="ui-scroll">
 									<div class="ui-scroll-container">
 										<table>
-											<tbody>
-												<tr>
-													<td class="w39 text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td class="w79">总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
+											<tbody id="notAssignRole">
+												
 											</tbody>
 										</table>
 									</div>
@@ -298,20 +234,20 @@
 						</div>
 					</div>
 					<div class="col-operate">
-						<div class="operate-items">
+						<div class="operate-items" id="selectButton">
 							<span>选择</span>
 							<span class="items-sel sel-1"></span>
 						</div>
-						<div class="operate-items">
+						<div class="operate-items" id="selectAllButton">
 							<span>选择全部</span>
-							<span class="items-sel sel-2"></span>
+							<span class="items-sel sel-2" ></span>
 						</div>
-						<div class="operate-items">
-							<span class="items-sel sel-3"></span>
+						<div class="operate-items" id="deleteButton">
+							<span class="items-sel sel-3" ></span>
 							<span>取消</span>
 						</div>
-						<div class="operate-items last">
-							<span class="items-sel sel-4"></span>
+						<div class="operate-items last" id="deleteAllButton">
+							<span class="items-sel sel-4" ></span>
 							<span>取消全部</span>
 						</div>
 					</div>
@@ -333,62 +269,8 @@
 								<div class="ui-scroll">
 									<div class="ui-scroll-container">
 										<table>
-											<tbody>
-												<tr>
-													<td class="w39 text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td class="w79">总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
-												<tr>
-													<td class="text-center"><input type="checkbox" class="chk-wait" /></td>
-													<td>总经理</td>
-													<td>组织权限管理系统</td>
-												</tr>
+											<tbody id="assignRole">
+												
 											</tbody>
 										</table>
 									</div>
@@ -398,7 +280,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="hidden content-panel">
+			<div class="hidden content-panel" >
 				<ul id="tree" class="ztree" style="width:400px;overflow-y:auto;overflow-x:auto"></ul>
 			</div>
 		</div>
