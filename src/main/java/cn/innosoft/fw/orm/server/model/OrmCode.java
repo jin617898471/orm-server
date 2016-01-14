@@ -5,63 +5,66 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
-
 /**
  * The persistent class for the ORM_CODE database table.
  * 
  */
 @Entity
-@Table(name="ORM_CODE")
-@NamedQuery(name="OrmCode.findAll", query="SELECT o FROM OrmCode o")
+@Table(name = "ORM_CODE")
+@NamedQuery(name = "OrmCode.findAll", query = "SELECT o FROM OrmCode o")
 public class OrmCode implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="CODE_ID")
+	@Column(name = "CODE_ID")
 	private String codeId;
 
-	@Column(name="CODE_DESC")
+	@Column(name = "CODE_DESC")
 	private String codeDesc;
 
-	@Column(name="CODE_NAME")
+	@Column(name = "CODE_NAME")
 	private String codeName;
 
-	@Column(name="CODE_VALUE")
+	@Column(name = "CODE_VALUE")
 	private String codeValue;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="CREATE_DT")
+	@Column(name = "CREATE_DT")
 	private Date createDt;
 
-	@Column(name="CREATE_USER_ID")
+	@Column(name = "CREATE_USER_ID")
 	private String createUserId;
 
-	@Column(name="IS_RIGHT")
+	@Column(name = "IS_RIGHT")
 	private String isRight;
 
-	@Column(name="ORDER_NUMBER")
+	@Column(name = "ORDER_NUMBER")
 	private BigDecimal orderNumber;
 
-	@Column(name="PARENT_CODE_ID")
+	@Column(name = "PARENT_CODE_ID")
 	private String parentCodeId;
 
-	@Column(name="ROOT_CODE_ID")
+	@Column(name = "ROOT_CODE_ID")
 	private String rootCodeId;
 
-	@Column(name="SYSTEM_ID")
+	@Column(name = "SYSTEM_ID")
 	private String systemId;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="UPDATE_DT")
+	@Column(name = "UPDATE_DT")
 	private Date updateDt;
 
-	@Column(name="UPDATE_USER_ID")
+	@Column(name = "UPDATE_USER_ID")
 	private String updateUserId;
 
-	@Column(name="VALID_SIGN")
+	@Column(name = "VALID_SIGN")
 	private String validSign;
 
 	public OrmCode() {
+	}
+
+	public OrmCode(BigDecimal orderNumber) {
+		this.orderNumber = orderNumber;
 	}
 
 	public String getCodeId() {

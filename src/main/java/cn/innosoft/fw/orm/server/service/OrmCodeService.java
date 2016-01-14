@@ -75,10 +75,6 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 
 	private List<ZtreeBean> transferSystemTreeNode(List<OrmSystem> ormSystems) {
 		List<ZtreeBean> list = new ArrayList<ZtreeBean>();
-		for (OrmSystem sys : ormSystems) {
-			ZtreeBean node = createSytemTreeNode(sys);
-			list.add(node);
-		}
 		ZtreeBean node = new ZtreeBean();
 		node.setId("GLOBAL");
 		node.setpId("ROOT");
@@ -87,6 +83,10 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 		attributes.put("nodeType", "SYSTEM");
 		node.setAttributes(attributes);
 		list.add(node);
+		for (OrmSystem sys : ormSystems) {
+			ZtreeBean tree = createSytemTreeNode(sys);
+			list.add(tree);
+		}
 		return list;
 	}
 
@@ -113,6 +113,8 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 			attributes.put("nodeType", "CODE");
 			node.setpId(pId);
 		}
+		attributes.put("rootCodeId", code.getRootCodeId());
+		attributes.put("systemId", code.getSystemId());
 		node.setName(code.getCodeName());
 		node.setAttributes(attributes);
 		return node;
@@ -170,7 +172,18 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 			ormCode.setSystemId(parent.getSystemId());
 			checkCodeValue(ormCode.getRootCodeId(), ormCode.getCodeValue(), ormCode.getCodeId());
 		}
+		BigDecimal order = getMaxOrderNumber(ormCode.getParentCodeId());
+		ormCode.setOrderNumber(order);
 		add(ormCode);
+	}
+
+	private BigDecimal getMaxOrderNumber(String parentCodeId) {
+		OrmCode ormCode = ormCodeDao.getMaxOrderNumber(parentCodeId);
+		BigDecimal order = ormCode.getOrderNumber();
+		if (null == order) {
+			order = new BigDecimal(0);
+		}
+		return order.add(new BigDecimal(1));
 	}
 
 	public void updateCode(OrmCode ormCode, List<String> updateField) {
@@ -185,20 +198,36 @@ public class OrmCodeService extends AbstractBaseService<OrmCode, String> {
 		}
 		updateSome(ormCode, updateField);
 	}
-	
-	public void adjustmentOrder(String sourceId,String targetId,String moveType) {
+
+	public void adjustmentOrder(String sourceId, String targetId, String moveType) {
 		OrmCode targ = findOne(targetId);
-		BigDecimal order = targ.getOrderNumber();
 		String pid = targ.getParentCodeId();
-		if("prev".equals(moveType)){
-			if(null==order){
-				order=new BigDecimal(1);
+		BigDecimal tarorder = targ.getOrderNumber();
+		OrmCode sour = findOne(sourceId);
+		BigDecimal sourorder = sour.getOrderNumber();
+		int result = tarorder.compareTo(sourorder);
+		if (1 == result) {// 目标的序号比源的序号大
+			ormCodeDao.substractOrderNumber(sourorder, tarorder, pid);
+			if ("prev".equals(moveType)) {
+				ormCodeDao.updateOrderNumber(tarorder.subtract(new BigDecimal(1)), sourceId);
+			} else if ("next".equals(moveType)) {
+				ormCodeDao.updateOrderNumber(tarorder, sourceId);
+				ormCodeDao.updateOrderNumber(tarorder.subtract(new BigDecimal(1)), targetId);
 			}
-			ormCodeDao.updateSelfOrderNumber(order,pid,sourceId);
-			ormCodeDao.updateSelfAndNextOrderNumber(order,sourceId);
-		}else if("next".equals(moveType)){
-			ormCodeDao.updateNextOrderNumber(order,sourceId);
-			ormCodeDao.updateSelfOrderNumber(order,pid,sourceId);
+		} else if (-1 == result) {// 目标的序号比源的序号小
+			ormCodeDao.addOrderNumber(sourorder, tarorder, pid);
+			if ("prev".equals(moveType)) {
+				ormCodeDao.updateOrderNumber(tarorder, sourceId);
+				ormCodeDao.updateOrderNumber(tarorder.add(new BigDecimal(1)), targetId);
+			} else if ("next".equals(moveType)) {
+				ormCodeDao.updateOrderNumber(tarorder.add(new BigDecimal(1)), sourceId);
+			}
+		} else {// 目标的序号和源的序号相等
+			if ("prev".equals(moveType)) {
+				ormCodeDao.updateOrderNumber(tarorder.subtract(new BigDecimal(1)), sourceId);
+			} else if ("next".equals(moveType)) {
+				ormCodeDao.updateOrderNumber(tarorder.add(new BigDecimal(1)), sourceId);
+			}
 		}
 	}
 

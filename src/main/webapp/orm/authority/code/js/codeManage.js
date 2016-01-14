@@ -20,6 +20,7 @@ define(function(require){
 		"dels":'deletes',
 		"list":'list',
 		"tree":'tree',
+		"order":'adjustmentorder',
 	}
 	
 	var gridTable=$("#grid-table").datagrid({
@@ -28,7 +29,9 @@ define(function(require){
 		striped : true,
 		collapsible : true,
 		url : urlBasePath+url_cfg["list"],
-		queryParams:{queryCondition:null},
+		queryParams:{queryCondition:getQueryCondition()},
+		sortName:"orderNumber",
+		sortOrder:"asc",
 		frozenColumns:[[
             {field:'codeId',checkbox:true},
         ]],
@@ -71,16 +74,13 @@ define(function(require){
 			},
 			beforeDrop: function(treeId, treeNodes, targetNode, moveType) {
 				var result=false;
-				if(moveType=="inner"){
-					result=typeNum[treeNodes[0].attributes.nodeType]-typeNum[targetNode[0].attributes.nodeType]==1
-				}
 				if(moveType=="prev" || moveType=="next"){
-					result=typeNum[treeNodes[0].attributes.nodeType]-typeNum[targetNode[0].attributes.nodeType]==0
+					result=treeNodes[0].attributes.nodeType==targetNode.attributes.nodeType && treeNodes[0].pId==targetNode.pId
 				}
 				if(!result){
 					return false;
 				}
-				result = dragTree(treeNodes[0].id,targetNode[0].id,moveType);
+				result = dragTree(treeNodes[0].id,targetNode.id,moveType);
 				return result;
 			},
 			beforeDrag:function(treeId, treeNodes){
@@ -94,22 +94,21 @@ define(function(require){
 		}
 	};
 	function dragTree(sourceId,targetId,moveType){
+		var result=false;
 		$.ajax( {
-			url:urlBasePath+url_cfg["del"]+"/"+id,
+			url:urlBasePath+url_cfg["order"],
+			data:{sourceId:sourceId,targetId:targetId,moveType:moveType},
+			async:false,
 			error:function(){
-				Confirmbox.alert('删除失败,请联系管理员');
+				alert('操作失败,请联系管理员');
 			},
 			statusCode: { 
 				200: function(msg) {
-					reloadGrid();
+					result=true;
 			  	}
 			}
 		});
-	}
-	var typeNum={
-		"SYSTEM":1,
-		"CODEINDEX":2,
-		"CODE":3
+		return result;
 	}
 	function setQueryConditon(treeNode){
 		var type = treeNode.attributes.nodeType;
@@ -147,10 +146,6 @@ define(function(require){
 			if("SYSTEM"==type){
 				node.open=true;
 				node.drag=false;
-			}else if("CODEINDEX"==type){
-				node.isParent=true;
-			}else{
-				node.isParent=false;
 			}
 		})
 		return data;
@@ -245,7 +240,7 @@ define(function(require){
 				$.ajax( {
 					url:urlBasePath+url_cfg["del"]+"/"+id,
 					error:function(){
-						Confirmbox.alert('删除失败,请联系管理员');
+						alert('操作失败,请联系管理员');
 					},
 					statusCode: { 
 						200: function(msg) {
@@ -294,7 +289,7 @@ define(function(require){
 				$.ajax( {
 					url:urlBasePath+url_cfg["dels"]+"/"+arr,
 					error:function(){
-						Confirmbox.alert('删除失败,请联系管理员');
+						alert('操作失败,请联系管理员');
 					},
 					statusCode: { 
 						200: function(msg) {

@@ -1,6 +1,7 @@
 package cn.innosoft.fw.orm.server.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 	public void addSystem(OrmSystem ormSystem) {
 		ormSystem.setSystemId(Identities.uuid2());
 		checkSystem(ormSystem.getSystemCode(), ormSystem.getSystemId());
+		ormSystem.setCreateDt(new Date());
 		add(ormSystem);
 		ormRoleService.addAdminRole(ormSystem.getSystemId());
 	}
@@ -71,7 +73,7 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 	 * @return
 	 */
 	public List<OrmSystem> getHasRight() {
-		return ormSystemDao.findAll();
+		return findAll(null,"createDt","desc");
 	}
 	
 
@@ -81,7 +83,7 @@ public class OrmSystemService extends AbstractBaseService<OrmSystem, String> {
 	 * @return
 	 */
 	public List<OrmSystem> getAll() {
-		return ormSystemDao.findAll();
+		return findAll(null,"createDt","desc");
 	}
 
 	public String createJs() {

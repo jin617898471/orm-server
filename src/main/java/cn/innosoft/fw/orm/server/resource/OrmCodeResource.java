@@ -91,4 +91,10 @@ public class OrmCodeResource {
 		return ormCodeService.findAll(pageRequest);
 	}
 	
+	@RequestMapping("/adjustmentorder")
+	@ResponseBody
+	public void adjustmentOrder(String sourceId,String targetId,String moveType){
+		ormCodeService.adjustmentOrder(sourceId,targetId,moveType);
+	}
+	
 }
